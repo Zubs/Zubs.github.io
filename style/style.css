@@ -1,9 +1,19 @@
-body {background-color: #f2f2f2;}
+body {background-color: #f2f2f2; padding: 0px;}
+.container-fluid {margin: 0px; padding: 0px;}
 nav li {font-weight: bolder; color: white;}
 header {margin: 50px 50px 50px 0px;}
 header img {float: left; margin: 0px 20px; width: 300px;}
 .row {margin: 50px;}
-.navbar-light .navbar-nav .nav-link, .navbar-light .navbar-nav .active>.nav-link {color: #f2f2f2;}
+.navbar-light .navbar-nav .nav-link, .navbar-light .navbar-nav .active>.nav-link {color: red;}
 footer {text-align: center;}
 footer img {width: 100px;}
 .jumbotron {margin-bottom: 0px; padding-bottom: 0px;}
+.bg-primary {background-color: transparent!important;}
+.main {background-image: url('../images/bg.jpeg'); margin: 0px; padding: 20px; background-size: cover;}
+.page-header {font-family: serif; color: white;}
+.btn-primary {background-color: white; color: red; text-transform: uppercase; padding: 10px 20px; border: 1px solid red; font-weight: bolder;}
+.progress {margin-top: 10px; height: 30px;}
+.spotlight {background-color: red; border-radius: 50%; padding: 80px;}
+.language {font-weight: bold;}
+.btn-success, .btn-outline-success, .btn-danger {padding: 5px 10px; border-radius: 20px; width: 100px;}
+.myname {color: red; font-weight: bolder;}
