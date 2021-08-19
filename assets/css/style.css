@@ -26,8 +26,8 @@ body {
 body::before {
   content: "";
   position: fixed;
-  background: #040404 url("../img/2021-03-02/bg4\ \(2\).jpg") top right no-repeat;
-  background-size: cover;
+  background: #040404 url("../img/p_bg.jpg") top right no-repeat;
+  background-size: contain;
   left: 0;
   right: 0;
   top: 0;
