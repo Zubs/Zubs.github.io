@@ -1,0 +1,10 @@
+{
+    "name": "Zubair Idris Aweda",
+    "short_name": "Zubair",
+    "description": "Zubair Idris Aweda is an experienced web developer with a demonstrated history of working in the computer software industry. Skilled in PHP, Laravel, NodeJS and VueJs. Strong engineering professional currently pursuing a Bachelors in Computer Engineering from University of Lagos.",
+    "display": "standalone",
+    "theme_color": "#040404",
+    "background_color": "#040404",
+    "start_url": "index.html",
+    "icons": []
+}
