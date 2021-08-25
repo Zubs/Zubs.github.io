@@ -6,5 +6,11 @@
     "theme_color": "#040404",
     "background_color": "#040404",
     "start_url": "index.html",
-    "icons": []
+    "icons": [
+        {
+            "src": "",
+            "type": "image/png",
+            "sizes": ""
+        }
+    ]
 }
