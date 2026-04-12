@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>toRoman — Interactive Playground</title>
+    <link rel="stylesheet" href="style.css"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+
+</head>
+<body>
+
+<!-- Sidebar -->
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+        <span class="logo-numeral">MMXXVI</span>
+        <span class="logo-title">toRoman</span>
+        <span class="logo-version">v2.0</span>
+    </div>
+
+    <nav class="sidebar-nav">
+        <div class="nav-section-label">Getting Started</div>
+        <a href="#installation" class="nav-link active" data-section="installation">Installation</a>
+        <a href="#quickstart" class="nav-link" data-section="quickstart">Quick Start</a>
+
+        <div class="nav-section-label">API Reference</div>
+        <a href="#toRoman" class="nav-link" data-section="toRoman">toRoman()</a>
+        <a href="#fromRoman" class="nav-link" data-section="fromRoman">fromRoman()</a>
+        <a href="#isRoman" class="nav-link" data-section="isRoman">isRoman()</a>
+        <a href="#addRoman" class="nav-link" data-section="addRoman">addRoman()</a>
+        <a href="#subtractRoman" class="nav-link" data-section="subtractRoman">subtractRoman()</a>
+        <a href="#multiplyRoman" class="nav-link" data-section="multiplyRoman">multiplyRoman()</a>
+        <a href="#divideRoman" class="nav-link" data-section="divideRoman">divideRoman()</a>
+        <a href="#rangeRoman" class="nav-link" data-section="rangeRoman">rangeRoman()</a>
+        <a href="#randomRoman" class="nav-link" data-section="randomRoman">randomRoman()</a>
+        <a href="#tableRoman" class="nav-link" data-section="tableRoman">tableRoman()</a>
+
+        <div class="nav-section-label">Playground</div>
+        <a href="#sandbox" class="nav-link" data-section="sandbox">Live Sandbox</a>
+
+        <div class="nav-section-label">Roadmap</div>
+        <a href="#v2" class="nav-link" data-section="v2">v2.1 Coming Soon</a>
+    </nav>
+
+    <div class="sidebar-footer">
+        <a href="https://github.com/Zubs/toRoman" target="_blank" class="gh-link">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0012 2z"/>
+            </svg>
+            GitHub
+        </a>
+        <a href="https://www.npmjs.com/package/toroman" target="_blank" class="npm-link">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M0 7.334v8h6.666v1.332H12v-1.332h12v-8H0zm6.666 6.664H5.334v-4H3.999v4H1.335V8.667h5.331v5.331zm4 0v1.336H8.001V8.667h5.334v5.332h-2.669v-.001zm12.001 0h-1.33v-4h-1.336v4h-1.335v-4h-1.33v4h-2.671V8.667h8.002v5.331z"/>
+            </svg>
+            npm
+        </a>
+    </div>
+</aside>
+
+<!-- Main Content -->
+<main class="main">
+
+    <!-- Hero -->
+    <section class="hero" id="installation" data-section="installation">
+        <div class="hero-bg-text" aria-hidden="true">MMXXVI</div>
+        <div class="hero-content">
+            <div class="badge">Open Source · MIT License</div>
+            <h1 class="hero-title">toRoman</h1>
+            <p class="hero-subtitle">A minimalist TypeScript library for Roman numeral operations — convert, validate,
+                and compute with the ancient numeral system.</p>
+            <div class="install-box">
+                <span class="install-label">npm</span>
+                <code class="install-cmd">npm install toroman</code>
+                <button class="copy-btn" onclick="copyToClipboard('npm install toroman', this)" title="Copy">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="9" y="9" width="13" height="13" rx="2"/>
+                        <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="install-box">
+                <span class="install-label">cdn</span>
+                <code class="install-cmd">&lt;script src="https://unpkg.com/toRoman"&gt;&lt;/script&gt;</code>
+                <button class="copy-btn"
+                        onclick="copyToClipboard('<script src=\'https://unpkg.com/toRoman\'><\/script>', this)"
+                        title="Copy">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="9" y="9" width="13" height="13" rx="2"/>
+                        <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Start -->
+    <section class="doc-section" id="quickstart" data-section="quickstart">
+        <h2 class="section-title">Quick Start</h2>
+        <p class="section-desc">Import the library and start converting in seconds.</p>
+        <div class="code-block">
+            <div class="code-header"><span>JavaScript</span>
+                <button class="copy-btn-sm" onclick="copyBlock(this)">Copy</button>
+            </div>
+            <pre><code><span class="kw">const</span> roman <span class="op">=</span> <span
+                    class="fn">require</span>(<span class="str">"toRoman"</span>);
+
+<span class="cm">// Convert number → Roman</span>
+roman.<span class="fn">toRoman</span>(<span class="num">2025</span>);   <span class="cm">// "MMXXV"</span>
+
+<span class="cm">// Convert Roman → number</span>
+roman.<span class="fn">fromRoman</span>(<span class="str">"XLII"</span>); <span class="cm">// 42</span>
+
+<span class="cm">// Validate a Roman numeral</span>
+roman.<span class="fn">isRoman</span>(<span class="str">"XIV"</span>);  <span class="cm">// true</span>
+
+<span class="cm">// Arithmetic</span>
+roman.<span class="fn">addRoman</span>(<span class="str">"X"</span>, <span class="str">"V"</span>); <span class="cm">// "XV"</span></code></pre>
+        </div>
+    </section>
+
+    <!-- toRoman -->
+    <section class="doc-section" id="toRoman" data-section="toRoman">
+        <div class="api-header">
+            <h2 class="section-title">toRoman()</h2>
+            <span class="api-badge">Method</span>
+        </div>
+        <p class="section-desc">Converts an Arabic integer (1–3999) into its Roman numeral string representation.</p>
+        <div class="signature-box">
+            <code>toRoman(value: <span class="type">number</span>): <span class="type">string</span></code>
+        </div>
+        <div class="param-table">
+            <div class="param-row header"><span>Parameter</span><span>Type</span><span>Description</span></div>
+            <div class="param-row"><span><code>value</code></span><span><code>number</code></span><span>Integer between 1 and 3999</span>
+            </div>
+        </div>
+        <div class="playground-card">
+            <div class="playground-label">▶ Try it</div>
+            <div class="playground-row">
+                <input type="number" class="pg-input" id="toRomanInput" placeholder="e.g. 2025" min="1" max="3999"
+                       value="2025" oninput="runToRoman()"/>
+                <div class="pg-arrow">→</div>
+                <div class="pg-output" id="toRomanOutput">MMXXV</div>
+            </div>
+        </div>
+        <div class="code-block">
+            <div class="code-header"><span>Example</span>
+                <button class="copy-btn-sm" onclick="copyBlock(this)">Copy</button>
+            </div>
+            <pre><code>roman.<span class="fn">toRoman</span>(<span class="num">765</span>);  <span class="cm">// "DCCLXV"</span>
+roman.<span class="fn">toRoman</span>(<span class="num">1994</span>); <span class="cm">// "MCMXCIV"</span>
+roman.<span class="fn">toRoman</span>(<span class="num">4</span>);    <span class="cm">// "IV"</span></code></pre>
+        </div>
+    </section>
+
+    <!-- fromRoman -->
+    <section class="doc-section" id="fromRoman" data-section="fromRoman">
+        <div class="api-header">
+            <h2 class="section-title">fromRoman()</h2>
+            <span class="api-badge">Method</span>
+        </div>
+        <p class="section-desc">Parses a Roman numeral string and returns its integer value.</p>
+        <div class="signature-box">
+            <code>fromRoman(value: <span class="type">string</span>): <span class="type">number</span></code>
+        </div>
+        <div class="param-table">
+            <div class="param-row header"><span>Parameter</span><span>Type</span><span>Description</span></div>
+            <div class="param-row"><span><code>value</code></span><span><code>string</code></span><span>A valid Roman numeral string</span>
+            </div>
+        </div>
+        <div class="playground-card">
+            <div class="playground-label">▶ Try it</div>
+            <div class="playground-row">
+                <input type="text" class="pg-input roman-input" id="fromRomanInput" placeholder="e.g. XLII"
+                       value="MMXXV" oninput="runFromRoman()" style="text-transform:uppercase"/>
+                <div class="pg-arrow">→</div>
+                <div class="pg-output" id="fromRomanOutput">2025</div>
+            </div>
+        </div>
+        <div class="code-block">
+            <div class="code-header"><span>Example</span>
+                <button class="copy-btn-sm" onclick="copyBlock(this)">Copy</button>
+            </div>
+            <pre><code>roman.<span class="fn">fromRoman</span>(<span class="str">"DCCLXV"</span>);  <span class="cm">// 765</span>
+roman.<span class="fn">fromRoman</span>(<span class="str">"MCMXCIV"</span>); <span class="cm">// 1994</span>
+roman.<span class="fn">fromRoman</span>(<span class="str">"IV"</span>);      <span class="cm">// 4</span></code></pre>
+        </div>
+    </section>
+
+    <!-- isRoman -->
+    <section class="doc-section" id="isRoman" data-section="isRoman">
+        <div class="api-header">
+            <h2 class="section-title">isRoman()</h2>
+            <span class="api-badge">Method</span>
+        </div>
+        <p class="section-desc">Validates whether a given string is a correctly formed Roman numeral.</p>
+        <div class="signature-box">
+            <code>isRoman(value: <span class="type">string</span>): <span class="type">boolean</span></code>
+        </div>
+        <div class="playground-card">
+            <div class="playground-label">▶ Try it</div>
+            <div class="playground-row">
+                <input type="text" class="pg-input roman-input" id="isRomanInput" placeholder="e.g. XIV" value="MCMXCIV"
+                       oninput="runIsRoman()" style="text-transform:uppercase"/>
+                <div class="pg-arrow">→</div>
+                <div class="pg-output bool-output" id="isRomanOutput">true</div>
+            </div>
+        </div>
+        <div class="code-block">
+            <div class="code-header"><span>Example</span>
+                <button class="copy-btn-sm" onclick="copyBlock(this)">Copy</button>
+            </div>
+            <pre><code>roman.<span class="fn">isRoman</span>(<span class="str">"XIV"</span>);    <span class="cm">// true</span>
+roman.<span class="fn">isRoman</span>(<span class="str">"IIII"</span>);  <span class="cm">// false</span>
+roman.<span class="fn">isRoman</span>(<span class="str">"hello"</span>); <span class="cm">// false</span></code></pre>
+        </div>
+    </section>
+
+    <!-- addRoman -->
+    <section class="doc-section" id="addRoman" data-section="addRoman">
+        <div class="api-header">
+            <h2 class="section-title">addRoman()</h2>
+            <span class="api-badge">Method</span>
+        </div>
+        <p class="section-desc">Adds two Roman numeral strings and returns the result as a Roman numeral.</p>
+        <div class="signature-box">
+            <code>addRoman(a: <span class="type">string</span>, b: <span class="type">string</span>): <span
+                    class="type">string</span></code>
+        </div>
+        <div class="playground-card">
+            <div class="playground-label">▶ Try it</div>
+            <div class="playground-row arith-row">
+                <input type="text" class="pg-input roman-input small" id="addA" placeholder="X" value="X"
+                       oninput="runArith()" style="text-transform:uppercase"/>
+                <span class="op-symbol">+</span>
+                <input type="text" class="pg-input roman-input small" id="addB" placeholder="V" value="V"
+                       oninput="runArith()" style="text-transform:uppercase"/>
+                <div class="pg-arrow">→</div>
+                <div class="pg-output" id="addOutput">XV</div>
+            </div>
+        </div>
+        <div class="code-block">
+            <div class="code-header"><span>Example</span>
+                <button class="copy-btn-sm" onclick="copyBlock(this)">Copy</button>
+            </div>
+            <pre><code>roman.<span class="fn">addRoman</span>(<span class="str">"X"</span>, <span class="str">"V"</span>);    <span
+                    class="cm">// "XV"</span>
+roman.<span class="fn">addRoman</span>(<span class="str">"L"</span>, <span class="str">"XXX"</span>); <span class="cm">// "LXXX"</span></code></pre>
+        </div>
+    </section>
+
+    <!-- subtractRoman -->
+    <section class="doc-section" id="subtractRoman" data-section="subtractRoman">
+        <div class="api-header">
+            <h2 class="section-title">subtractRoman()</h2>
+            <span class="api-badge">Method</span>
+        </div>
+        <p class="section-desc">Subtracts the second Roman numeral from the first.</p>
+        <div class="signature-box">
+            <code>subtractRoman(a: <span class="type">string</span>, b: <span class="type">string</span>): <span
+                    class="type">string</span></code>
+        </div>
+        <div class="playground-card">
+            <div class="playground-label">▶ Try it</div>
+            <div class="playground-row arith-row">
+                <input type="text" class="pg-input roman-input small" id="subA" placeholder="XX" value="XX"
+                       oninput="runSubtract()" style="text-transform:uppercase"/>
+                <span class="op-symbol">−</span>
+                <input type="text" class="pg-input roman-input small" id="subB" placeholder="V" value="V"
+                       oninput="runSubtract()" style="text-transform:uppercase"/>
+                <div class="pg-arrow">→</div>
+                <div class="pg-output" id="subOutput">XV</div>
+            </div>
+        </div>
+        <div class="code-block">
+            <div class="code-header"><span>Example</span>
+                <button class="copy-btn-sm" onclick="copyBlock(this)">Copy</button>
+            </div>
+            <pre><code>roman.<span class="fn">subtractRoman</span>(<span class="str">"XX"</span>, <span
+                    class="str">"V"</span>); <span class="cm">// "XV"</span>
+roman.<span class="fn">subtractRoman</span>(<span class="str">"C"</span>, <span class="str">"L"</span>);  <span
+                        class="cm">// "L"</span></code></pre>
+        </div>
+    </section>
+
+    <!-- multiplyRoman -->
+    <section class="doc-section" id="multiplyRoman" data-section="multiplyRoman">
+        <div class="api-header">
+            <h2 class="section-title">multiplyRoman()</h2>
+            <span class="api-badge">Method</span>
+        </div>
+        <p class="section-desc">Multiplies two Roman numerals and returns the Roman numeral result.</p>
+        <div class="signature-box">
+            <code>multiplyRoman(a: <span class="type">string</span>, b: <span class="type">string</span>): <span
+                    class="type">string</span></code>
+        </div>
+        <div class="playground-card">
+            <div class="playground-label">▶ Try it</div>
+            <div class="playground-row arith-row">
+                <input type="text" class="pg-input roman-input small" id="mulA" placeholder="X" value="X"
+                       oninput="runMultiply()" style="text-transform:uppercase"/>
+                <span class="op-symbol">×</span>
+                <input type="text" class="pg-input roman-input small" id="mulB" placeholder="III" value="III"
+                       oninput="runMultiply()" style="text-transform:uppercase"/>
+                <div class="pg-arrow">→</div>
+                <div class="pg-output" id="mulOutput">XXX</div>
+            </div>
+        </div>
+        <div class="code-block">
+            <div class="code-header"><span>Example</span>
+                <button class="copy-btn-sm" onclick="copyBlock(this)">Copy</button>
+            </div>
+            <pre><code>roman.<span class="fn">multiplyRoman</span>(<span class="str">"X"</span>, <span
+                    class="str">"III"</span>); <span class="cm">// "XXX"</span>
+roman.<span class="fn">multiplyRoman</span>(<span class="str">"V"</span>, <span class="str">"IV"</span>);  <span
+                        class="cm">// "XX"</span></code></pre>
+        </div>
+    </section>
+
+    <!-- divideRoman -->
+    <section class="doc-section" id="divideRoman" data-section="divideRoman">
+        <div class="api-header">
+            <h2 class="section-title">divideRoman()</h2>
+            <span class="api-badge">Method</span>
+        </div>
+        <p class="section-desc">Divides the first Roman numeral by the second (integer division).</p>
+        <div class="signature-box">
+            <code>divideRoman(a: <span class="type">string</span>, b: <span class="type">string</span>): <span
+                    class="type">string</span></code>
+        </div>
+        <div class="playground-card">
+            <div class="playground-label">▶ Try it</div>
+            <div class="playground-row arith-row">
+                <input type="text" class="pg-input roman-input small" id="divA" placeholder="X" value="X"
+                       oninput="runDivide()" style="text-transform:uppercase"/>
+                <span class="op-symbol">÷</span>
+                <input type="text" class="pg-input roman-input small" id="divB" placeholder="II" value="II"
+                       oninput="runDivide()" style="text-transform:uppercase"/>
+                <div class="pg-arrow">→</div>
+                <div class="pg-output" id="divOutput">V</div>
+            </div>
+        </div>
+        <div class="code-block">
+            <div class="code-header"><span>Example</span>
+                <button class="copy-btn-sm" onclick="copyBlock(this)">Copy</button>
+            </div>
+            <pre><code>roman.<span class="fn">divideRoman</span>(<span class="str">"X"</span>, <span
+                    class="str">"II"</span>);  <span class="cm">// "V"</span>
+roman.<span class="fn">divideRoman</span>(<span class="str">"C"</span>, <span class="str">"IV"</span>);  <span
+                        class="cm">// "XXV"</span></code></pre>
+        </div>
+    </section>
+
+    <!-- rangeRoman -->
+    <section class="doc-section" id="rangeRoman" data-section="rangeRoman">
+        <div class="api-header">
+            <h2 class="section-title">rangeRoman()</h2>
+            <span class="api-badge">Method</span>
+        </div>
+        <p class="section-desc">Returns an array of Roman numerals within the given integer range.</p>
+        <div class="signature-box">
+            <code>rangeRoman(start: <span class="type">number</span>, end: <span class="type">number</span>): <span
+                    class="type">string[]</span></code>
+        </div>
+        <div class="playground-card">
+            <div class="playground-label">▶ Try it</div>
+            <div class="playground-row arith-row">
+                <input type="number" class="pg-input small" id="rangeStart" placeholder="1" value="1" min="1" max="3999"
+                       oninput="runRange()"/>
+                <span class="op-symbol">to</span>
+                <input type="number" class="pg-input small" id="rangeEnd" placeholder="10" value="10" min="1" max="3999"
+                       oninput="runRange()"/>
+            </div>
+            <div class="pg-output range-output" id="rangeOutput">I, II, III, IV, V, VI, VII, VIII, IX, X</div>
+        </div>
+        <div class="code-block">
+            <div class="code-header"><span>Example</span>
+                <button class="copy-btn-sm" onclick="copyBlock(this)">Copy</button>
+            </div>
+            <pre><code>roman.<span class="fn">rangeRoman</span>(<span class="num">1</span>, <span class="num">5</span>);
+<span class="cm">// ["I", "II", "III", "IV", "V"]</span></code></pre>
+        </div>
+    </section>
+
+    <!-- randomRoman -->
+    <section class="doc-section" id="randomRoman" data-section="randomRoman">
+        <div class="api-header">
+            <h2 class="section-title">randomRoman()</h2>
+            <span class="api-badge">Method</span>
+        </div>
+        <p class="section-desc">Generates a random Roman numeral between 1 and 3999.</p>
+        <div class="signature-box">
+            <code>randomRoman(): <span class="type">string</span></code>
+        </div>
+        <div class="playground-card">
+            <div class="playground-label">▶ Try it</div>
+            <div class="playground-row">
+                <button class="run-btn" onclick="runRandom()">Generate</button>
+                <div class="pg-arrow">→</div>
+                <div class="pg-output" id="randomOutput">—</div>
+            </div>
+        </div>
+        <div class="code-block">
+            <div class="code-header"><span>Example</span>
+                <button class="copy-btn-sm" onclick="copyBlock(this)">Copy</button>
+            </div>
+            <pre><code>roman.<span class="fn">randomRoman</span>(); <span
+                    class="cm">// e.g. "DCCCXLVII"</span></code></pre>
+        </div>
+    </section>
+
+    <!-- tableRoman -->
+    <section class="doc-section" id="tableRoman" data-section="tableRoman">
+        <div class="api-header">
+            <h2 class="section-title">tableRoman()</h2>
+            <span class="api-badge">Method</span>
+        </div>
+        <p class="section-desc">Generates a lookup table of Roman numerals up to a given limit.</p>
+        <div class="signature-box">
+            <code>tableRoman(limit: <span class="type">number</span>): <span
+                    class="type">Record&lt;number, string&gt;</span></code>
+        </div>
+        <div class="playground-card">
+            <div class="playground-label">▶ Try it</div>
+            <div class="playground-row arith-row" style="align-items:center">
+                <label style="font-family:var(--font-mono);font-size:13px;color:var(--text-muted)">limit:</label>
+                <input type="number" class="pg-input small" id="tableLimit" value="12" min="1" max="50"
+                       oninput="runTable()"/>
+            </div>
+            <div class="table-grid" id="tableOutput"></div>
+        </div>
+        <div class="code-block">
+            <div class="code-header"><span>Example</span>
+                <button class="copy-btn-sm" onclick="copyBlock(this)">Copy</button>
+            </div>
+            <pre><code>roman.<span class="fn">tableRoman</span>(<span class="num">5</span>);
+<span class="cm">// { 1: "I", 2: "II", 3: "III", 4: "IV", 5: "V" }</span></code></pre>
+        </div>
+    </section>
+
+    <!-- Live Sandbox -->
+    <section class="doc-section sandbox-section" id="sandbox" data-section="sandbox">
+        <h2 class="section-title">Live Sandbox</h2>
+        <p class="section-desc">Write any JavaScript using the <code>roman</code> object. Results appear instantly.</p>
+        <div class="sandbox-wrapper">
+            <div class="sandbox-editor">
+                <div class="sandbox-toolbar">
+                    <span class="sandbox-label">sandbox.js</span>
+                    <button class="run-btn" onclick="runSandbox()">▶ Run</button>
+                    <button class="copy-btn-sm" onclick="copySandbox()">Copy</button>
+                    <button class="copy-btn-sm" onclick="clearSandbox()">Clear</button>
+                </div>
+                <textarea class="sandbox-code" id="sandboxCode" spellcheck="false">// Explore toRoman freely!
+// The `roman` object is available globally.
+
+const year = 2025;
+const yearRoman = roman.toRoman(year);
+console.log(`${year} in Roman numerals: ${yearRoman}`);
+
+// Arithmetic
+const sum = roman.addRoman("MCM", "LXXXV");
+console.log("1900 + 85 =", sum);
+
+// Range
+const decade = roman.rangeRoman(1, 10);
+console.log("First decade:", decade.join(", "));
+
+// Validate
+const tests = ["XIV", "IIII", "MCM", "VV"];
+tests.forEach(t => {
+  console.log(`isRoman("${t}") →`, roman.isRoman(t));
+});</textarea>
+            </div>
+            <div class="sandbox-output">
+                <div class="sandbox-toolbar">
+                    <span class="sandbox-label">output</span>
+                    <button class="copy-btn-sm" onclick="clearOutput()">Clear</button>
+                </div>
+                <div class="sandbox-result" id="sandboxResult">
+                    <div class="sandbox-hint">Press ▶ Run or Ctrl+Enter to execute</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- v2.1 Roadmap -->
+    <section class="doc-section roadmap-section" id="v2" data-section="v2">
+        <div class="roadmap-badge">Coming in v2.1</div>
+        <h2 class="section-title">What's Next</h2>
+        <p class="section-desc">The library is actively evolving. Here's what's planned for the next major release.</p>
+
+        <div class="roadmap-grid">
+
+            <div class="roadmap-card">
+                <div class="roadmap-icon">⚡</div>
+                <h3>Expression Parser</h3>
+                <p>Evaluate Roman numeral expressions directly.</p>
+                <div class="code-block compact">
+            <pre><code>roman.<span class="fn">evaluate</span>(<span class="str">"X + V * II"</span>)
+<span class="cm">// → "XX"</span></code></pre>
+                </div>
+            </div>
+
+            <div class="roadmap-card">
+                <div class="roadmap-icon">🏛</div>
+                <h3>Immutable Roman Object</h3>
+                <p>A chainable, immutable Roman numeral class.</p>
+                <div class="code-block compact">
+            <pre><code><span class="kw">const</span> x = <span class="fn">Roman</span>(<span class="str">"X"</span>);
+x.<span class="fn">add</span>(<span class="str">"V"</span>).<span class="fn">toString</span>(); <span
+                        class="cm">// "XV"</span></code></pre>
+                </div>
+            </div>
+
+            <div class="roadmap-card">
+                <div class="roadmap-icon">⚛️</div>
+                <h3>Framework Hooks</h3>
+                <p>First-class React & Vue integration.</p>
+                <div class="code-block compact">
+            <pre><code><span class="kw">const</span> { roman, error }
+  = <span class="fn">useRoman</span>(input);
+<span class="cm">// React / Vue hook</span></code></pre>
+                </div>
+            </div>
+
+            <div class="roadmap-card">
+                <div class="roadmap-icon">💻</div>
+                <h3>CLI Improvements</h3>
+                <p>Powerful flags and piping support.</p>
+                <div class="code-block compact">
+            <pre><code><span class="cm"># Convert from Roman</span>
+toroman --from XLII
+<span class="cm"># Pipe input</span>
+<span class="kw">echo</span> 42 | toroman</code></pre>
+                </div>
+            </div>
+
+            <div class="roadmap-card">
+                <div class="roadmap-icon">🛡</div>
+                <h3>Consistent Error Design</h3>
+                <p>Custom error classes with uniform messages.</p>
+                <div class="code-block compact">
+            <pre><code><span class="kw">throw new</span> <span class="fn">RomanError</span>(
+  <span class="str">"Invalid numeral: IIII"</span>
+);</code></pre>
+                </div>
+            </div>
+
+            <div class="roadmap-card">
+                <div class="roadmap-icon">📊</div>
+                <h3>Benchmarks</h3>
+                <p>Performance comparisons with similar libraries.</p>
+                <div class="code-block compact">
+            <pre><code><span class="cm">// Benchmark suite</span>
+bench(<span class="str">"toRoman"</span>, () => {
+  roman.<span class="fn">toRoman</span>(<span class="num">3999</span>);
+});</code></pre>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <footer class="doc-footer">
+        <p>toRoman is open-source and MIT licensed · Built by <a href="https://github.com/Zubs" target="_blank">Zubs</a>
+        </p>
+        <p class="footer-roman">MMXXVI</p>
+    </footer>
+
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>
