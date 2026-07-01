@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description"
+          content="Projects by Zubair Idris Aweda — Full-Stack Engineer. Detailed breakdown of products, open source libraries, and academic work."/>
+    <title>Projects — Zubair Idris Aweda</title>
+    <link rel="icon"
+          href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='28'>Z</text></svg>"/>
+    <link rel="stylesheet" href="style.css"/>
+    <style>
+        /* ── Page-specific overrides ── */
+        .proj-page-hero {
+            padding: calc(var(--nav-h) + 5rem) 0 4rem;
+            border-bottom: 1px solid var(--rule);
+        }
+
+        .proj-page-hero .breadcrumb {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--amber);
+            margin-bottom: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .proj-page-hero .breadcrumb a {
+            color: var(--ink-light);
+            transition: color 0.2s;
+        }
+
+        .proj-page-hero .breadcrumb a:hover {
+            color: var(--amber);
+        }
+
+        .proj-page-hero .breadcrumb span {
+            color: var(--rule);
+        }
+
+        .proj-page-intro {
+            max-width: 620px;
+            font-size: 1.05rem;
+            color: var(--ink-mid);
+            margin-top: 1.2rem;
+            line-height: 1.75;
+        }
+
+        /* ── Filter bar ── */
+        .proj-filter-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            padding: 2.5rem 0 3rem;
+            border-bottom: 1px solid var(--rule);
+            align-items: center;
+        }
+
+        .proj-filter-bar .filter-label {
+            font-family: var(--font-mono);
+            font-size: 0.62rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--ink-light);
+            margin-right: 0.4rem;
+        }
+
+        /* ── Project entries ── */
+        .proj-entries {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .proj-entry {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            gap: 0;
+            border-bottom: 1px solid var(--rule);
+            padding: 4rem 0;
+            align-items: start;
+            transition: background 0.2s;
+        }
+
+        .proj-entry:first-child {
+            padding-top: 3.5rem;
+        }
+
+        .proj-entry.hidden {
+            display: none;
+        }
+
+        .proj-sidebar {
+            padding-right: 3rem;
+            position: sticky;
+            top: calc(var(--nav-h) + 2rem);
+        }
+
+        .proj-category {
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--amber);
+            margin-bottom: 0.8rem;
+        }
+
+        .proj-title-main {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            font-weight: 500;
+            color: var(--ink);
+            line-height: 1.1;
+            margin-bottom: 1rem;
+        }
+
+        .proj-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 0.3rem 0.8rem;
+            margin-bottom: 1.6rem;
+        }
+
+        .proj-status.live {
+            background: rgba(26, 58, 92, 0.08);
+            color: var(--accent);
+            border: 1px solid rgba(26, 58, 92, 0.2);
+        }
+
+        .proj-status.building {
+            background: rgba(200, 135, 58, 0.1);
+            color: var(--amber);
+            border: 1px solid rgba(200, 135, 58, 0.3);
+        }
+
+        .proj-status.archived {
+            background: rgba(122, 121, 114, 0.08);
+            color: var(--ink-light);
+            border: 1px solid var(--rule);
+        }
+
+        .proj-status::before {
+            content: '';
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: currentColor;
+            display: block;
+        }
+
+        .proj-status.live::before {
+            animation: statusPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes statusPulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.3;
+            }
+        }
+
+        .proj-links-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .proj-links-sidebar a {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--accent);
+            border: 1px solid rgba(26, 58, 92, 0.25);
+            padding: 0.45rem 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.2s;
+        }
+
+        .proj-links-sidebar a:hover {
+            background: var(--accent);
+            color: var(--white);
+            border-color: var(--accent);
+        }
+
+        /* ── Main content ── */
+        .proj-main {
+            padding-left: 3rem;
+            border-left: 1px solid var(--rule);
+        }
+
+        .proj-headline {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 400;
+            font-style: italic;
+            color: var(--ink);
+            line-height: 1.35;
+            margin-bottom: 1.6rem;
+            max-width: 540px;
+        }
+
+        .proj-desc-body {
+            color: var(--ink-mid);
+            font-size: 0.95rem;
+            line-height: 1.75;
+            margin-bottom: 2.5rem;
+            max-width: 560px;
+        }
+
+        .proj-desc-body p + p {
+            margin-top: 1rem;
+        }
+
+        .proj-meta-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0;
+            border: 1px solid var(--rule);
+            margin-bottom: 2.5rem;
+        }
+
+        .proj-meta-cell {
+            padding: 1.2rem 1.4rem;
+            border-right: 1px solid var(--rule);
+        }
+
+        .proj-meta-cell:last-child {
+            border-right: none;
+        }
+
+        .proj-meta-key {
+            font-family: var(--font-mono);
+            font-size: 0.58rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--amber);
+            margin-bottom: 0.4rem;
+        }
+
+        .proj-meta-val {
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+            color: var(--ink-mid);
+            line-height: 1.4;
+        }
+
+        /* ── Blocks ── */
+        .proj-block {
+            margin-bottom: 2.5rem;
+        }
+
+        .proj-block-label {
+            font-family: var(--font-mono);
+            font-size: 0.62rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--ink-light);
+            margin-bottom: 0.9rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--rule);
+        }
+
+        .feature-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.6rem 1.5rem;
+            list-style: none;
+        }
+
+        .feature-list li {
+            font-size: 0.88rem;
+            color: var(--ink-mid);
+            display: flex;
+            align-items: baseline;
+            gap: 0.6rem;
+            line-height: 1.5;
+        }
+
+        .feature-list li::before {
+            content: '→';
+            color: var(--amber);
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            flex-shrink: 0;
+        }
+
+        .tech-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+        }
+
+        .tech-chip {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            padding: 0.3rem 0.7rem;
+            border: 1px solid var(--rule);
+            color: var(--ink-mid);
+            letter-spacing: 0.04em;
+            background: var(--bg-warm);
+        }
+
+        .tech-chip.primary {
+            border-color: rgba(26, 58, 92, 0.3);
+            background: rgba(26, 58, 92, 0.05);
+            color: var(--accent);
+        }
+
+        .impact-stat {
+            display: flex;
+            align-items: baseline;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .impact-num {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            font-weight: 300;
+            color: var(--accent);
+        }
+
+        .impact-desc {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--ink-light);
+        }
+
+        /* ── Visual placeholder ── */
+        .proj-visual {
+            margin-bottom: 2.5rem;
+            border: 1px solid var(--rule);
+            border-radius: 2px;
+            overflow: hidden;
+            background: var(--bg-warm);
+            position: relative;
+        }
+
+        .proj-visual-inner {
+            padding: 2.5rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 180px;
+        }
+
+        .proj-visual-text {
+            font-family: var(--font-display);
+            font-size: clamp(1.8rem, 4vw, 2.8rem);
+            font-weight: 300;
+            font-style: italic;
+            color: var(--rule);
+            text-align: center;
+            letter-spacing: -0.02em;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .proj-visual-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding: 0.25rem 0.6rem;
+            background: var(--bg);
+            border: 1px solid var(--rule);
+            color: var(--ink-light);
+        }
+
+        /* ── Summary panel ── */
+        .proj-summary-panel {
+            background: var(--accent);
+            color: var(--white);
+            padding: 1.8rem 2rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .proj-summary-panel .panel-label {
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 0.6rem;
+        }
+
+        .proj-summary-panel p {
+            font-size: 0.9rem;
+            line-height: 1.65;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 860px) {
+            .proj-entry {
+                grid-template-columns: 1fr;
+            }
+
+            .proj-sidebar {
+                position: static;
+                padding-right: 0;
+                padding-bottom: 2.5rem;
+                margin-bottom: 2rem;
+                border-bottom: 1px solid var(--rule);
+            }
+
+            .proj-main {
+                padding-left: 0;
+                border-left: none;
+            }
+
+            .proj-meta-row {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .proj-meta-row .proj-meta-cell:nth-child(2) {
+                border-right: none;
+            }
+
+            .proj-meta-row .proj-meta-cell:nth-child(3) {
+                border-top: 1px solid var(--rule);
+                grid-column: 1 / -1;
+                border-right: none;
+            }
+        }
+
+        @media (max-width: 560px) {
+            .proj-meta-row {
+                grid-template-columns: 1fr;
+            }
+
+            .proj-meta-cell {
+                border-right: none !important;
+                border-bottom: 1px solid var(--rule);
+            }
+
+            .proj-meta-cell:last-child {
+                border-bottom: none;
+            }
+
+            .feature-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+    <div class="container">
+        <div class="nav-inner">
+            <a href="index.html" class="nav-logo">Zubair Idris Aweda</a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="index.html#experience">Experience</a></li>
+                <li><a href="#" style="color:var(--amber)">Projects</a></li>
+                <li><a href="testimonials.html">Testimonials</a></li>
+                <li><a href="index.html#writing">Writing</a></li>
+                <li><a href="index.html#contact">Contact</a></li>
+            </ul>
+            <a href="Zubair-Idris-Aweda-ATS-Resume.pdf" target="_blank" class="nav-cta" id="nav-cv-btn">CV ↗</a>
+            <button class="nav-burger" id="burger" aria-label="Toggle menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<!-- HERO -->
+<div class="proj-page-hero section--alt">
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="index.html">Home</a>
+            <span>/</span>
+            Projects
+        </div>
+        <h1 class="section-title" style="font-size:clamp(2.4rem,6vw,4rem);">
+            Things I've<br><em>Built</em>
+        </h1>
+        <p class="proj-page-intro">
+            A recruiter-facing breakdown of my work — products, open source libraries, and
+            academic projects. Each entry covers the problem, the engineering decisions, and
+            the outcomes. I care about code that ships, systems that hold, and software
+            that actually helps people.
+        </p>
+    </div>
+</div>
+
+<!-- FILTER -->
+<div class="container">
+    <div class="proj-filter-bar">
+        <span class="filter-label">Filter by</span>
+        <button class="filter-btn active" data-filter="all">All Projects</button>
+        <button class="filter-btn" data-filter="product">Products</button>
+        <button class="filter-btn" data-filter="opensource">Open Source</button>
+        <button class="filter-btn" data-filter="academic">Academic</button>
+        <button class="filter-btn" data-filter="experiment">Experiments</button>
+    </div>
+</div>
+
+<!-- ENTRIES -->
+<div class="container">
+    <div class="proj-entries">
+
+        <!-- ── IslamicHub ── -->
+        <article class="proj-entry reveal" data-category="product">
+            <div class="proj-sidebar">
+                <p class="proj-category">Product · Open Source</p>
+                <h2 class="proj-title-main">IslamicHub</h2>
+                <span class="proj-status live">Live</span>
+                <div class="proj-links-sidebar">
+                    <a href="https://islamichub.xyz/" target="_blank" rel="noopener">islamichub.xyz ↗</a>
+                    <a href="https://github.com/Zubs/islamichub" target="_blank" rel="noopener">GitHub ↗</a>
+                </div>
+            </div>
+
+            <div class="proj-main">
+                <p class="proj-headline">IslamicHub is a comprehensive, open-source Islamic education and utility
+                    platform designed to help users learn and live the Five Pillars of Islam. It combines in-depth
+                    scholarly guides grounded in the Qur'an and Hadith with high-utility modern tools like a Zakat
+                    calculator, prayer time engine, and inheritance (Fara'id) calculator.</p>
+
+                <div class="proj-desc-body">
+                    <p>
+                        IslamicHub is a free Islamic education and tools platform built for Muslims seeking
+                        accurate, well-sourced religious guidance online. The problem: most Islamic sites are
+                        either overly simplified, source-poor, or built without real attention to the differences
+                        between schools of thought. IslamicHub treats religious accuracy as a hard requirement,
+                        not an afterthought.
+                    </p>
+                    <p>
+                        Every feature — from the prayer times calculation to the inheritance calculator — is
+                        grounded in Qur'an, Hadith, and cross-referenced with all four major schools of Islamic
+                        jurisprudence (Hanafi, Maliki, Shafi'i, Hanbali). The platform is co-founded with Yusuf Saif
+                        and is actively used and maintained.
+                    </p>
+                </div>
+
+                <div class="proj-meta-row">
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Role</p>
+                        <p class="proj-meta-val">Co-founder &amp; Lead Engineer</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Timeline</p>
+                        <p class="proj-meta-val">2026 – Present</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Stack</p>
+                        <p class="proj-meta-val">Vue 3 · Vite · Pinia</p>
+                    </div>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Core Features</p>
+                    <ul class="feature-list">
+                        <li>Accurate prayer times with Qibla direction finder</li>
+                        <li>Zakat calculator with live gold &amp; silver prices</li>
+                        <li>Islamic inheritance calculator</li>
+                        <li>Live API-driven Hijri calendar</li>
+                        <li>Five Pillars guides grounded in primary sources</li>
+                        <li>Cross-school jurisprudence references throughout</li>
+                        <li>Extensive Hadith library</li>
+                    </ul>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Engineering Decisions</p>
+                    <ul class="feature-list">
+                        <li>Migrated from the original design in HTML, CSS, and JavaScript to Vue 3 Composition API</li>
+                        <li>Pinia for predictable, modular state management</li>
+                        <li>Live external API integration for financial data (Zakat)</li>
+                        <li>Structured content architecture for multi-madhab content</li>
+                    </ul>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Technologies</p>
+                    <div class="tech-chips">
+                        <span class="tech-chip primary">Vue 3</span>
+                        <span class="tech-chip primary">JavaScript</span>
+                        <span class="tech-chip primary">Pinia</span>
+                        <span class="tech-chip">Vite</span>
+                        <span class="tech-chip">Vue Router</span>
+                        <span class="tech-chip">REST APIs</span>
+                        <span class="tech-chip">Responsive HTML & CSS</span>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- ── Kueri ── -->
+        <article class="proj-entry reveal" data-category="product">
+            <div class="proj-sidebar">
+                <p class="proj-category">Product · Developer Tool</p>
+                <h2 class="proj-title-main">Kueri</h2>
+                <span class="proj-status building">Building</span>
+                <div class="proj-links-sidebar">
+                    <a href="https://kueriapp.netlify.app/" target="_blank" rel="noopener">Live preview ↗</a>
+                </div>
+            </div>
+
+            <div class="proj-main">
+                <p class="proj-headline">"TablePlus meets Cursor — an AI-native desktop database client for
+                    developers."</p>
+
+                <div class="proj-visual">
+                    <div class="proj-visual-inner">
+                        <span class="proj-visual-text">Kueri</span>
+                    </div>
+                    <span class="proj-visual-badge">Desktop · AI · In Development</span>
+                </div>
+
+                <div class="proj-desc-body">
+                    <p>
+                        Most database clients are UI wrappers around SQL. Kueri is an IDE-style tool — you can write
+                        queries the traditional way, or describe what you want in plain English and let the AI
+                        generate and explain the SQL. It's positioned at the intersection of developer tooling and
+                        AI assistance, for teams that already know SQL but want to move faster.
+                    </p>
+                    <p>
+                        Built during a focused 10-day pivot from concept to MVP. Currently in active development,
+                        with a pre-seed pitch deck, AI cost-reduction roadmap, and launch strategy in progress.
+                        Supports PostgreSQL, MySQL, MongoDB, and SQLite.
+                    </p>
+                </div>
+
+                <div class="proj-meta-row">
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Role</p>
+                        <p class="proj-meta-val">Solo founder &amp; Engineer</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Timeline</p>
+                        <p class="proj-meta-val">2025 – Present</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Stack</p>
+                        <p class="proj-meta-val">Electron · Vue 3 · Tailwind · Gemini</p>
+                    </div>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Core Features (MVP)</p>
+                    <ul class="feature-list">
+                        <li>Natural language → SQL query generation</li>
+                        <li>AI query explanation for onboarding &amp; learning</li>
+                        <li>Multi-database support (PG, MySQL, MongoDB, SQLite)</li>
+                        <li>IDE-style interface with schema explorer</li>
+                        <li>Connection management with encrypted credentials</li>
+                        <li>Query history and saved snippets</li>
+                    </ul>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Key Engineering Challenges</p>
+                    <ul class="feature-list">
+                        <li>AI token cost optimisation across query volumes</li>
+                        <li>Cross-database query normalisation layer</li>
+                        <li>Electron IPC architecture for secure DB connections</li>
+                        <li>Context-aware prompt engineering for schema-aware AI</li>
+                    </ul>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Technologies</p>
+                    <div class="tech-chips">
+                        <span class="tech-chip primary">Electron</span>
+                        <span class="tech-chip primary">Vue 3</span>
+                        <span class="tech-chip primary">Google Gemini</span>
+                        <span class="tech-chip">Tailwind CSS</span>
+                        <span class="tech-chip">PostgreSQL</span>
+                        <span class="tech-chip">MySQL</span>
+                        <span class="tech-chip">MongoDB</span>
+                        <span class="tech-chip">SQLite</span>
+                        <span class="tech-chip">Node.js</span>
+                    </div>
+                </div>
+
+                <div class="proj-summary-panel">
+                    <p class="panel-label">Why this matters to a recruiter</p>
+                    <p>Building a startup solo demonstrates product thinking, architecture ownership, AI integration
+                        experience, and the ability to ship — not just code. Kueri is a live proof of all four.</p>
+                </div>
+            </div>
+        </article>
+
+        <!-- ── toRoman ── -->
+        <article class="proj-entry reveal" data-category="opensource">
+            <div class="proj-sidebar">
+                <p class="proj-category">Open Source · npm Package</p>
+                <h2 class="proj-title-main">toRoman</h2>
+                <span class="proj-status live">Published</span>
+                <div class="proj-links-sidebar">
+                    <a href="https://github.com/Zubs/toRoman" target="_blank" rel="noopener">GitHub ↗</a>
+                    <a href="https://www.npmjs.com/package/toroman" target="_blank" rel="noopener">npm ↗</a>
+                    <a href="packages/toroman/index.html" target="_blank">Interactive Playground ↗</a>
+                </div>
+            </div>
+
+            <div class="proj-main">
+                <p class="proj-headline">"A zero-dependency library for Roman numeral operations — shipped with a full
+                    interactive docs playground."</p>
+
+                <div class="proj-desc-body">
+                    <p>
+                        toRoman is a lightweight TypeScript library for converting between Arabic integers and
+                        Roman numerals, validating Roman numeral strings, and performing arithmetic entirely in
+                        Roman notation. What started as a focused utility grew into a full-featured package with
+                        a rich API and a custom-built interactive documentation site.
+                    </p>
+                    <p>
+                        The library handles edge cases the obvious implementation misses — invalid character
+                        sequences, repetition limits per Roman character, subtractive notation rules — all
+                        enforced with clear, typed error messages. The accompanying docs playground lets users
+                        try every API method in the browser without setup.
+                    </p>
+                </div>
+
+                <div class="proj-meta-row">
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Role</p>
+                        <p class="proj-meta-val">Author &amp; Maintainer</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Distribution</p>
+                        <p class="proj-meta-val">npm · CDN (unpkg)</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Stack</p>
+                        <p class="proj-meta-val">TypeScript · Zero deps</p>
+                    </div>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">API Surface</p>
+                    <ul class="feature-list">
+                        <li><code style="font-size:0.78rem;color:var(--accent)">toRoman(n)</code> — integer → Roman</li>
+                        <li><code style="font-size:0.78rem;color:var(--accent)">fromRoman(s)</code> — Roman → integer
+                        </li>
+                        <li><code style="font-size:0.78rem;color:var(--accent)">isRoman(s)</code> — full validation</li>
+                        <li><code style="font-size:0.78rem;color:var(--accent)">addRoman / subtractRoman</code></li>
+                        <li><code style="font-size:0.78rem;color:var(--accent)">multiplyRoman / divideRoman</code></li>
+                        <li><code style="font-size:0.78rem;color:var(--accent)">rangeRoman / tableRoman</code></li>
+                    </ul>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Technologies</p>
+                    <div class="tech-chips">
+                        <span class="tech-chip primary">TypeScript</span>
+                        <span class="tech-chip primary">npm</span>
+                        <span class="tech-chip">Vanilla JS</span>
+                        <span class="tech-chip">Zero dependencies</span>
+                        <span class="tech-chip">Custom Docs Site</span>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- ── OWASP SecBank ── -->
+        <article class="proj-entry reveal" data-category="academic">
+            <div class="proj-sidebar">
+                <p class="proj-category">Academic · Security</p>
+                <h2 class="proj-title-main">OWASP SecBank</h2>
+                <span class="proj-status archived">Conference Talk</span>
+                <div class="proj-links-sidebar">
+                    <a href="https://github.com/Zubs/owasp-sec-bank" target="_blank" rel="noopener">GitHub ↗</a>
+                </div>
+            </div>
+
+            <div class="proj-main">
+                <p class="proj-headline">"A deliberately vulnerable banking app — built to teach security by breaking
+                    it."</p>
+
+                <div class="proj-desc-body">
+                    <p>
+                        OWASP SecBank is a PHP/Laravel banking application intentionally built with the OWASP
+                        Top 10 vulnerabilities baked in. The purpose: give developers a safe, realistic target to
+                        practice identifying, exploiting, and remediating real-world security flaws in a familiar
+                        domain (financial transactions).
+                    </p>
+                    <p>
+                        The project formed the basis of a security talk delivered at DevFest London 2023 and DevFest
+                        Ogbomoso 2022, where it was used to demonstrate live exploitation and remediation of each
+                        vulnerability class. Teaching security through a working, attackable system lands differently
+                        than slides alone.
+                    </p>
+                </div>
+
+                <div class="proj-meta-row">
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Role</p>
+                        <p class="proj-meta-val">Author &amp; Speaker</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Presented</p>
+                        <p class="proj-meta-val">DevFest London 2023</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Domain</p>
+                        <p class="proj-meta-val">Application Security</p>
+                    </div>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Vulnerabilities Demonstrated</p>
+                    <ul class="feature-list">
+                        <li>SQL Injection (A03)</li>
+                        <li>Broken Access Control (A01)</li>
+                        <li>Cryptographic Failures (A02)</li>
+                        <li>XSS — Stored &amp; Reflected (A03)</li>
+                        <li>Insecure Direct Object References</li>
+                        <li>Security Misconfiguration (A05)</li>
+                    </ul>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Technologies</p>
+                    <div class="tech-chips">
+                        <span class="tech-chip primary">PHP</span>
+                        <span class="tech-chip primary">Laravel</span>
+                        <span class="tech-chip">MySQL</span>
+                        <span class="tech-chip">OWASP Top 10</span>
+                        <span class="tech-chip">Blade Templates</span>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- ── Scholar Search ── -->
+        <article class="proj-entry reveal" data-category="academic">
+            <div class="proj-sidebar">
+                <p class="proj-category">Academic · Big Data</p>
+                <h2 class="proj-title-main">ScholarSearch</h2>
+                <span class="proj-status archived">Academic</span>
+                <div class="proj-links-sidebar">
+                    <a href="https://github.com/Zubs/scholar-search" target="_blank" rel="noopener">GitHub ↗</a>
+                </div>
+            </div>
+
+            <div class="proj-main">
+                <p class="proj-headline">"A full-stack academic search engine over an arXiv dataset — built for a Big
+                    Data module."</p>
+
+                <div class="proj-desc-body">
+                    <p>
+                        ScholarSearch is a research paper discovery tool built as a university project for a Big
+                        Data module (6CS030). The system ingests a large arXiv dataset into Elasticsearch,
+                        exposing a fast full-text search API via FastAPI, consumed by a Vue 3 frontend.
+                    </p>
+                    <p>
+                        The project required not just engineering but academic rigour — including a Literature
+                        Review covering information retrieval systems, an IEEE-formatted report, and multiple
+                        audit passes to catch bugs including XSS via v-html, pagination edge cases, sort value
+                        mismatches, and null pointer crashes.
+                    </p>
+                </div>
+
+                <div class="proj-meta-row">
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Role</p>
+                        <p class="proj-meta-val">Lead Engineer &amp; Author</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Module</p>
+                        <p class="proj-meta-val">6CS030 — Big Data</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Dataset</p>
+                        <p class="proj-meta-val">arXiv research papers</p>
+                    </div>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Technical Highlights</p>
+                    <ul class="feature-list">
+                        <li>Elasticsearch for full-text search at scale</li>
+                        <li>FastAPI backend with pagination &amp; filtering</li>
+                        <li>Vue 3 Composition API frontend</li>
+                        <li>XSS remediation (v-html audit)</li>
+                        <li>arXiv dataset ingestion pipeline</li>
+                        <li>IEEE-formatted academic report</li>
+                    </ul>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Technologies</p>
+                    <div class="tech-chips">
+                        <span class="tech-chip primary">Vue 3</span>
+                        <span class="tech-chip primary">FastAPI</span>
+                        <span class="tech-chip primary">Elasticsearch</span>
+                        <span class="tech-chip">Python</span>
+                        <span class="tech-chip">arXiv Dataset</span>
+                        <span class="tech-chip">Docker</span>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- ── BrickBreaker ── -->
+        <article class="proj-entry reveal" data-category="experiment">
+            <div class="proj-sidebar">
+                <p class="proj-category">Experiment · AI-Paired</p>
+                <h2 class="proj-title-main">BrickBreaker Challenge</h2>
+                <span class="proj-status archived">Experiment</span>
+                <div class="proj-links-sidebar">
+                    <a href="https://github.com/Zubs/BrickBreakerChallenge" target="_blank" rel="noopener">GitHub ↗</a>
+                </div>
+            </div>
+
+            <div class="proj-main">
+                <p class="proj-headline">"An experiment in human-AI co-authorship — building a game with an AI pair
+                    programmer."</p>
+
+                <div class="proj-desc-body">
+                    <p>
+                        A fully playable Brick Breaker game built in collaboration with an AI pair-programmer.
+                        The project was an intentional exploration of human-AI co-authorship in game development:
+                        where does the human add value, where does the AI excel, and what does the handoff look like?
+                    </p>
+                    <p>
+                        Beyond the game itself, this is a study in prompt engineering, AI output review, and the
+                        pragmatics of building software with generative tools — a skill set increasingly relevant
+                        across the industry.
+                    </p>
+                </div>
+
+                <div class="proj-meta-row">
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Role</p>
+                        <p class="proj-meta-val">Lead + AI co-author</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Type</p>
+                        <p class="proj-meta-val">Browser game</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Stack</p>
+                        <p class="proj-meta-val">Vanilla JavaScript · Canvas API</p>
+                    </div>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Technologies</p>
+                    <div class="tech-chips">
+                        <span class="tech-chip primary">JavaScript</span>
+                        <span class="tech-chip">HTML5 Canvas</span>
+                        <span class="tech-chip">AI-assisted dev</span>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- ── GPCalc ── -->
+        <article class="proj-entry reveal" data-category="experiment">
+            <div class="proj-sidebar">
+                <p class="proj-category">Experiment · Utility</p>
+                <h2 class="proj-title-main">GPCalc</h2>
+                <span class="proj-status archived">Utility</span>
+                <div class="proj-links-sidebar">
+                    <a href="https://github.com/Zubs/GPCalc" target="_blank" rel="noopener">GitHub ↗</a>
+                </div>
+            </div>
+
+            <div class="proj-main">
+                <p class="proj-headline">"A GPA/CGPA calculator that supports multiple grading scales — built because
+                    the existing ones were terrible."</p>
+
+                <div class="proj-desc-body">
+                    <p>
+                        GPCalc is a GPA and CGPA calculator utility built for students who need to quickly
+                        compute grade point averages without wrestling with inflexible tools. It supports
+                        different grading scales across institutions and handles the running CGPA calculation
+                        across multiple semesters.
+                    </p>
+                </div>
+
+                <div class="proj-meta-row">
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Role</p>
+                        <p class="proj-meta-val">Author</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Type</p>
+                        <p class="proj-meta-val">Student utility</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Users</p>
+                        <p class="proj-meta-val">Students</p>
+                    </div>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Technologies</p>
+                    <div class="tech-chips">
+                        <span class="tech-chip primary">JavaScript</span>
+                        <span class="tech-chip">HTML/CSS</span>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+    </div><!-- /proj-entries -->
+</div>
+
+<!-- FOOTER CTA -->
+<section id="contact" class="section" style="background:var(--ink);color:var(--bg);">
+    <div class="container">
+        <p class="section-label" style="color:var(--amber);">What's next</p>
+        <h2 class="section-title" style="color:var(--bg);">Want to talk about<br><em style="color:var(--amber);">working
+            together?</em></h2>
+        <div class="section-rule" style="background:var(--amber-lt);"></div>
+        <div style="display:flex;flex-wrap:wrap;gap:1rem;margin-top:1rem;">
+            <a href="mailto:zubairidrisaweda@gmail.com" class="btn btn-amber">Send me an email ↗</a>
+            <a href="testimonials.html" class="btn btn-outline-light">Read testimonials →</a>
+            <a href="Zubair-Idris-Aweda-ATS-Resume.pdf" target="_blank" class="btn btn-outline-light">Download CV ↗</a>
+        </div>
+        <p style="font-family:var(--font-mono);font-size:0.65rem;color:rgba(247,245,240,0.35);margin-top:2rem;letter-spacing:0.08em;">
+            <a href="index.html" style="color:rgba(247,245,240,0.35);transition:color 0.2s;"
+               onmouseover="this.style.color='var(--amber)'" onmouseout="this.style.color='rgba(247,245,240,0.35)'">←
+                Back to portfolio</a>
+        </p>
+    </div>
+</section>
+
+<footer>
+    <div class="container">
+        <div class="footer-inner">
+            <p class="footer-copy">© 2026 Zubair Idris Aweda.</p>
+            <div class="footer-links">
+                <a href="index.html">Home</a>
+                <a href="testimonials.html">Testimonials</a>
+                <a href="mailto:zubairidrisaweda@gmail.com">Email</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script>
+    // Nav shadow
+    (function () {
+        const nav = document.getElementById('nav');
+        const burger = document.getElementById('burger');
+        const links = document.getElementById('navLinks');
+        window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 30), {passive: true});
+        burger && burger.addEventListener('click', () => links.classList.toggle('open'));
+        links && links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => links.classList.remove('open')));
+    })();
+
+    // Reveal
+    (function () {
+        const obs = new IntersectionObserver(
+            entries => entries.forEach(e => {
+                if (e.isIntersecting) {
+                    e.target.classList.add('visible');
+                    obs.unobserve(e.target);
+                }
+            }),
+            {threshold: 0.05, rootMargin: '0px 0px -40px 0px'}
+        );
+        document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+    })();
+
+    // Filter
+    (function () {
+        const btns = document.querySelectorAll('.filter-btn');
+        const entries = document.querySelectorAll('.proj-entry');
+        btns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                btns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const cat = btn.dataset.filter;
+                entries.forEach(e => e.classList.toggle('hidden', cat !== 'all' && e.dataset.category !== cat));
+            });
+        });
+    })();
+</script>
+</body>
+</html>

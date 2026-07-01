@@ -110,7 +110,6 @@ ul {
     margin: 1.6rem 0 3rem;
 }
 
-/* Fade-in animation */
 .reveal {
     opacity: 0;
     transform: translateY(22px);
@@ -151,10 +150,6 @@ ul {
     font-size: 1.25rem;
     font-weight: 500;
     letter-spacing: 0.02em;
-}
-
-.nav-logo span {
-    color: var(--amber);
 }
 
 .nav-links {
@@ -352,6 +347,27 @@ ul {
 .btn-ghost:hover {
     border-color: var(--accent);
     color: var(--accent);
+    transform: translateY(-2px);
+}
+
+.btn-amber {
+    background: var(--amber);
+    color: var(--ink);
+}
+
+.btn-amber:hover {
+    background: #d4923f;
+    transform: translateY(-2px);
+}
+
+.btn-outline-light {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: var(--bg);
+}
+
+.btn-outline-light:hover {
+    border-color: var(--bg);
     transform: translateY(-2px);
 }
 
@@ -687,14 +703,7 @@ ul {
     border-top: 1px solid var(--rule);
 }
 
-.project-lang {
-    font-family: var(--font-mono);
-    font-size: 0.62rem;
-    color: var(--ink-light);
-    letter-spacing: 0.05em;
-}
-
-.project-stars {
+.project-lang, .project-stars {
     font-family: var(--font-mono);
     font-size: 0.62rem;
     color: var(--ink-light);
@@ -745,55 +754,6 @@ ul {
     font-size: 0.82rem;
     color: var(--ink-light);
     line-height: 1.5;
-}
-
-.pubs-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-}
-
-.pub-item {
-    padding: 1.5rem 0;
-    border-bottom: 1px solid var(--rule);
-}
-
-.pub-item:first-child {
-    border-top: 1px solid var(--rule);
-}
-
-.pub-venue {
-    font-family: var(--font-mono);
-    font-size: 0.62rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--amber);
-    margin-bottom: 0.4rem;
-}
-
-.pub-title {
-    font-family: var(--font-display);
-    font-size: 1.1rem;
-    font-weight: 400;
-    color: var(--ink);
-    margin-bottom: 0.3rem;
-    line-height: 1.3;
-}
-
-.pub-title a {
-    border-bottom: 1px solid transparent;
-    transition: border-color 0.2s;
-}
-
-.pub-title a:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-}
-
-.pub-date {
-    font-family: var(--font-mono);
-    font-size: 0.62rem;
-    color: var(--ink-light);
 }
 
 /* ── Speaking ─────────────────────────────────────────────── */
@@ -1095,27 +1055,6 @@ ul {
     align-self: flex-start;
 }
 
-.btn-amber {
-    background: var(--amber);
-    color: var(--ink);
-}
-
-.btn-amber:hover {
-    background: #d4923f;
-    transform: translateY(-2px);
-}
-
-.btn-outline-light {
-    background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    color: var(--bg);
-}
-
-.btn-outline-light:hover {
-    border-color: var(--bg);
-    transform: translateY(-2px);
-}
-
 .contact-email {
     margin-top: 3rem;
     padding-top: 2rem;
@@ -1177,6 +1116,96 @@ footer {
     color: var(--amber);
 }
 
+/* ── Hobbies ──────────────────────────────────────────────── */
+.hobbies-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 0;
+    border: 1px solid var(--rule);
+    background: var(--rule);
+}
+
+.hobby-card {
+    background: var(--bg);
+    padding: 2.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    transition: background 0.25s;
+}
+
+.hobby-card:hover {
+    background: var(--white);
+}
+
+.hobby-icon {
+    font-size: 1.8rem;
+    line-height: 1;
+    margin-bottom: 0.2rem;
+}
+
+.hobby-name {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1.2;
+}
+
+.hobby-desc {
+    font-size: 0.9rem;
+    color: var(--ink-mid);
+    line-height: 1.7;
+}
+
+/* ── Testimonial teaser cards (index.html) ─────────────── */
+.teaser-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    border: 1px solid var(--rule);
+    background: var(--rule);
+}
+
+.teaser-card {
+    background: var(--bg-warm);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    transition: background 0.2s;
+}
+
+.teaser-card:hover {
+    background: var(--white);
+}
+
+.teaser-quote {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-style: italic;
+    color: var(--ink);
+    line-height: 1.6;
+    flex: 1;
+}
+
+.teaser-quote::before {
+    content: '\201C';
+    color: var(--amber);
+    font-size: 1.4rem;
+    line-height: 0;
+    vertical-align: -0.3em;
+    margin-right: 0.1em;
+}
+
+.teaser-attr {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--amber);
+}
+
 /* ── Responsive ───────────────────────────────────────────── */
 @media (max-width: 900px) {
     .about-grid,
@@ -1211,8 +1240,8 @@ footer {
         gap: 0.3rem;
     }
 
-    .talk-date {
-        font-size: 0.62rem;
+    .teaser-grid {
+        grid-template-columns: 1fr;
     }
 }
 
@@ -1280,51 +1309,7 @@ footer {
     .hero-scroll {
         display: none;
     }
-}
 
-/* ── Hobbies ──────────────────────────────────────────────── */
-.hobbies-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 0;
-    border: 1px solid var(--rule);
-    background: var(--rule);
-}
-
-.hobby-card {
-    background: var(--bg);
-    padding: 2.2rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.8rem;
-    transition: background 0.25s;
-}
-
-.hobby-card:hover {
-    background: var(--white);
-}
-
-.hobby-icon {
-    font-size: 1.8rem;
-    line-height: 1;
-    margin-bottom: 0.2rem;
-}
-
-.hobby-name {
-    font-family: var(--font-display);
-    font-size: 1.4rem;
-    font-weight: 500;
-    color: var(--ink);
-    line-height: 1.2;
-}
-
-.hobby-desc {
-    font-size: 0.9rem;
-    color: var(--ink-mid);
-    line-height: 1.7;
-}
-
-@media (max-width: 680px) {
     .hobbies-grid {
         grid-template-columns: 1fr;
     }
