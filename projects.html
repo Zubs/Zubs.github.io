@@ -1208,6 +1208,123 @@
             </div>
         </article>
 
+        <!-- ── FootballSite ── -->
+        <article class="proj-entry reveal" data-category="academic">
+            <div class="proj-sidebar">
+                <p class="proj-category">Academic · Full-Stack · RIA</p>
+                <h2 class="proj-title-main">FootballSite</h2>
+                <span class="proj-status live">Live</span>
+                <div class="proj-links-sidebar">
+                    <a href="https://github.com/Zubs/footballSite" target="_blank" rel="noopener">GitHub ↗</a>
+                </div>
+            </div>
+
+            <div class="proj-main">
+                <p class="proj-headline">"A full-stack football match tracker with live API sync, AJAX navigation,
+                    geolocation filtering, and social comments — graded 100/100."</p>
+
+                <div class="proj-visual">
+                    <div class="proj-visual-inner">
+                        <span class="proj-visual-text">FootballSite ⚽</span>
+                    </div>
+                    <span class="proj-visual-badge">Laravel 12 · MySQL · AJAX · 100/100</span>
+                </div>
+
+                <div class="proj-desc-body">
+                    <p>
+                        Built for the <strong>6CC001 Advanced Web Technologies</strong> module at the University of
+                        Wolverhampton, FootballSite is a dynamic football fixture and fan engagement platform.
+                        It integrates a live third-party football data API (API-Football v3), supports AJAX-driven
+                        browsing without full page reloads, and uses the browser Geolocation API to surface matches
+                        relevant to the user's location. Graded 100/100.
+                    </p>
+                    <p>
+                        The architecture is deliberately lean — a custom service class centralises all
+                        outbound API calls, fixtures are cached in MySQL to avoid redundant requests, and the
+                        same controller method serves both full-page loads and AJAX partial updates by detecting
+                        <code style="font-size:0.78rem;color:var(--accent)">$request->ajax()</code> server-side.
+                        Lineups and match stats are fetched lazily on first visit and stored as JSON columns,
+                        keeping the database write load minimal.
+                    </p>
+                </div>
+
+                <div class="proj-meta-row">
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Module</p>
+                        <p class="proj-meta-val">6CC001 Advanced Web Technologies</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Grade</p>
+                        <p class="proj-meta-val" style="color:var(--accent);font-weight:600;">100 / 100</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Stack</p>
+                        <p class="proj-meta-val">Laravel 12 · MySQL · Alpine.js · API-Football</p>
+                    </div>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Core Features</p>
+                    <ul class="feature-list">
+                        <li>Daily fixture dashboard split into completed &amp; upcoming</li>
+                        <li>Live API sync — refreshes automatically for today/yesterday if stale &gt;10 min</li>
+                        <li>Match detail: starting XIs, substitutes, managers, comparative stat bars</li>
+                        <li>AJAX search with 300ms debounce — no full-page reload on team name filter</li>
+                        <li>AJAX date navigation — prev/next day updates match list in-place via Fetch API</li>
+                        <li>Geolocation "Matches near me" using Browser Geolocation + BigDataCloud reverse geocode</li>
+                        <li>Auth system — register, login, email verification, password reset, account deletion</li>
+                        <li>Social comments per match — authenticated users only, displayed newest-first</li>
+                        <li>Responsive design with collapsible mobile nav, fluid breakpoints</li>
+                        <li>Custom 404 page with football-themed copy</li>
+                    </ul>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Key Engineering Decisions</p>
+                    <ul class="feature-list">
+                        <li><code style="font-size:0.78rem;color:var(--accent)">FootballApiService</code> — dedicated
+                            service class for all API-Football calls; maps status codes to local ENUM
+                        </li>
+                        <li>Smart sync: only re-fetches when date is today/yesterday &amp; last sync &gt;10 min old</li>
+                        <li>Lineups &amp; stats lazy-loaded on first match detail visit, cached as JSON columns</li>
+                        <li><code style="font-size:0.78rem;color:var(--accent)">updateOrCreate</code> throughout to
+                            prevent duplicate records on re-sync
+                        </li>
+                        <li>Same controller action serves full-page load and AJAX partial (detects via <code
+                                style="font-size:0.78rem;color:var(--accent)">$request->ajax()</code>)
+                        </li>
+                        <li>Full PHPUnit test suite — Feature and Unit coverage across Auth, Profile, and core flows
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Technologies</p>
+                    <div class="tech-chips">
+                        <span class="tech-chip primary">PHP 8.2</span>
+                        <span class="tech-chip primary">Laravel 12</span>
+                        <span class="tech-chip primary">MySQL</span>
+                        <span class="tech-chip primary">API-Football v3</span>
+                        <span class="tech-chip">Blade Templates</span>
+                        <span class="tech-chip">Alpine.js</span>
+                        <span class="tech-chip">Tailwind CSS</span>
+                        <span class="tech-chip">Fetch API (AJAX)</span>
+                        <span class="tech-chip">Geolocation API</span>
+                        <span class="tech-chip">Laravel Breeze</span>
+                        <span class="tech-chip">PHPUnit</span>
+                        <span class="tech-chip">Vite</span>
+                    </div>
+                </div>
+
+                <div class="proj-summary-panel">
+                    <p class="panel-label">Why this matters to a recruiter</p>
+                    <p>100/100 on a module that explicitly required third-party API integration, AJAX-driven RIA
+                        behaviour, browser device API usage, and server-side PHP with a database. Every requirement was
+                        met and exceeded — and the codebase is clean enough that the marker had nothing to subtract.</p>
+                </div>
+            </div>
+        </article>
+
     </div><!-- /proj-entries -->
 </div>
 
