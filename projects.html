@@ -780,69 +780,124 @@
         <!-- ── OWASP SecBank ── -->
         <article class="proj-entry reveal" data-category="academic">
             <div class="proj-sidebar">
-                <p class="proj-category">Academic · Security</p>
+                <p class="proj-category">Academic · Security · Dissertation</p>
                 <h2 class="proj-title-main">OWASP SecBank</h2>
-                <span class="proj-status archived">Conference Talk</span>
+                <span class="proj-status live">Live</span>
                 <div class="proj-links-sidebar">
                     <a href="https://github.com/Zubs/owasp-sec-bank" target="_blank" rel="noopener">GitHub ↗</a>
+                    <a href="https://documenter.getpostman.com/view/33365941/2sBXVZpuxT" target="_blank" rel="noopener">API
+                        Docs ↗</a>
                 </div>
             </div>
 
             <div class="proj-main">
-                <p class="proj-headline">"A deliberately vulnerable banking app — built to teach security by breaking
-                    it."</p>
+                <p class="proj-headline">"A BSc dissertation research artefact — two parallel banking apps, one
+                    deliberately broken, one hardened, built to empirically compare OWASP vulnerability behaviour and
+                    mitigation effectiveness."</p>
+
+                <div class="proj-visual">
+                    <div class="proj-visual-inner">
+                        <span class="proj-visual-text">SecBank A/B</span>
+                    </div>
+                    <span class="proj-visual-badge">Dissertation · Vue.js · Express · PostgreSQL</span>
+                </div>
 
                 <div class="proj-desc-body">
                     <p>
-                        OWASP SecBank is a PHP/Laravel banking application intentionally built with the OWASP
-                        Top 10 vulnerabilities baked in. The purpose: give developers a safe, realistic target to
-                        practice identifying, exploiting, and remediating real-world security flaws in a familiar
-                        domain (financial transactions).
+                        OWASP SecBank is a full-stack banking application built as a research artefact for a BSc
+                        Computer Science dissertation. The project addresses a real gap in security research: most
+                        discussions of OWASP vulnerabilities are theoretical. This closes that gap with a live,
+                        working system.
                     </p>
                     <p>
-                        The project formed the basis of a security talk delivered at DevFest London 2023 and DevFest
-                        Ogbomoso 2022, where it was used to demonstrate live exploitation and remediation of each
-                        vulnerability class. Teaching security through a working, attackable system lands differently
-                        than slides alone.
+                        The methodology is A/B: two fully functional parallel builds of the same banking platform.
+                        <strong>Version A (Insecure)</strong> deliberately incorporates weak authentication, inline
+                        SQL queries, insecure design patterns, and missing access controls. <strong>Version B
+                        (Secure)</strong> implements RBAC, parameterised queries, secure session management, and
+                        industry best practices throughout. Running them side-by-side enables direct empirical
+                        comparison of vulnerability behaviour and the measurable impact of each mitigation.
+                        The secure version also served as the basis of a security talk at DevFest London 2023.
                     </p>
                 </div>
 
                 <div class="proj-meta-row">
                     <div class="proj-meta-cell">
                         <p class="proj-meta-key">Role</p>
-                        <p class="proj-meta-val">Author &amp; Speaker</p>
+                        <p class="proj-meta-val">Author, Researcher &amp; Speaker</p>
                     </div>
                     <div class="proj-meta-cell">
-                        <p class="proj-meta-key">Presented</p>
-                        <p class="proj-meta-val">DevFest London 2023</p>
+                        <p class="proj-meta-key">Context</p>
+                        <p class="proj-meta-val">BSc Dissertation + DevFest London 2023</p>
                     </div>
                     <div class="proj-meta-cell">
-                        <p class="proj-meta-key">Domain</p>
-                        <p class="proj-meta-val">Application Security</p>
+                        <p class="proj-meta-key">Stack</p>
+                        <p class="proj-meta-val">Vue.js · Express.js · PostgreSQL</p>
                     </div>
                 </div>
 
                 <div class="proj-block">
-                    <p class="proj-block-label">Vulnerabilities Demonstrated</p>
+                    <p class="proj-block-label">A/B Methodology — What's Compared</p>
                     <ul class="feature-list">
-                        <li>SQL Injection (A03)</li>
-                        <li>Broken Access Control (A01)</li>
-                        <li>Cryptographic Failures (A02)</li>
-                        <li>XSS — Stored &amp; Reflected (A03)</li>
-                        <li>Insecure Direct Object References</li>
-                        <li>Security Misconfiguration (A05)</li>
+                        <li><strong>Insecure:</strong> Inline SQL → SQL Injection risk</li>
+                        <li><strong>Secure:</strong> Parameterised queries → injection prevented</li>
+                        <li><strong>Insecure:</strong> Weak auth, no RBAC → broken access control</li>
+                        <li><strong>Secure:</strong> RBAC + secure session management</li>
+                        <li><strong>Insecure:</strong> No input validation → XSS &amp; injection vectors</li>
+                        <li><strong>Secure:</strong> Server-side validation &amp; output encoding</li>
+                        <li><strong>Insecure:</strong> Plaintext credentials, insecure storage</li>
+                        <li><strong>Secure:</strong> Hashed passwords, secure token handling</li>
+                    </ul>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Full Feature Set (Both Versions)</p>
+                    <ul class="feature-list">
+                        <li>User registration, login, logout with token auth</li>
+                        <li>Money transfer with recipient account lookup</li>
+                        <li>Transaction history with full audit trail</li>
+                        <li>Profile management including avatar upload/view</li>
+                        <li>Admin dashboard: all users, transactions, system logs</li>
+                        <li>DB schemas: Users, Accounts, Transactions, Logs, Tokens</li>
+                    </ul>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Engineering &amp; Research Notes</p>
+                    <ul class="feature-list">
+                        <li>SonarQube integrated for static code quality analysis</li>
+                        <li>GitHub Actions CI/CD pipeline via <code style="font-size:0.78rem;color:var(--accent)">.github/workflows</code>
+                        </li>
+                        <li>Postman collection published for full API documentation</li>
+                        <li>Swagger UI served at <code style="font-size:0.78rem;color:var(--accent)">/api-docs</code>
+                            for interactive exploration
+                        </li>
+                        <li>Deployed to both Netlify (frontend) and Render (backend)</li>
                     </ul>
                 </div>
 
                 <div class="proj-block">
                     <p class="proj-block-label">Technologies</p>
                     <div class="tech-chips">
-                        <span class="tech-chip primary">PHP</span>
-                        <span class="tech-chip primary">Laravel</span>
-                        <span class="tech-chip">MySQL</span>
+                        <span class="tech-chip primary">Vue.js</span>
+                        <span class="tech-chip primary">Express.js</span>
+                        <span class="tech-chip primary">PostgreSQL</span>
+                        <span class="tech-chip">JavaScript</span>
+                        <span class="tech-chip">SonarQube</span>
+                        <span class="tech-chip">GitHub Actions</span>
+                        <span class="tech-chip">Swagger / OpenAPI</span>
+                        <span class="tech-chip">Postman</span>
+                        <span class="tech-chip">Netlify</span>
+                        <span class="tech-chip">Render</span>
                         <span class="tech-chip">OWASP Top 10</span>
-                        <span class="tech-chip">Blade Templates</span>
                     </div>
+                </div>
+
+                <div class="proj-summary-panel">
+                    <p class="panel-label">Why this matters to a recruiter</p>
+                    <p>This isn't just "I built a vulnerable app for a talk." It's a dissertation-grade research
+                        artefact with a rigorous A/B methodology, CI/CD, static analysis, published API docs, and two
+                        live deployments. It demonstrates security knowledge at the implementation level — not just
+                        awareness — and the ability to conduct and communicate original research.</p>
                 </div>
             </div>
         </article>
