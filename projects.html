@@ -1380,6 +1380,156 @@
             </div>
         </article>
 
+        <!-- ── JCLcheck ── -->
+        <article class="proj-entry reveal" data-category="product">
+            <div class="proj-sidebar">
+                <p class="proj-category">Product · SaaS · Developer Tool</p>
+                <h2 class="proj-title-main">JCLcheck</h2>
+                <span class="proj-status live">Live</span>
+                <div class="proj-links-sidebar">
+                    <a href="https://jclcheck.xyz" target="_blank" rel="noopener">jclcheck.xyz ↗</a>
+                    <a href="https://github.com/Zubs/jclcheck" target="_blank" rel="noopener">GitHub ↗</a>
+                </div>
+            </div>
+
+            <div class="proj-main">
+                <p class="proj-headline">"A SaaS JCL validation workbench for mainframe developers — built from scratch
+                    as a custom lexer → parser → AST → rule-engine pipeline. No mainframe connection required."</p>
+
+                <div class="proj-visual">
+                    <div class="proj-visual-inner">
+                        <span class="proj-visual-text">JCLcheck</span>
+                    </div>
+                    <span class="proj-visual-badge">Node.js · Vue 3 · Lexer/Parser · Live</span>
+                </div>
+
+                <div class="proj-desc-body">
+                    <p>
+                        JCLcheck is a standalone SaaS JCL (Job Control Language) validator built to help
+                        mainframe developers learn JCL and catch errors before submitting jobs to a real system.
+                        The core insight: you shouldn't need a mainframe connection to validate JCL syntax. The
+                        entire validation pipeline — lexing, parsing, AST construction, rule evaluation —
+                        runs server-side in Node.js, with every diagnostic carrying a plain-English explanation
+                        and a suggested fix.
+                    </p>
+                    <p>
+                        The workbench UI takes visual cues from classic IBM 3270 terminal
+                        aesthetics — including a PF-key action bar (F1 Help / F5 Validate / F9 Sample / F12 Clear)
+                        — so that the interface itself doubles as a learning tool for the terminal conventions
+                        new mainframe developers need to internalise.
+                    </p>
+                </div>
+
+                <div class="proj-meta-row">
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Role</p>
+                        <p class="proj-meta-val">Sole Engineer/Founder</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Stack</p>
+                        <p class="proj-meta-val">Node.js · Express · Vue 3 · Vite</p>
+                    </div>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Validation Pipeline — What Gets Checked</p>
+                    <ul class="feature-list">
+                        <li><strong>Lexer:</strong> <code style="font-size:0.78rem;color:var(--accent)">//</code> record
+                            format, comment/continuation lines, unterminated quotes, 80-column overflow, in-stream data
+                            delimiters
+                        </li>
+                        <li><strong>Parser/Structure:</strong> statement recognition (JOB, EXEC, DD, PROC, PEND, SET,
+                            IF/THEN/ELSE/ENDIF, INCLUDE), unmatched parentheses, IF/ENDIF &amp; PROC/PEND balance
+                        </li>
+                        <li><strong>Ordering:</strong> JOB must come first; EXEC before its DDs; only one JOB per job
+                            stream
+                        </li>
+                        <li><strong>DD rules:</strong> duplicate ddnames within a step; exactly one data source required
+                            (DSN / DUMMY / SYSOUT / instream)
+                        </li>
+                        <li><strong>Keywords:</strong> every keyword on JOB/EXEC/DD checked against IBM JCL Reference
+                            tables — with Levenshtein-distance "did you mean…" typo suggestions
+                        </li>
+                        <li><strong>Parameter syntax:</strong> DISP dispositions, SPACE quantities, DCB sub-parameters
+                            (RECFM/DSORG/LRECL/BLKSIZE), REGION, TIME, DSN qualifier rules
+                        </li>
+                        <li><strong>Procedures:</strong> in-stream PROC/PEND bodies parsed and validated; EXEC PROC=
+                            calls resolved; symbolic <code style="font-size:0.78rem;color:var(--accent)">&amp;SYM</code>
+                            parameters checked against declared defaults; DD overrides matched against procedure DDs
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Diagnostic System</p>
+                    <ul class="feature-list">
+                        <li>Every diagnostic carries <code style="font-size:0.78rem;color:var(--accent)">{ code,
+                            severity, line, column, message, suggestion }</code></li>
+                        <li>Grouped error codes: <code style="font-size:0.78rem;color:var(--accent)">JCLLxxx</code>
+                            lexer · <code style="font-size:0.78rem;color:var(--accent)">JCLPxxx</code> parser · <code
+                                    style="font-size:0.78rem;color:var(--accent)">JCLOxxx</code> ordering · <code
+                                    style="font-size:0.78rem;color:var(--accent)">JCLDxxx</code> DD · <code
+                                    style="font-size:0.78rem;color:var(--accent)">JCLKxxx</code> keyword · <code
+                                    style="font-size:0.78rem;color:var(--accent)">JCLSxxx</code> syntax · <code
+                                    style="font-size:0.78rem;color:var(--accent)">JCLRxxx</code> proc resolution
+                        </li>
+                        <li>Line-numbered editor with diagnostic gutter markers</li>
+                        <li>Errors panel with code, message, and plain-English fix for every issue</li>
+                        <li>Bundled sample JCL snippets (clean / broken / proc+symbolics)</li>
+                    </ul>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Architecture</p>
+                    <ul class="feature-list">
+                        <li><code style="font-size:0.78rem;color:var(--accent)">lexer.js</code> — physical lines to
+                            logical statements (continuations, comments)
+                        </li>
+                        <li><code style="font-size:0.78rem;color:var(--accent)">paramTokenizer.js</code> — operand
+                            string to positional/keyword params (paren/quote aware)
+                        </li>
+                        <li><code style="font-size:0.78rem;color:var(--accent)">parser.js</code> — statements to AST
+                            (Job/Step/DD/Proc/If), ordering + structural checks
+                        </li>
+                        <li><code style="font-size:0.78rem;color:var(--accent)">rules/</code> — modular rule engine:
+                            ddRules, paramRules, procRules
+                        </li>
+                        <li><code style="font-size:0.78rem;color:var(--accent)">keywords.js</code> — keyword/value
+                            tables distilled from the IBM JCL Reference
+                        </li>
+                        <li>Fixture-based smoke test suite with no external test framework dependency</li>
+                        <li>Vue 3 SPA: Landing, About, and dark 3270-themed Workbench pages</li>
+                    </ul>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Technologies</p>
+                    <div class="tech-chips">
+                        <span class="tech-chip primary">Node.js</span>
+                        <span class="tech-chip primary">Vue 3</span>
+                        <span class="tech-chip primary">Express</span>
+                        <span class="tech-chip primary">Vite</span>
+                        <span class="tech-chip">Vue Router</span>
+                        <span class="tech-chip">Custom Lexer</span>
+                        <span class="tech-chip">AST / Parser</span>
+                        <span class="tech-chip">Levenshtein Distance</span>
+                        <span class="tech-chip">JavaScript</span>
+                        <span class="tech-chip">IBM JCL Reference</span>
+                        <span class="tech-chip">3270 UI Design</span>
+                    </div>
+                </div>
+
+                <div class="proj-summary-panel">
+                    <p class="panel-label">Why this matters to a recruiter</p>
+                    <p>Writing a hand-crafted lexer, parser, and AST from scratch — without ANTLR or a grammar generator
+                        — for a domain-specific language as arcane as IBM JCL is not a beginner task. It demonstrates
+                        compiler theory in practice, deep mainframe domain knowledge, a modular rule engine
+                        architecture, and the product thinking to wrap it all in a workbench UI that's genuinely useful
+                        for real training programmes.</p>
+                </div>
+            </div>
+        </article>
+
     </div><!-- /proj-entries -->
 </div>
 
