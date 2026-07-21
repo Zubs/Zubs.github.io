@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mainframe 101 — An Interactive Series</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:wght@700;900&display=swap"
+          rel="stylesheet">
+    <style>
+        :root {
+            --bg: #080c14;
+            --surface: #0d1520;
+            --surface2: #111c2e;
+            --border: #1a2e4a;
+            --cyan: #00d4ff;
+            --cyan-dim: rgba(0, 212, 255, 0.12);
+            --cyan-glow: rgba(0, 212, 255, 0.35);
+            --amber: #ffb830;
+            --green: #00ff9d;
+            --red: #ff4757;
+            --text: #c8daf0;
+            --text-dim: #5a7a9a;
+            --text-bright: #e8f4ff;
+            --mono: 'Space Mono', monospace;
+            --sans: 'DM Sans', sans-serif;
+            --serif: 'Playfair Display', serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--sans);
+            font-size: 16px;
+            line-height: 1.75;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, 0.03) 2px, rgba(0, 0, 0, 0.03) 4px);
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .wrap {
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 96px 32px 120px;
+        }
+
+        .eyebrow {
+            font-family: var(--mono);
+            font-size: 11px;
+            letter-spacing: 0.25em;
+            color: var(--cyan);
+            text-transform: uppercase;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .eyebrow::before {
+            content: '';
+            display: block;
+            width: 32px;
+            height: 1px;
+            background: var(--cyan);
+        }
+
+        h1 {
+            font-family: var(--serif);
+            font-size: clamp(2.4rem, 5vw, 4rem);
+            font-weight: 900;
+            color: var(--text-bright);
+            line-height: 1.05;
+            margin-bottom: 20px;
+            letter-spacing: -0.02em;
+        }
+
+        .lede {
+            font-size: 1.2rem;
+            color: var(--text-dim);
+            font-weight: 300;
+            max-width: 62ch;
+            margin-bottom: 56px;
+        }
+
+        .lede strong {
+            color: var(--text-bright);
+            font-weight: 500;
+        }
+
+        .progress-rail {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 72px;
+        }
+
+        .progress-seg {
+            flex: 1;
+            height: 3px;
+            background: var(--cyan);
+            border-radius: 2px;
+            opacity: 0.85;
+        }
+
+        .section-label {
+            font-family: var(--mono);
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            color: var(--cyan);
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .card-list {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 80px;
+        }
+
+        .article-card {
+            display: grid;
+            grid-template-columns: 64px 1fr auto;
+            align-items: center;
+            gap: 24px;
+            padding: 28px 28px;
+            background: var(--surface);
+            text-decoration: none;
+            color: inherit;
+            border-bottom: 1px solid var(--border);
+            transition: background 0.2s;
+            position: relative;
+        }
+
+        .card-list a.article-card:last-child {
+            border-bottom: none;
+        }
+
+        .article-card:hover {
+            background: var(--surface2);
+        }
+
+        .article-card:hover .card-num {
+            border-color: var(--cyan);
+            color: var(--cyan);
+            box-shadow: 0 0 20px var(--cyan-glow);
+        }
+
+        .article-card:hover .card-title {
+            color: var(--cyan);
+        }
+
+        .card-num {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--mono);
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-dim);
+            background: var(--bg);
+            transition: all 0.25s ease;
+            flex-shrink: 0;
+        }
+
+        .card-body {
+            min-width: 0;
+        }
+
+        .card-title {
+            font-family: var(--sans);
+            font-weight: 600;
+            font-size: 1.05rem;
+            color: var(--text-bright);
+            margin-bottom: 4px;
+            transition: color 0.2s;
+        }
+
+        .card-sub {
+            font-family: var(--mono);
+            font-size: 0.78rem;
+            color: var(--text-dim);
+        }
+
+        .card-arrow {
+            font-family: var(--mono);
+            font-size: 18px;
+            color: var(--text-dim);
+            transition: transform 0.2s, color 0.2s;
+        }
+
+        .article-card:hover .card-arrow {
+            color: var(--cyan);
+            transform: translateX(4px);
+        }
+
+        .card-tags {
+            display: flex;
+            gap: 6px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            font-family: var(--mono);
+            font-size: 9px;
+            padding: 2px 8px;
+            border-radius: 100px;
+            border: 1px solid var(--border);
+            color: var(--text-dim);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        @media (max-width: 640px) {
+            .article-card {
+                grid-template-columns: 40px 1fr;
+                padding: 22px 18px;
+            }
+
+            .card-arrow {
+                display: none;
+            }
+
+            .card-num {
+                width: 34px;
+                height: 34px;
+                font-size: 11px;
+            }
+        }
+
+        /* ─── BONUS SECTION ─── */
+        .bonus-box {
+            border: 1px solid rgba(0, 212, 255, 0.25);
+            border-radius: 12px;
+            padding: 32px;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.06) 0%, rgba(0, 0, 0, 0) 100%);
+            margin-bottom: 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bonus-box::after {
+            content: '//';
+            position: absolute;
+            right: 8px;
+            bottom: -30px;
+            font-family: var(--serif);
+            font-size: 120px;
+            font-weight: 900;
+            color: rgba(0, 212, 255, 0.05);
+            pointer-events: none;
+            line-height: 1;
+        }
+
+        .bonus-box h3 {
+            font-family: var(--sans);
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--text-bright);
+            margin-bottom: 10px;
+        }
+
+        .bonus-box p {
+            color: var(--text-dim);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+            max-width: 60ch;
+        }
+
+        .bonus-links {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            font-family: var(--mono);
+            font-size: 11px;
+            padding: 10px 18px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            color: var(--text);
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            border-color: var(--cyan);
+            color: var(--cyan);
+            background: var(--cyan-dim);
+        }
+
+        .btn.primary {
+            background: var(--cyan);
+            color: var(--bg);
+            border-color: var(--cyan);
+            font-weight: 700;
+        }
+
+        .btn.primary:hover {
+            background: transparent;
+            color: var(--cyan);
+        }
+
+        /* ─── FOOTER / AUTHOR ─── */
+        .author-bio {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 28px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: var(--surface);
+        }
+
+        .author-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            border: 2px solid var(--cyan);
+            flex-shrink: 0;
+            background: var(--cyan-dim);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--mono);
+            font-size: 1.2rem;
+            color: var(--cyan);
+            font-weight: 700;
+        }
+
+        .author-info {
+            flex: 1;
+        }
+
+        .author-name {
+            font-weight: 600;
+            color: var(--text-bright);
+            margin-bottom: 2px;
+            font-size: 0.95rem;
+        }
+
+        .author-title {
+            font-family: var(--mono);
+            font-size: 10px;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 10px;
+        }
+
+        .author-links {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .author-link {
+            font-family: var(--mono);
+            font-size: 10px;
+            color: var(--text-dim);
+            text-decoration: none;
+            border: 1px solid var(--border);
+            padding: 4px 10px;
+            border-radius: 4px;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .author-link:hover {
+            border-color: var(--cyan);
+            color: var(--cyan);
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(16px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: none;
+        }
+    </style>
+</head>
+<body>
+<div class="wrap">
+
+    <div class="eyebrow">z/OS Fundamentals · Interactive Series</div>
+    <h1>Mainframe 101</h1>
+    <p class="lede">
+        Six articles, six interactive companions. Everything a student or early-career
+        engineer needs to start finding their way around <strong>z/OS</strong> — from
+        logging in, to writing code, to the network that keeps it all talking.
+        Click through, drag sliders, and explore each topic hands-on.
+    </p>
+
+    <div class="progress-rail reveal">
+        <div class="progress-seg"></div>
+        <div class="progress-seg"></div>
+        <div class="progress-seg"></div>
+        <div class="progress-seg"></div>
+        <div class="progress-seg"></div>
+        <div class="progress-seg"></div>
+    </div>
+
+    <div class="section-label reveal">The Series — 6 Parts</div>
+
+    <div class="card-list reveal">
+        <a class="article-card" href="mainframe-interaction/">
+            <div class="card-num">01</div>
+            <div class="card-body">
+                <div class="card-title">Mainframe Interaction</div>
+                <div class="card-sub">Keeping Up With The Mainframes</div>
+                <div class="card-tags">
+                    <span class="tag">TSO/E</span>
+                    <span class="tag">ISPF</span>
+                    <span class="tag">USS</span>
+                    <span class="tag">TN3270</span>
+                </div>
+            </div>
+            <div class="card-arrow">→</div>
+        </a>
+
+        <a class="article-card" href="introduction-to-mainframe-programming-languages/">
+            <div class="card-num">02</div>
+            <div class="card-body">
+                <div class="card-title">Introduction to Mainframe Programming Languages</div>
+                <div class="card-sub">Part One: Learning to Speak the Machine's Native Tongues</div>
+                <div class="card-tags">
+                    <span class="tag">HLASM</span>
+                    <span class="tag">COBOL</span>
+                    <span class="tag">PL/I</span>
+                    <span class="tag">Java · Python · Go</span>
+                </div>
+            </div>
+            <div class="card-arrow">→</div>
+        </a>
+
+        <a class="article-card" href="introduction-to-mainframe-scripting-languages/">
+            <div class="card-num">03</div>
+            <div class="card-body">
+                <div class="card-title">Introduction to Mainframe Scripting Languages</div>
+                <div class="card-sub">Part Two: Automating the Machine's Everyday Work</div>
+                <div class="card-tags">
+                    <span class="tag">REXX</span>
+                    <span class="tag">CLIST</span>
+                    <span class="tag">Shell / USS</span>
+                </div>
+            </div>
+            <div class="card-arrow">→</div>
+        </a>
+
+        <a class="article-card" href="batch-processing-and-the-job-entry-subsystem-jes/">
+            <div class="card-num">04</div>
+            <div class="card-body">
+                <div class="card-title">Batch Processing and the Job Entry Subsystem (JES)</div>
+                <div class="card-sub">The Traffic Controller Behind Every Job</div>
+                <div class="card-tags">
+                    <span class="tag">JCL</span>
+                    <span class="tag">JES2 / JES3</span>
+                    <span class="tag">CICS</span>
+                </div>
+            </div>
+            <div class="card-arrow">→</div>
+        </a>
+
+        <a class="article-card" href="designing-and-developing-applications-for-zos/">
+            <div class="card-num">05</div>
+            <div class="card-body">
+                <div class="card-title">Designing and Developing Applications for z/OS</div>
+                <div class="card-sub">From Blueprint to Production</div>
+                <div class="card-tags">
+                    <span class="tag">VSAM / Db2</span>
+                    <span class="tag">IDz / Zowe</span>
+                    <span class="tag">DevOps</span>
+                </div>
+            </div>
+            <div class="card-arrow">→</div>
+        </a>
+
+        <a class="article-card" href="mainframe-communications/">
+            <div class="card-num">06</div>
+            <div class="card-body">
+                <div class="card-title">Mainframe Communications</div>
+                <div class="card-sub">The Portals Between Worlds</div>
+                <div class="card-tags">
+                    <span class="tag">SNA / TCP-IP</span>
+                    <span class="tag">OSA / HiperSockets</span>
+                    <span class="tag">Security</span>
+                </div>
+            </div>
+            <div class="card-arrow">→</div>
+        </a>
+    </div>
+
+    <div class="bonus-box reveal">
+        <div class="section-label" style="margin-bottom:12px;">Bonus — Also From This Series</div>
+        <h3>Introduction to the Mainframe Workload Manager (WLM)</h3>
+        <p>
+            An earlier, standalone deep-dive on how WLM acts as the mainframe's traffic
+            controller — translating business priorities into real-time resource allocation.
+            Includes a live priority simulator and a zIIP CPU offload visualiser.
+        </p>
+        <div class="bonus-links">
+            <a class="btn primary" href="introduction-to-the-mainframe-workload-manager-wlm/">Open Interactive
+                Version →</a>
+            <a class="btn"
+               href="https://zubairidrisaweda.medium.com/introduction-to-the-mainframe-workload-manager-wlm-107499ecc9ce"
+               target="_blank">Read on Medium ↗</a>
+        </div>
+    </div>
+
+    <div class="author-bio reveal">
+        <div class="author-avatar">ZIA</div>
+        <div class="author-info">
+            <div class="author-name">Zubair Idris Aweda</div>
+            <div class="author-title">Software Engineer · Technical Writer · Mainframe Open Education Mentee</div>
+            <div class="author-links">
+                <a class="author-link" href="https://zubairidrisaweda.medium.com/" target="_blank">Medium</a>
+                <a class="author-link" href="https://www.linkedin.com/in/zubairidrisaweda/" target="_blank">LinkedIn</a>
+                <a class="author-link" href="https://x.com/greatzubs" target="_blank">Twitter/X</a>
+                <a class="author-link" href="https://github.com/Zubs" target="_blank">GitHub</a>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                e.target.classList.add('visible');
+                revealObserver.unobserve(e.target);
+            }
+        });
+    }, {threshold: 0.08});
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+</script>
+</body>
+</html>

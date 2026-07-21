@@ -1,0 +1,1593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Batch Processing and the Job Entry Subsystem (JES)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:wght@700;900&display=swap"
+          rel="stylesheet">
+    <style>
+        :root {
+            --bg: #080c14;
+            --surface: #0d1520;
+            --surface2: #111c2e;
+            --border: #1a2e4a;
+            --cyan: #00d4ff;
+            --cyan-dim: rgba(0, 212, 255, 0.12);
+            --cyan-glow: rgba(0, 212, 255, 0.35);
+            --amber: #ffb830;
+            --green: #00ff9d;
+            --red: #ff4757;
+            --text: #c8daf0;
+            --text-dim: #5a7a9a;
+            --text-bright: #e8f4ff;
+            --mono: 'Space Mono', monospace;
+            --sans: 'DM Sans', sans-serif;
+            --serif: 'Playfair Display', serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--sans);
+            font-size: 16px;
+            line-height: 1.75;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, 0.03) 2px, rgba(0, 0, 0, 0.03) 4px);
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .page-wrap {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            min-height: 100vh;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            padding: 48px 24px 32px;
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            overflow-y: auto;
+            background: var(--bg);
+        }
+
+        .sidebar-label {
+            font-family: var(--mono);
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .toc-link {
+            display: block;
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--text-dim);
+            text-decoration: none;
+            padding: 6px 10px;
+            border-radius: 4px;
+            border-left: 2px solid transparent;
+            transition: all 0.2s;
+            line-height: 1.4;
+        }
+
+        .toc-link:hover, .toc-link.active {
+            color: var(--cyan);
+            border-left-color: var(--cyan);
+            background: var(--cyan-dim);
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+            font-family: var(--mono);
+            font-size: 10px;
+            color: var(--text-dim);
+            line-height: 1.8;
+        }
+
+        .sidebar-footer a {
+            color: var(--cyan);
+            text-decoration: none;
+        }
+
+        .main {
+            padding: 0 64px 120px;
+            max-width: 900px;
+        }
+
+        .hero {
+            padding: 80px 0 64px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 72px;
+        }
+
+        .hero-eyebrow {
+            font-family: var(--mono);
+            font-size: 11px;
+            letter-spacing: 0.25em;
+            color: var(--cyan);
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .hero-eyebrow::before {
+            content: '';
+            display: block;
+            width: 32px;
+            height: 1px;
+            background: var(--cyan);
+        }
+
+        h1.hero-title {
+            font-family: var(--serif);
+            font-size: clamp(2.1rem, 4vw, 3.2rem);
+            font-weight: 900;
+            color: var(--text-bright);
+            line-height: 1.1;
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-sub {
+            font-family: var(--sans);
+            font-size: 1.15rem;
+            color: var(--text-dim);
+            font-weight: 300;
+            margin-bottom: 32px;
+        }
+
+        .hero-meta {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--text-dim);
+        }
+
+        .hero-meta span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .hero-meta .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--cyan);
+            display: inline-block;
+        }
+
+        section {
+            margin-bottom: 96px;
+        }
+
+        .section-label {
+            font-family: var(--mono);
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            color: var(--cyan);
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        h2 {
+            font-family: var(--serif);
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-bright);
+            margin-bottom: 24px;
+            line-height: 1.2;
+        }
+
+        p {
+            color: var(--text);
+            margin-bottom: 16px;
+        }
+
+        code.inline {
+            font-family: var(--mono);
+            background: var(--surface2);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.88em;
+            color: var(--green);
+        }
+
+        .callout {
+            border-left: 3px solid var(--cyan);
+            padding: 20px 24px;
+            background: var(--cyan-dim);
+            border-radius: 0 8px 8px 0;
+            margin: 28px 0;
+            font-family: var(--mono);
+            font-size: 0.88rem;
+            line-height: 1.7;
+            color: var(--text);
+        }
+
+        .concept-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 24px 0;
+        }
+
+        .concept-card {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            background: var(--surface);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .concept-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 3px;
+            height: 100%;
+            background: var(--cyan);
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .concept-card:hover::before {
+            opacity: 1;
+        }
+
+        .concept-term {
+            font-family: var(--mono);
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--cyan);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 8px;
+        }
+
+        .concept-def {
+            font-size: 0.82rem;
+            color: var(--text-dim);
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        pre.code-block {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px 20px;
+            font-family: var(--mono);
+            font-size: 12.5px;
+            color: var(--green);
+            overflow-x: auto;
+            margin: 16px 0;
+            line-height: 1.7;
+        }
+
+        /* ═══════════════════════════════════════
+           INTERACTIVE 1: BATCH VS LIVE SCENARIO SWITCH
+        ═══════════════════════════════════════ */
+        .scenario-wrap {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 32px;
+            margin: 32px 0;
+        }
+
+        .scenario-wrap h3 {
+            margin-top: 0;
+            margin-bottom: 4px;
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            letter-spacing: 0.15em;
+            color: var(--cyan);
+            text-transform: uppercase;
+        }
+
+        .scenario-sub {
+            font-size: 0.82rem;
+            color: var(--text-dim);
+            margin-bottom: 22px;
+            font-family: var(--mono);
+        }
+
+        .scenario-switch {
+            display: flex;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            padding: 4px;
+            margin-bottom: 24px;
+            width: fit-content;
+        }
+
+        .scenario-btn {
+            font-family: var(--mono);
+            font-size: 12px;
+            padding: 9px 20px;
+            border-radius: 100px;
+            border: none;
+            background: transparent;
+            color: var(--text-dim);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 700;
+        }
+
+        .scenario-btn.active {
+            background: var(--cyan);
+            color: var(--bg);
+        }
+
+        .scenario-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+
+        .stat-box {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-family: var(--mono);
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--cyan);
+            transition: color 0.2s;
+        }
+
+        .stat-label {
+            font-family: var(--mono);
+            font-size: 9.5px;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-top: 4px;
+        }
+
+        .scenario-desc {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 18px 20px;
+            font-size: 0.87rem;
+            color: var(--text-dim);
+        }
+
+        .scenario-desc strong {
+            color: var(--text-bright);
+        }
+
+        /* ═══════════════════════════════════════
+           INTERACTIVE 2: JOB LIFECYCLE FLOW (unchanged pattern)
+        ═══════════════════════════════════════ */
+        .flow-diagram {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 32px;
+            margin: 32px 0;
+        }
+
+        .flow-diagram h3 {
+            margin-top: 0;
+            margin-bottom: 8px;
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            letter-spacing: 0.15em;
+            color: var(--cyan);
+            text-transform: uppercase;
+        }
+
+        .flow-hint {
+            font-family: var(--mono);
+            font-size: 10px;
+            color: var(--text-dim);
+            letter-spacing: 0.1em;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .flow-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .flow-step {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            cursor: pointer;
+        }
+
+        .flow-step-line {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .flow-node {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--mono);
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-dim);
+            background: var(--bg);
+            transition: all 0.3s ease;
+            z-index: 1;
+            flex-shrink: 0;
+        }
+
+        .flow-step.active .flow-node {
+            border-color: var(--cyan);
+            color: var(--cyan);
+            background: var(--cyan-dim);
+            box-shadow: 0 0 20px var(--cyan-glow);
+        }
+
+        .flow-connector {
+            width: 2px;
+            height: 40px;
+            background: var(--border);
+        }
+
+        .flow-step.active .flow-connector {
+            background: var(--cyan);
+        }
+
+        .flow-content {
+            padding: 8px 0 40px;
+            flex: 1;
+        }
+
+        .flow-title {
+            font-family: var(--sans);
+            font-weight: 600;
+            color: var(--text-bright);
+            margin-bottom: 4px;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+
+        .flow-step.active .flow-title {
+            color: var(--cyan);
+        }
+
+        .flow-detail {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            line-height: 1.6;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, opacity 0.3s;
+            opacity: 0;
+        }
+
+        .flow-step.active .flow-detail {
+            max-height: 220px;
+            opacity: 1;
+        }
+
+        .flow-detail ul {
+            margin: 8px 0 0 16px;
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            list-style: none;
+        }
+
+        .flow-detail ul li::before {
+            content: '→ ';
+            color: var(--cyan);
+        }
+
+        /* ═══════════════════════════════════════
+           INTERACTIVE 3: LIVE JOB QUEUE SIMULATOR
+        ═══════════════════════════════════════ */
+        .queue-wrap {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 32px;
+            margin: 32px 0;
+        }
+
+        .queue-wrap h3 {
+            margin-top: 0;
+            margin-bottom: 4px;
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            letter-spacing: 0.15em;
+            color: var(--cyan);
+            text-transform: uppercase;
+        }
+
+        .queue-sub {
+            font-size: 0.82rem;
+            color: var(--text-dim);
+            margin-bottom: 20px;
+            font-family: var(--mono);
+        }
+
+        .queue-phases {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .queue-phase-head {
+            font-family: var(--mono);
+            font-size: 9.5px;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            text-align: center;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .queue-lane {
+            background: var(--bg);
+            border: 1px dashed var(--border);
+            border-radius: 8px;
+            min-height: 200px;
+            padding: 8px 6px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            position: relative;
+        }
+
+        .job-chip {
+            font-family: var(--mono);
+            font-size: 10px;
+            background: var(--surface2);
+            border: 1px solid var(--cyan);
+            color: var(--text-bright);
+            border-radius: 5px;
+            padding: 6px 8px;
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.15);
+            transition: all 0.5s ease;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .job-chip.purging {
+            border-color: var(--text-dim);
+            opacity: 0.4;
+            color: var(--text-dim);
+            box-shadow: none;
+        }
+
+        .queue-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-top: 4px;
+        }
+
+        .queue-btn {
+            font-family: var(--mono);
+            font-size: 11px;
+            padding: 9px 18px;
+            border-radius: 100px;
+            border: 1px solid var(--cyan);
+            background: var(--cyan-dim);
+            color: var(--cyan);
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            transition: all 0.2s;
+            font-weight: 700;
+        }
+
+        .queue-btn:hover {
+            background: var(--cyan);
+            color: var(--bg);
+        }
+
+        .queue-btn.secondary {
+            background: transparent;
+            border-color: var(--border);
+            color: var(--text-dim);
+        }
+
+        .queue-btn.secondary:hover {
+            border-color: var(--red);
+            color: var(--red);
+            background: rgba(255, 71, 87, 0.08);
+        }
+
+        .queue-count {
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--text-dim);
+            margin-left: auto;
+        }
+
+        /* ═══════════════════════════════════════
+           INTERACTIVE 4: ANNOTATED JCL EXPLORER
+        ═══════════════════════════════════════ */
+        .jcl-wrap {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 32px;
+            margin: 32px 0;
+        }
+
+        .jcl-wrap h3 {
+            margin-top: 0;
+            margin-bottom: 4px;
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            letter-spacing: 0.15em;
+            color: var(--cyan);
+            text-transform: uppercase;
+        }
+
+        .jcl-sub {
+            font-size: 0.82rem;
+            color: var(--text-dim);
+            margin-bottom: 20px;
+            font-family: var(--mono);
+        }
+
+        .jcl-code {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 18px 20px;
+            font-family: var(--mono);
+            font-size: 12.5px;
+            line-height: 1.9;
+            overflow-x: auto;
+        }
+
+        .jcl-line {
+            white-space: pre;
+            cursor: pointer;
+            padding: 2px 6px;
+            border-radius: 4px;
+            transition: background 0.15s;
+            border-left: 3px solid transparent;
+        }
+
+        .jcl-line:hover {
+            background: rgba(0, 212, 255, 0.06);
+        }
+
+        .jcl-line.active {
+            background: rgba(0, 212, 255, 0.1);
+            border-left-color: var(--cyan);
+        }
+
+        .jcl-tok-stmt {
+            color: #b8ffce;
+        }
+
+        .jcl-tok-op {
+            color: var(--cyan);
+            font-weight: 700;
+        }
+
+        .jcl-tok-kw {
+            color: var(--amber);
+        }
+
+        .jcl-tok-val {
+            color: var(--green);
+        }
+
+        .jcl-tok-cmt {
+            color: var(--text-dim);
+        }
+
+        .jcl-explain {
+            margin-top: 16px;
+            background: var(--bg);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 8px;
+            padding: 18px 20px;
+            min-height: 60px;
+        }
+
+        .jcl-explain .jcl-tag {
+            display: inline-block;
+            font-family: var(--mono);
+            font-size: 10px;
+            font-weight: 700;
+            background: var(--cyan);
+            color: var(--bg);
+            padding: 3px 10px;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .jcl-explain p {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            margin: 0;
+        }
+
+        /* ═══════════════════════════════════════
+           INTERACTIVE 5: JES2 / JES3 TOPOLOGY
+        ═══════════════════════════════════════ */
+        .topo-wrap {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 32px;
+            margin: 32px 0;
+        }
+
+        .topo-wrap h3 {
+            margin-top: 0;
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            letter-spacing: 0.15em;
+            color: var(--cyan);
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .topo-switch {
+            display: flex;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            padding: 4px;
+            margin-bottom: 28px;
+            width: fit-content;
+        }
+
+        .topo-btn {
+            font-family: var(--mono);
+            font-size: 12px;
+            padding: 8px 22px;
+            border-radius: 100px;
+            border: none;
+            background: transparent;
+            color: var(--text-dim);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 700;
+        }
+
+        .topo-btn.active {
+            background: var(--cyan);
+            color: var(--bg);
+        }
+
+        .topo-diagram {
+            display: none;
+        }
+
+        .topo-diagram.active {
+            display: block;
+        }
+
+        .topo-row {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 8px;
+            position: relative;
+        }
+
+        .topo-node {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            z-index: 1;
+        }
+
+        .topo-circle {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            border: 2px solid var(--cyan);
+            background: var(--cyan-dim);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--mono);
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--cyan);
+            box-shadow: 0 0 16px var(--cyan-glow);
+        }
+
+        .topo-circle.dim {
+            border-color: var(--border);
+            background: var(--bg);
+            color: var(--text-dim);
+            box-shadow: none;
+        }
+
+        .topo-label {
+            font-family: var(--mono);
+            font-size: 10px;
+            color: var(--text-dim);
+            text-align: center;
+        }
+
+        .topo-connector-row {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            height: 30px;
+            align-items: center;
+        }
+
+        .topo-connector-row .line {
+            width: 2px;
+            height: 100%;
+            background: var(--border);
+        }
+
+        .topo-hub-lines {
+            position: relative;
+            height: 40px;
+            margin: 0 auto;
+            width: 240px;
+        }
+
+        .topo-hub-lines::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 2px;
+            height: 100%;
+            background: var(--border);
+        }
+
+        .topo-hub-lines::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--border);
+        }
+
+        .topo-desc {
+            margin-top: 20px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 18px 20px;
+            font-size: 0.87rem;
+            color: var(--text-dim);
+        }
+
+        .topo-desc strong {
+            color: var(--text-bright);
+        }
+
+        .summary-box {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.06) 0%, rgba(0, 0, 0, 0) 100%);
+            border: 1px solid rgba(0, 212, 255, 0.25);
+            border-radius: 12px;
+            padding: 40px;
+            margin: 40px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .summary-box::after {
+            content: 'JES';
+            position: absolute;
+            right: -10px;
+            bottom: -20px;
+            font-family: var(--serif);
+            font-size: 110px;
+            font-weight: 900;
+            color: rgba(0, 212, 255, 0.04);
+            pointer-events: none;
+            line-height: 1;
+        }
+
+        .summary-box h2 {
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+        }
+
+        .summary-box p {
+            font-size: 0.95rem;
+        }
+
+        .author-bio {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 28px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: var(--surface);
+            margin-top: 64px;
+        }
+
+        .author-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            border: 2px solid var(--cyan);
+            flex-shrink: 0;
+            background: var(--cyan-dim);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--mono);
+            font-size: 1.2rem;
+            color: var(--cyan);
+            font-weight: 700;
+        }
+
+        .author-info {
+            flex: 1;
+        }
+
+        .author-name {
+            font-weight: 600;
+            color: var(--text-bright);
+            margin-bottom: 2px;
+            font-size: 0.95rem;
+        }
+
+        .author-title {
+            font-family: var(--mono);
+            font-size: 10px;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 10px;
+        }
+
+        .author-links {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .author-link {
+            font-family: var(--mono);
+            font-size: 10px;
+            color: var(--text-dim);
+            text-decoration: none;
+            border: 1px solid var(--border);
+            padding: 4px 10px;
+            border-radius: 4px;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .author-link:hover {
+            border-color: var(--cyan);
+            color: var(--cyan);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--text-dim);
+            text-decoration: none;
+            margin-bottom: 24px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .back-link:hover {
+            color: var(--cyan);
+        }
+
+        @media (max-width: 900px) {
+            .page-wrap {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            .main {
+                padding: 24px 24px 80px;
+                max-width: 100%;
+            }
+
+            .concept-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .scenario-stats {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .queue-phases {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .topo-row {
+                gap: 16px;
+            }
+
+            .topo-hub-lines {
+                width: 140px;
+            }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: none;
+        }
+    </style>
+</head>
+<body>
+<div class="page-wrap">
+    <aside class="sidebar">
+        <a href="../" class="back-link">← Series index</a>
+        <div class="sidebar-label">In this article</div>
+        <a href="#what-is-batch" class="toc-link">What Is Batch Processing?</a>
+        <a href="#batch-vs-live" class="toc-link">↳ Batch vs. Live (Interactive)</a>
+        <a href="#jes" class="toc-link">What JES Actually Does</a>
+        <a href="#lifecycle" class="toc-link">↳ Job Lifecycle (Interactive)</a>
+        <a href="#queue" class="toc-link">↳ Live Job Queue (Interactive)</a>
+        <a href="#jcl" class="toc-link">JCL Basics</a>
+        <a href="#jcl-explorer" class="toc-link">↳ Annotated JCL (Interactive)</a>
+        <a href="#jes2-jes3" class="toc-link">↳ JES2 vs. JES3 Topology</a>
+        <a href="#cics" class="toc-link">Batch vs. Online (CICS)</a>
+        <a href="#summary" class="toc-link">Summary</a>
+        <div class="sidebar-footer">
+            <div>Series: Mainframe 101 · Part 4</div>
+            <div>~9 min read</div>
+            <br>
+            <div>
+                <a href="https://zubairidrisaweda.medium.com/batch-processing-and-the-job-entry-subsystem-jes-5f08341b1517"
+                   target="_blank">Read on Medium →</a></div>
+        </div>
+    </aside>
+
+    <main class="main">
+        <header class="hero" id="top">
+            <div class="hero-eyebrow">Mainframe 101 · Part 04</div>
+            <h1 class="hero-title">Batch Processing and the Job Entry Subsystem (JES)</h1>
+            <p class="hero-sub">The Traffic Controller Behind Every Job</p>
+            <div class="hero-meta">
+                <span><span class="dot"></span> Zubair Idris Aweda</span>
+                <span><span class="dot"></span> 9 min read</span>
+                <span><span class="dot"></span> Interactive</span>
+            </div>
+        </header>
+
+        <section id="what-is-batch" class="reveal">
+            <div class="section-label">01 — Overview</div>
+            <h2>What Is Batch Processing?</h2>
+            <p>Batch processing is the execution of a program, or series of programs, against a defined set of data
+                without requiring a person to interact with it while it runs. Think of it like a washing machine
+                cycle, or a bakery: you load a batch, it processes, and you come back once it's done.</p>
+
+            <div class="scenario-wrap" id="batch-vs-live">
+                <h3>Batch vs. Live: Switch the Scenario</h3>
+                <p class="scenario-sub">Toggle between a real overnight batch job and a real online transaction to see
+                    how differently they behave</p>
+                <div class="scenario-switch">
+                    <button class="scenario-btn active" onclick="setScenario('batch', this)">Overnight Batch Job
+                    </button>
+                    <button class="scenario-btn" onclick="setScenario('live', this)">Online Transaction</button>
+                </div>
+                <div class="scenario-stats" id="scenarioStats"></div>
+                <div class="scenario-desc" id="scenarioDesc"></div>
+            </div>
+            <p>Neither is "better" — a bank needs both: authorising your card in under two seconds <em>right now</em>,
+                and reconciling every transaction from the entire day in one overnight run.</p>
+        </section>
+
+        <section id="jes" class="reveal">
+            <div class="section-label">02 — The Orchestrator</div>
+            <h2>What JES Actually Does</h2>
+            <p>The Job Entry Subsystem, JES, is the component of z/OS responsible for managing the entire lifecycle of
+                a batch job — from the moment it's submitted to the moment its output has been delivered and it's
+                cleared from the system. If batch processing is the washing machine cycle, JES is the appliance
+                itself, quietly managing the sequence of events that turns a submitted job into a completed one.</p>
+            <p>JES doesn't just move jobs through in the order they arrive, either. Alongside the Workload Manager, it
+                handles <strong style="color:var(--text-bright)">scheduling and prioritisation</strong> — deciding
+                which jobs get access to resources and when, based on job class, priority, and current system load.
+                On a busy production system, there might be thousands of jobs moving through these phases at any
+                given moment, and JES is what keeps that flow orderly rather than descending into chaos.</p>
+
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <div class="concept-term">Job Class</div>
+                    <p class="concept-def">A category grouping jobs with similar resource needs or execution
+                        characteristics. Installations configure how many jobs from each class can run at once.</p>
+                </div>
+                <div class="concept-card">
+                    <div class="concept-term">Priority</div>
+                    <p class="concept-def">Within a class, jobs are further ordered by priority — giving JES a clear
+                        basis for deciding which of potentially thousands of waiting jobs runs next.</p>
+                </div>
+            </div>
+
+            <p>Click through the five phases below to see what happens at each stage.</p>
+
+            <div class="flow-diagram" id="lifecycle">
+                <h3>The Job Lifecycle</h3>
+                <p class="flow-hint">Click a phase to expand</p>
+                <div class="flow-steps">
+                    <div class="flow-step active" data-step="0" onclick="activateJes(0)">
+                        <div class="flow-step-line">
+                            <div class="flow-node">1</div>
+                            <div class="flow-connector"></div>
+                        </div>
+                        <div class="flow-content">
+                            <div class="flow-title">Input</div>
+                            <div class="flow-detail">A job is submitted as a JCL stream. JES receives it, assigns a job
+                                name and number, and places it in the appropriate queue.
+                                <ul>
+                                    <li>Job name & number assigned</li>
+                                    <li>Placed into input queue</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flow-step" data-step="1" onclick="activateJes(1)">
+                        <div class="flow-step-line">
+                            <div class="flow-node">2</div>
+                            <div class="flow-connector"></div>
+                        </div>
+                        <div class="flow-content">
+                            <div class="flow-title">Conversion</div>
+                            <div class="flow-detail">JES translates the submitted JCL into an internal format, checking
+                                it for basic syntax correctness along the way.
+                                <ul>
+                                    <li>JCL parsed & validated</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flow-step" data-step="2" onclick="activateJes(2)">
+                        <div class="flow-step-line">
+                            <div class="flow-node">3</div>
+                            <div class="flow-connector"></div>
+                        </div>
+                        <div class="flow-content">
+                            <div class="flow-title">Processing (Execution)</div>
+                            <div class="flow-detail">The job is scheduled and dispatched, competing for CPU, memory, and
+                                I/O alongside every other job on the system.
+                                <ul>
+                                    <li>Actual program logic executes</li>
+                                    <li>WLM & JES coordinate scheduling</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flow-step" data-step="3" onclick="activateJes(3)">
+                        <div class="flow-step-line">
+                            <div class="flow-node">4</div>
+                            <div class="flow-connector"></div>
+                        </div>
+                        <div class="flow-content">
+                            <div class="flow-title">Output</div>
+                            <div class="flow-detail">JES manages whatever the job produced — a printed report, a written
+                                dataset, or log messages — routing it wherever it needs to go.
+                                <ul>
+                                    <li>SYSOUT routed / printed</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flow-step" data-step="4" onclick="activateJes(4)">
+                        <div class="flow-step-line">
+                            <div class="flow-node">5</div>
+                        </div>
+                        <div class="flow-content">
+                            <div class="flow-title">Purge</div>
+                            <div class="flow-detail">Once output is delivered and temporary resources released, JES
+                                removes the job from the system entirely, freeing space for the next one.
+                                <ul>
+                                    <li>Job removed from system</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="queue-wrap" id="queue">
+                <h3>Live Job Queue Simulator</h3>
+                <p class="queue-sub">Submit jobs at different priorities and watch JES move them through Input →
+                    Conversion → Processing → Output → Purge — high-priority jobs get dispatched faster, exactly as JES
+                    would in production</p>
+                <div class="queue-phases">
+                    <div class="queue-phase-head">Input</div>
+                    <div class="queue-phase-head">Conversion</div>
+                    <div class="queue-phase-head">Processing</div>
+                    <div class="queue-phase-head">Output</div>
+                    <div class="queue-phase-head">Purge</div>
+                </div>
+                <div class="queue-phases" style="margin-bottom:0;">
+                    <div class="queue-lane" id="lane0"></div>
+                    <div class="queue-lane" id="lane1"></div>
+                    <div class="queue-lane" id="lane2"></div>
+                    <div class="queue-lane" id="lane3"></div>
+                    <div class="queue-lane" id="lane4"></div>
+                </div>
+                <div class="queue-controls">
+                    <button class="queue-btn" onclick="submitJob('standard')">▶ Submit Standard Job (Class B)</button>
+                    <button class="queue-btn"
+                            style="border-color:var(--red);background:rgba(255,71,87,0.1);color:var(--red);"
+                            onclick="submitJob('high')">▶ Submit High-Priority Job (Class A)
+                    </button>
+                    <button class="queue-btn secondary" onclick="resetQueue()">↺ Reset Queue</button>
+                </div>
+                <div class="queue-controls" style="margin-top:4px;">
+                    <span class="queue-count" id="queueCount">0 jobs submitted</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="jcl" class="reveal">
+            <div class="section-label">03 — Deferred Processing</div>
+            <h2>JCL Basics</h2>
+            <p>Job Control Language is declarative — it describes what a job needs, not how to compute something.
+                Click any line below to see what it actually does.</p>
+
+            <div class="jcl-wrap" id="jcl-explorer">
+                <h3>Annotated JCL Explorer</h3>
+                <p class="jcl-sub">Click a line for a plain-English explanation</p>
+                <div class="jcl-code" id="jclCode"></div>
+                <div class="jcl-explain" id="jclExplain">
+                    <span class="jcl-tag">Tip</span>
+                    <p>Click any line above to see what it does.</p>
+                </div>
+            </div>
+
+            <div class="callout">
+                Writing your own JCL and want to check it's syntactically sound before you submit it? I built
+                <a href="https://jclcheck.xyz" target="_blank"
+                   style="color:var(--cyan);text-decoration:none;border-bottom:1px solid rgba(0,212,255,0.4);">jclcheck.xyz</a>
+                —
+                a free online JCL checker: paste in a job, and it validates statement ordering, DD rules, keyword
+                syntax, and PROC symbolics, with plain-English errors and fixes. No mainframe connection required.
+            </div>
+        </section>
+
+        <section id="jes2-jes3" class="reveal">
+            <div class="section-label">04 — Two Models</div>
+            <h2>JES2 vs. JES3</h2>
+            <p>IBM provides two different implementations of the Job Entry Subsystem. Both manage the same job
+                lifecycle — they just coordinate very differently across a multi-system environment.</p>
+
+            <div class="topo-wrap">
+                <h3>JES2 / JES3 Topology</h3>
+                <div class="topo-switch">
+                    <button class="topo-btn active" onclick="switchTopo('jes2', this)">JES2 — Decentralised</button>
+                    <button class="topo-btn" onclick="switchTopo('jes3', this)">JES3 — Centralised</button>
+                </div>
+
+                <div class="topo-diagram active" id="topo-jes2">
+                    <div class="topo-row">
+                        <div class="topo-node">
+                            <div class="topo-circle">SYS A<br>JES2</div>
+                            <div class="topo-label">Own queue,<br>own decisions</div>
+                        </div>
+                        <div class="topo-node">
+                            <div class="topo-circle">SYS B<br>JES2</div>
+                            <div class="topo-label">Own queue,<br>own decisions</div>
+                        </div>
+                        <div class="topo-node">
+                            <div class="topo-circle">SYS C<br>JES2</div>
+                            <div class="topo-label">Own queue,<br>own decisions</div>
+                        </div>
+                    </div>
+                    <div class="topo-desc"><strong>Peer-to-peer.</strong> Each system in the sysplex runs its own JES2
+                        instance. They communicate to coordinate work and share a common job queue view, but each makes
+                        many scheduling decisions independently. The more widely deployed model — valued for simplicity
+                        and flexibility.
+                    </div>
+                </div>
+
+                <div class="topo-diagram" id="topo-jes3">
+                    <div class="topo-row">
+                        <div class="topo-node">
+                            <div class="topo-circle">Global<br>JES3</div>
+                            <div class="topo-label">Makes all scheduling<br>decisions</div>
+                        </div>
+                    </div>
+                    <div class="topo-hub-lines"></div>
+                    <div class="topo-row">
+                        <div class="topo-node">
+                            <div class="topo-circle dim">Local<br>JES3</div>
+                            <div class="topo-label">Carries out<br>the plan</div>
+                        </div>
+                        <div class="topo-node">
+                            <div class="topo-circle dim">Local<br>JES3</div>
+                            <div class="topo-label">Carries out<br>the plan</div>
+                        </div>
+                    </div>
+                    <div class="topo-desc"><strong>Hub and spoke.</strong> One system acts as the global JES3, making
+                        scheduling decisions for the entire complex; other systems act as local instances carrying out
+                        that centrally coordinated plan. Gives stronger control over complex resource dependencies —
+                        found in a smaller number of large, long-established installations.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="cics" class="reveal">
+            <div class="section-label">05 — Two Worlds, One Machine</div>
+            <h2>Batch vs. Online (CICS)</h2>
+            <p>CICS keeps transactions running continuously — short, discrete requests completing in a fraction of a
+                second. JES-managed batch jobs have a defined beginning and end. They're complementary, not
+                competitors.</p>
+            <div class="callout">CICS handles every card swipe throughout the day. A JES-managed batch job runs
+                overnight to reconcile and post everything CICS captured. Same machine, two very different rhythms.
+            </div>
+        </section>
+
+        <section id="summary" class="reveal">
+            <div class="section-label">06 — Wrap Up</div>
+            <div class="summary-box">
+                <h2>Summary</h2>
+                <p>JES manages the entire lifecycle of a batch job — from submission through JCL-defined execution to
+                    output and purge — while CICS handles the online side. JES2's decentralised model and JES3's
+                    centralised one solve the same problem in different ways, and understanding both halves of this
+                    picture is key to understanding how a mainframe balances enormous overnight workloads with instant,
+                    everyday transactions.</p>
+            </div>
+        </section>
+
+        <div class="author-bio reveal">
+            <div class="author-avatar">ZIA</div>
+            <div class="author-info">
+                <div class="author-name">Zubair Idris Aweda</div>
+                <div class="author-title">Software Engineer · Technical Writer</div>
+                <div class="author-links">
+                    <a href="https://www.linkedin.com/in/zubairidrisaweda/" target="_blank"
+                       class="author-link">LinkedIn</a>
+                    <a href="https://x.com/greatzubs" target="_blank" class="author-link">Twitter/X</a>
+                    <a href="https://github.com/Zubs" target="_blank" class="author-link">GitHub</a>
+                    <a href="https://zubairidrisaweda.medium.com/" target="_blank" class="author-link">Medium</a>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+    /* ── SCENARIO SWITCH ── */
+    const scenarios = {
+        batch: {
+            stats: [['Scheduled', 'Timing'], ['2.4M rows', 'Volume/run'], ['Unattended', 'Interaction'], ['~40 min', 'Typical duration']],
+            desc: "<strong>PAYROLL — overnight batch job.</strong> Submitted at 23:00 via JCL, processes the entire day's accumulated transactions in one continuous run, and finishes before staff arrive. If it fails at row 1.8M, it's restarted from a checkpoint — nobody's waiting on the other end."
+        },
+        live: {
+            stats: [['Instant', 'Timing'], ['1 record', 'Volume/request'], ['Interactive', 'Interaction'], ['~0.3 sec', 'Typical duration']],
+            desc: "<strong>Card payment authorisation — online transaction.</strong> A request arrives, is validated against the account, and a response returns in a fraction of a second. If it fails, the person at the checkout needs to know immediately — there's no 'restart it overnight' option."
+        }
+    };
+
+    function setScenario(key, btn) {
+        document.querySelectorAll('.scenario-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const s = scenarios[key];
+        document.getElementById('scenarioStats').innerHTML = s.stats.map(([v, l]) =>
+            `<div class="stat-box"><div class="stat-value">${v}</div><div class="stat-label">${l}</div></div>`
+        ).join('');
+        document.getElementById('scenarioDesc').innerHTML = s.desc;
+    }
+
+    setScenario('batch', document.querySelector('.scenario-btn'));
+
+    /* ── JOB LIFECYCLE FLOW ── */
+    function activateJes(idx) {
+        document.querySelectorAll('#lifecycle .flow-step').forEach((el, i) => el.classList.toggle('active', i === idx));
+    }
+
+    /* ── LIVE JOB QUEUE SIMULATOR ── */
+    let jobCounter = 0;
+    const jobNames = ['PAYROLL', 'SORTJOB', 'RPTGEN', 'BACKUP', 'RECONCIL', 'STMTGEN', 'ARCHIVE', 'NIGHTBAT'];
+    // Standard-priority jobs sit longer in Processing (competing for CPU behind everything else);
+    // high-priority jobs get dispatched through it far faster — JES/WLM giving them precedence.
+    const phaseDurationsByPriority = {
+        standard: [900, 1100, 3200, 900, 800],
+        high: [500, 600, 900, 500, 600]
+    };
+
+    function submitJob(priority) {
+        jobCounter++;
+        const name = jobNames[Math.floor(Math.random() * jobNames.length)] + String(jobCounter).padStart(2, '0');
+        document.getElementById('queueCount').textContent = `${jobCounter} job${jobCounter === 1 ? '' : 's'} submitted`;
+
+        const chip = document.createElement('div');
+        chip.className = 'job-chip';
+        const classLabel = priority === 'high' ? 'CLASS A' : 'CLASS B';
+        chip.innerHTML = `JOB${String(jobCounter).padStart(3, '0')} ${name} <span style="opacity:0.7;">· ${classLabel}</span>`;
+        if (priority === 'high') {
+            chip.style.borderColor = 'var(--red)';
+            chip.style.boxShadow = '0 0 10px rgba(255,71,87,0.25)';
+        }
+        document.getElementById('lane0').appendChild(chip);
+
+        advanceJob(chip, 0, priority);
+    }
+
+    function advanceJob(chip, phase, priority) {
+        const durations = phaseDurationsByPriority[priority] || phaseDurationsByPriority.standard;
+        setTimeout(() => {
+            if (phase >= 4) {
+                chip.classList.add('purging');
+                setTimeout(() => {
+                    chip.remove();
+                }, 1400);
+                return;
+            }
+            const nextLane = document.getElementById('lane' + (phase + 1));
+            if (nextLane && chip.parentNode) {
+                nextLane.appendChild(chip);
+                advanceJob(chip, phase + 1, priority);
+            }
+        }, durations[phase]);
+    }
+
+    function resetQueue() {
+        for (let i = 0; i < 5; i++) document.getElementById('lane' + i).innerHTML = '';
+        jobCounter = 0;
+        document.getElementById('queueCount').textContent = '0 jobs submitted';
+    }
+
+    /* ── ANNOTATED JCL EXPLORER ── */
+    const jclLines = [
+        {
+            html: `<span class="jcl-tok-stmt">//ZUBAIRJ1</span> <span class="jcl-tok-op">JOB</span> <span class="jcl-tok-val">(ACCT123),'BATCH DEMO',CLASS=A,MSGCLASS=X</span>`,
+            tag: 'JOB statement',
+            text: "Identifies the job — ZUBAIRJ1 — along with accounting information, a description, the job class it belongs to (CLASS=A), and where its system messages should go (MSGCLASS=X)."
+        },
+        {
+            html: `<span class="jcl-tok-stmt">//STEP1</span>    <span class="jcl-tok-op">EXEC</span> <span class="jcl-tok-kw">PGM</span>=IEFBR14`,
+            tag: 'EXEC statement',
+            text: "Specifies what to run in this step. Here it's the utility program IEFBR14 — commonly used simply to allocate a dataset without running any real processing."
+        },
+        {
+            html: `<span class="jcl-tok-stmt">//DD1</span>      <span class="jcl-tok-op">DD</span> <span class="jcl-tok-kw">DSN</span>=ZUBAIR.TEST.OUTPUT,`,
+            tag: 'DD statement — dataset name',
+            text: "A Data Definition statement describing a dataset this job needs. DSN= names it — here, a brand-new dataset called ZUBAIR.TEST.OUTPUT."
+        },
+        {
+            html: `<span class="jcl-tok-stmt">//</span>            <span class="jcl-tok-kw">DISP</span>=(NEW,CATLG,DELETE),`,
+            tag: 'DISP parameter',
+            text: "Disposition: NEW means this dataset doesn't exist yet and should be created. CATLG means keep and catalog it if the step ends normally; DELETE means remove it if the step abends."
+        },
+        {
+            html: `<span class="jcl-tok-stmt">//</span>            <span class="jcl-tok-kw">SPACE</span>=(CYL,(5,1)),`,
+            tag: 'SPACE parameter',
+            text: "How much storage to allocate — here, 5 cylinders primary and 1 cylinder secondary (extra space allocated automatically if needed)."
+        },
+        {
+            html: `<span class="jcl-tok-stmt">//</span>            <span class="jcl-tok-kw">DCB</span>=(RECFM=FB,LRECL=80)`,
+            tag: 'DCB parameter',
+            text: "Data Control Block attributes describing the dataset's physical format — RECFM=FB means Fixed Block records, LRECL=80 means each record is 80 bytes long (a classic punch-card-width record)."
+        }
+    ];
+
+    function renderJcl() {
+        const container = document.getElementById('jclCode');
+        container.innerHTML = jclLines.map((l, i) =>
+            `<div class="jcl-line" data-idx="${i}" onclick="explainJcl(${i})">${l.html}</div>`
+        ).join('');
+    }
+
+    function explainJcl(idx) {
+        document.querySelectorAll('.jcl-line').forEach((el, i) => el.classList.toggle('active', i === idx));
+        const l = jclLines[idx];
+        document.getElementById('jclExplain').innerHTML = `<span class="jcl-tag">${l.tag}</span><p>${l.text}</p>`;
+    }
+
+    renderJcl();
+
+    /* ── JES2/JES3 TOPOLOGY ── */
+    function switchTopo(key, btn) {
+        document.querySelectorAll('.topo-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.querySelectorAll('.topo-diagram').forEach(d => d.classList.remove('active'));
+        document.getElementById('topo-' + key).classList.add('active');
+    }
+
+    /* ── SCROLL REVEAL + TOC ── */
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                e.target.classList.add('visible');
+                revealObserver.unobserve(e.target);
+            }
+        });
+    }, {threshold: 0.08});
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    const sections = document.querySelectorAll('section[id], header[id]');
+    const tocLinks = document.querySelectorAll('.toc-link');
+    const tocObserver = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                tocLinks.forEach(l => l.classList.remove('active'));
+                const match = document.querySelector(`.toc-link[href="#${e.target.id}"]`);
+                if (match) match.classList.add('active');
+            }
+        });
+    }, {threshold: 0.3});
+    sections.forEach(s => tocObserver.observe(s));
+</script>
+</body>
+</html>

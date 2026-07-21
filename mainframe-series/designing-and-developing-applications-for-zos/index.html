@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Designing and Developing Applications for z/OS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:wght@700;900&display=swap"
+          rel="stylesheet">
+    <style>
+        :root {
+            --bg: #080c14;
+            --surface: #0d1520;
+            --surface2: #111c2e;
+            --border: #1a2e4a;
+            --cyan: #00d4ff;
+            --cyan-dim: rgba(0, 212, 255, 0.12);
+            --cyan-glow: rgba(0, 212, 255, 0.35);
+            --amber: #ffb830;
+            --green: #00ff9d;
+            --red: #ff4757;
+            --text: #c8daf0;
+            --text-dim: #5a7a9a;
+            --text-bright: #e8f4ff;
+            --mono: 'Space Mono', monospace;
+            --sans: 'DM Sans', sans-serif;
+            --serif: 'Playfair Display', serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--sans);
+            font-size: 16px;
+            line-height: 1.75;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, 0.03) 2px, rgba(0, 0, 0, 0.03) 4px);
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .page-wrap {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            min-height: 100vh;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            padding: 48px 24px 32px;
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            overflow-y: auto;
+            background: var(--bg);
+        }
+
+        .sidebar-label {
+            font-family: var(--mono);
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .toc-link {
+            display: block;
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--text-dim);
+            text-decoration: none;
+            padding: 6px 10px;
+            border-radius: 4px;
+            border-left: 2px solid transparent;
+            transition: all 0.2s;
+            line-height: 1.4;
+        }
+
+        .toc-link:hover, .toc-link.active {
+            color: var(--cyan);
+            border-left-color: var(--cyan);
+            background: var(--cyan-dim);
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+            font-family: var(--mono);
+            font-size: 10px;
+            color: var(--text-dim);
+            line-height: 1.8;
+        }
+
+        .sidebar-footer a {
+            color: var(--cyan);
+            text-decoration: none;
+        }
+
+        .main {
+            padding: 0 64px 120px;
+            max-width: 860px;
+        }
+
+        .hero {
+            padding: 80px 0 64px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 72px;
+        }
+
+        .hero-eyebrow {
+            font-family: var(--mono);
+            font-size: 11px;
+            letter-spacing: 0.25em;
+            color: var(--cyan);
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .hero-eyebrow::before {
+            content: '';
+            display: block;
+            width: 32px;
+            height: 1px;
+            background: var(--cyan);
+        }
+
+        h1.hero-title {
+            font-family: var(--serif);
+            font-size: clamp(2.1rem, 4vw, 3.2rem);
+            font-weight: 900;
+            color: var(--text-bright);
+            line-height: 1.1;
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-sub {
+            font-family: var(--sans);
+            font-size: 1.15rem;
+            color: var(--text-dim);
+            font-weight: 300;
+            margin-bottom: 32px;
+        }
+
+        .hero-meta {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--text-dim);
+        }
+
+        .hero-meta span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .hero-meta .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--cyan);
+            display: inline-block;
+        }
+
+        section {
+            margin-bottom: 96px;
+        }
+
+        .section-label {
+            font-family: var(--mono);
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            color: var(--cyan);
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        h2 {
+            font-family: var(--serif);
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-bright);
+            margin-bottom: 24px;
+            line-height: 1.2;
+        }
+
+        h3.subhead {
+            font-family: var(--sans);
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-bright);
+            margin: 32px 0 12px;
+        }
+
+        p {
+            color: var(--text);
+            margin-bottom: 16px;
+        }
+
+        code.inline {
+            font-family: var(--mono);
+            background: var(--surface2);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.88em;
+            color: var(--green);
+        }
+
+        .callout {
+            border-left: 3px solid var(--cyan);
+            padding: 20px 24px;
+            background: var(--cyan-dim);
+            border-radius: 0 8px 8px 0;
+            margin: 28px 0;
+            font-family: var(--mono);
+            font-size: 0.88rem;
+            line-height: 1.7;
+            color: var(--text);
+        }
+
+        .concept-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 24px 0;
+        }
+
+        .concept-card {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            background: var(--surface);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .concept-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 3px;
+            height: 100%;
+            background: var(--cyan);
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .concept-card:hover::before {
+            opacity: 1;
+        }
+
+        .concept-term {
+            font-family: var(--mono);
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--cyan);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 8px;
+        }
+
+        .concept-def {
+            font-size: 0.82rem;
+            color: var(--text-dim);
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* ── DECISION HELPER ── */
+        .decision-wrap {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 32px;
+            margin: 32px 0;
+        }
+
+        .decision-wrap h3 {
+            margin-top: 0;
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            letter-spacing: 0.15em;
+            color: var(--cyan);
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+
+        .decision-step {
+            display: none;
+        }
+
+        .decision-step.active {
+            display: block;
+        }
+
+        .decision-q {
+            font-family: var(--sans);
+            font-size: 1rem;
+            color: var(--text-bright);
+            margin-bottom: 16px;
+        }
+
+        .decision-opts {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .decision-opt {
+            font-family: var(--sans);
+            font-size: 0.88rem;
+            padding: 14px 18px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            color: var(--text);
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s;
+        }
+
+        .decision-opt:hover {
+            border-color: var(--cyan);
+        }
+
+        .decision-result {
+            background: var(--bg);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .decision-result .badge {
+            display: inline-block;
+            background: var(--cyan);
+            color: var(--bg);
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-family: var(--mono);
+            font-size: 12px;
+            margin-bottom: 12px;
+        }
+
+        .decision-result p {
+            font-size: 0.88rem;
+            color: var(--text-dim);
+            margin-bottom: 0;
+        }
+
+        .decision-reset {
+            margin-top: 16px;
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--text-dim);
+            background: none;
+            border: 1px solid var(--border);
+            padding: 8px 14px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .decision-reset:hover {
+            color: var(--cyan);
+            border-color: var(--cyan);
+        }
+
+        /* ── DEV TOOLS TABS ── */
+        .example-tabs {
+            margin: 28px 0;
+        }
+
+        .tab-btns {
+            display: flex;
+            border-bottom: 1px solid var(--border);
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            font-family: var(--mono);
+            font-size: 11px;
+            padding: 10px 20px;
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            color: var(--text-dim);
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: all 0.2s;
+            margin-bottom: -1px;
+        }
+
+        .tab-btn.active {
+            color: var(--cyan);
+            border-bottom-color: var(--cyan);
+        }
+
+        .tab-panel {
+            display: none;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            padding: 24px;
+        }
+
+        .tab-panel.active {
+            display: block;
+        }
+
+        .tab-panel h4 {
+            font-family: var(--sans);
+            color: var(--text-bright);
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+
+        .tab-panel p {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            margin: 0;
+        }
+
+        /* ── ROLES GRID ── */
+        .roles-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin: 24px 0;
+        }
+
+        .role-card {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px;
+            background: var(--surface);
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        .role-card:hover, .role-card.active {
+            border-color: var(--cyan);
+        }
+
+        .role-icon {
+            font-size: 22px;
+            margin-bottom: 8px;
+        }
+
+        .role-name {
+            font-family: var(--mono);
+            font-size: 10px;
+            color: var(--text-bright);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .role-detail {
+            grid-column: 1 / -1;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 18px 20px;
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            display: none;
+        }
+
+        .role-detail.show {
+            display: block;
+        }
+
+        .summary-box {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.06) 0%, rgba(0, 0, 0, 0) 100%);
+            border: 1px solid rgba(0, 212, 255, 0.25);
+            border-radius: 12px;
+            padding: 40px;
+            margin: 40px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .summary-box::after {
+            content: '{ }';
+            position: absolute;
+            right: 0px;
+            bottom: -30px;
+            font-family: var(--serif);
+            font-size: 100px;
+            font-weight: 900;
+            color: rgba(0, 212, 255, 0.04);
+            pointer-events: none;
+            line-height: 1;
+        }
+
+        .summary-box h2 {
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+        }
+
+        .summary-box p {
+            font-size: 0.95rem;
+        }
+
+        .author-bio {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 28px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: var(--surface);
+            margin-top: 64px;
+        }
+
+        .author-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            border: 2px solid var(--cyan);
+            flex-shrink: 0;
+            background: var(--cyan-dim);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--mono);
+            font-size: 1.2rem;
+            color: var(--cyan);
+            font-weight: 700;
+        }
+
+        .author-info {
+            flex: 1;
+        }
+
+        .author-name {
+            font-weight: 600;
+            color: var(--text-bright);
+            margin-bottom: 2px;
+            font-size: 0.95rem;
+        }
+
+        .author-title {
+            font-family: var(--mono);
+            font-size: 10px;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 10px;
+        }
+
+        .author-links {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .author-link {
+            font-family: var(--mono);
+            font-size: 10px;
+            color: var(--text-dim);
+            text-decoration: none;
+            border: 1px solid var(--border);
+            padding: 4px 10px;
+            border-radius: 4px;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .author-link:hover {
+            border-color: var(--cyan);
+            color: var(--cyan);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--text-dim);
+            text-decoration: none;
+            margin-bottom: 24px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .back-link:hover {
+            color: var(--cyan);
+        }
+
+        @media (max-width: 900px) {
+            .page-wrap {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            .main {
+                padding: 24px 24px 80px;
+                max-width: 100%;
+            }
+
+            .concept-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .roles-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: none;
+        }
+    </style>
+</head>
+<body>
+<div class="page-wrap">
+    <aside class="sidebar">
+        <a href="../" class="back-link">← Series index</a>
+        <div class="sidebar-label">In this article</div>
+        <a href="#designing" class="toc-link">Application Designing Overview</a>
+        <a href="#workload" class="toc-link">Understanding the Workload</a>
+        <a href="#data" class="toc-link">↳ VSAM vs. Db2 (Interactive)</a>
+        <a href="#integration" class="toc-link">Integration & Modernisation</a>
+        <a href="#nfr" class="toc-link">Non-Functional Requirements</a>
+        <a href="#developing" class="toc-link">Application Development Overview</a>
+        <a href="#tools" class="toc-link">↳ Writing the Code (Tools)</a>
+        <a href="#roles" class="toc-link">↳ Who Does This Work?</a>
+        <a href="#summary" class="toc-link">Summary</a>
+        <div class="sidebar-footer">
+            <div>Series: Mainframe 101 · Part 5</div>
+            <div>~9 min read</div>
+            <br>
+            <div>
+                <a href="https://zubairidrisaweda.medium.com/designing-and-developing-applications-for-z-os-efbc6578c936"
+                   target="_blank">Read on Medium →</a></div>
+        </div>
+    </aside>
+
+    <main class="main">
+        <header class="hero" id="top">
+            <div class="hero-eyebrow">Mainframe 101 · Part 05</div>
+            <h1 class="hero-title">Designing and Developing Applications for z/OS</h1>
+            <p class="hero-sub">From Blueprint to Production</p>
+            <div class="hero-meta">
+                <span><span class="dot"></span> Zubair Idris Aweda</span>
+                <span><span class="dot"></span> 9 min read</span>
+                <span><span class="dot"></span> Interactive</span>
+            </div>
+        </header>
+
+        <section id="designing" class="reveal">
+            <div class="section-label">01 — Overview</div>
+            <h2>Application Designing Overview</h2>
+            <p>Designing an application for z/OS starts with understanding the problem you're solving — but the
+                mainframe context adds considerations shaped by decades of running the world's most demanding, least
+                forgiving workloads.</p>
+
+            <h3 class="subhead" id="workload">Understanding the Workload</h3>
+            <p>The first question is almost always: batch or online? Batch work leans toward efficient sequential
+                processing and checkpoint/restart. Online work (CICS/IMS) leans toward response time, concurrency,
+                and resilience under unpredictable load. Many real applications blend both.</p>
+        </section>
+
+        <section id="data" class="reveal">
+            <div class="section-label">02 — Interactive</div>
+            <h2>VSAM or Db2? A Quick Decision Helper</h2>
+            <p>Data design is foundational — get it wrong and you fight the data layer for the application's entire
+                life. Answer the question below to see which shape fits your access pattern.</p>
+
+            <div class="decision-wrap">
+                <h3>Data Layer Decision Helper</h3>
+                <div class="decision-step active" id="decisionStep0">
+                    <div class="decision-q">How does your application mostly access its data?</div>
+                    <div class="decision-opts">
+                        <button class="decision-opt" onclick="showDecision('vsam')">Simple reads/writes against one
+                            well-known key (e.g. a claim number)
+                        </button>
+                        <button class="decision-opt" onclick="showDecision('db2')">Complex queries — filtering, joining
+                            across related records
+                        </button>
+                        <button class="decision-opt" onclick="showDecision('mixed')">Both — fast lookups by key, but
+                            also reporting across relationships
+                        </button>
+                    </div>
+                </div>
+                <div class="decision-step" id="decisionResultWrap">
+                    <div class="decision-result" id="decisionResultBox"></div>
+                    <button class="decision-reset" onclick="resetDecision()">↺ Try another answer</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="integration" class="reveal">
+            <div class="section-label">03 — Modernisation</div>
+            <h2>Integration & Modernisation</h2>
+            <p>Very few new mainframe applications are built in complete isolation. A common pattern: wrap existing
+                logic behind modern interfaces rather than rewrite it — using z/OS Connect to expose a proven COBOL
+                program as a REST API.</p>
+            <div class="callout">"Wrap, don't rewrite." A COBOL program that's correctly processed millions of
+                transactions a day for twenty years encodes edge cases nobody currently remembers. Wrapping preserves
+                that proven logic while giving new applications a modern way to consume it.
+            </div>
+        </section>
+
+        <section id="nfr" class="reveal">
+            <div class="section-label">04 — Design Inputs</div>
+            <h2>Non-Functional Requirements</h2>
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <div class="concept-term">Availability</div>
+                    <p class="concept-def">How the application behaves during planned maintenance, or recovers
+                        mid-transaction after a failure.</p>
+                </div>
+                <div class="concept-card">
+                    <div class="concept-term">Security</div>
+                    <p class="concept-def">Access control via RACF, and encryption both at rest and in transit —
+                        designed in from the start, not bolted on later.</p>
+                </div>
+                <div class="concept-card">
+                    <div class="concept-term">Performance</div>
+                    <p class="concept-def">CPU efficiency matters financially — processing cost is measured and billed
+                        with real precision on this platform.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="developing" class="reveal">
+            <div class="section-label">05 — Overview</div>
+            <h2>Application Development Overview</h2>
+            <p>Once design is settled, development looks familiar in some ways and distinctly its own in others.</p>
+
+            <h3 class="subhead" id="tools">Writing the Code</h3>
+            <div class="example-tabs">
+                <div class="tab-btns">
+                    <button class="tab-btn active" onclick="switchDevTab(0, this)">ISPF Editor</button>
+                    <button class="tab-btn" onclick="switchDevTab(1, this)">IBM Developer for z/OS</button>
+                    <button class="tab-btn" onclick="switchDevTab(2, this)">VS Code + Zowe</button>
+                </div>
+                <div class="tab-panel active" id="dev0">
+                    <h4>The traditional route</h4>
+                    <p>Working directly with datasets and members on the mainframe itself — still common, and still an
+                        essential skill for any mainframer.</p>
+                </div>
+                <div class="tab-panel" id="dev1">
+                    <h4>IDz — Eclipse-based IDE</h4>
+                    <p>Brings a modern, graphical experience to COBOL and PL/I development — syntax highlighting,
+                        integrated debugging, project-based navigation.</p>
+                </div>
+                <div class="tab-panel" id="dev2">
+                    <h4>Zowe-powered modern tooling</h4>
+                    <p>Exposes mainframe datasets, jobs, and USS files through modern APIs and a CLI — letting
+                        developers work from an editor they already know.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="roles" class="reveal">
+            <div class="section-label">06 — Interactive</div>
+            <h2>Who Does This Work?</h2>
+            <p>"Mainframe developer" means different things depending on where someone sits. Click a role to see what it
+                actually covers.</p>
+            <div class="roles-grid">
+                <div class="role-card" onclick="showRole(0, this)">
+                    <div class="role-icon">🖥️</div>
+                    <div class="role-name">Systems Programmer</div>
+                </div>
+                <div class="role-card" onclick="showRole(1, this)">
+                    <div class="role-icon">💻</div>
+                    <div class="role-name">App Developer</div>
+                </div>
+                <div class="role-card" onclick="showRole(2, this)">
+                    <div class="role-icon">🗄️</div>
+                    <div class="role-name">DBA</div>
+                </div>
+                <div class="role-card" onclick="showRole(3, this)">
+                    <div class="role-icon">🔌</div>
+                    <div class="role-name">Integration Dev</div>
+                </div>
+                <div class="role-detail" id="roleDetail"></div>
+            </div>
+        </section>
+
+        <section id="summary" class="reveal">
+            <div class="section-label">07 — Wrap Up</div>
+            <div class="summary-box">
+                <h2>Summary</h2>
+                <p>Good design means understanding your workload, your data, and your non-functional requirements.
+                    Good development means writing clean, testable code, managing it in version control, and
+                    deploying it through a controlled, repeatable pipeline — the same instincts that apply anywhere,
+                    just applied within a platform built specifically to run workloads the world can't afford to get
+                    wrong.</p>
+            </div>
+        </section>
+
+        <div class="author-bio reveal">
+            <div class="author-avatar">ZIA</div>
+            <div class="author-info">
+                <div class="author-name">Zubair Idris Aweda</div>
+                <div class="author-title">Software Engineer · Technical Writer</div>
+                <div class="author-links">
+                    <a href="https://www.linkedin.com/in/zubairidrisaweda/" target="_blank"
+                       class="author-link">LinkedIn</a>
+                    <a href="https://x.com/greatzubs" target="_blank" class="author-link">Twitter/X</a>
+                    <a href="https://github.com/Zubs" target="_blank" class="author-link">GitHub</a>
+                    <a href="https://zubairidrisaweda.medium.com/" target="_blank" class="author-link">Medium</a>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+    const decisionText = {
+        vsam: {
+            badge: 'VSAM (KSDS)',
+            text: "A VSAM Key Sequenced Data Set is likely the simpler, faster choice here. Fast, direct access to records by key, without the overhead of a full relational engine for access patterns that don't need one."
+        },
+        db2: {
+            badge: 'Db2 for z/OS',
+            text: "Db2 is the better fit. Trying to build joins and filters on top of VSAM means reinventing, badly, functionality Db2 already provides natively through SQL."
+        },
+        mixed: {
+            badge: 'Db2, likely with VSAM at the edges',
+            text: "Most applications like this lean on Db2 for the relational core, sometimes with VSAM handling a small number of extremely hot, simple-key lookups alongside it."
+        }
+    };
+
+    function showDecision(key) {
+        document.getElementById('decisionStep0').classList.remove('active');
+        document.getElementById('decisionResultWrap').classList.add('active');
+        const d = decisionText[key];
+        document.getElementById('decisionResultBox').innerHTML = `<span class="badge">${d.badge}</span><p>${d.text}</p>`;
+    }
+
+    function resetDecision() {
+        document.getElementById('decisionStep0').classList.add('active');
+        document.getElementById('decisionResultWrap').classList.remove('active');
+    }
+
+    function switchDevTab(idx, btn) {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(`dev${idx}`).classList.add('active');
+    }
+
+    const roleText = [
+        "<strong style='color:var(--text-bright)'>Systems Programmer</strong> — focuses on the platform itself: configuring z/OS, JES, and the security manager, and keeping underlying infrastructure healthy.",
+        "<strong style='color:var(--text-bright)'>Application Developer</strong> — writes and maintains the COBOL, PL/I, Java, or other code implementing business logic.",
+        "<strong style='color:var(--text-bright)'>Database Administrator</strong> — designs and tunes the Db2 or VSAM data layer.",
+        "<strong style='color:var(--text-bright)'>Integration / API Developer</strong> — builds the connective layer exposing mainframe logic to mobile apps, websites, and other modern systems."
+    ];
+
+    function showRole(idx, card) {
+        document.querySelectorAll('.role-card').forEach(c => c.classList.remove('active'));
+        card.classList.add('active');
+        const el = document.getElementById('roleDetail');
+        el.innerHTML = roleText[idx];
+        el.classList.add('show');
+    }
+
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                e.target.classList.add('visible');
+                revealObserver.unobserve(e.target);
+            }
+        });
+    }, {threshold: 0.08});
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    const sections = document.querySelectorAll('section[id], header[id]');
+    const tocLinks = document.querySelectorAll('.toc-link');
+    const tocObserver = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                tocLinks.forEach(l => l.classList.remove('active'));
+                const match = document.querySelector(`.toc-link[href="#${e.target.id}"]`);
+                if (match) match.classList.add('active');
+            }
+        });
+    }, {threshold: 0.3});
+    sections.forEach(s => tocObserver.observe(s));
+</script>
+</body>
+</html>

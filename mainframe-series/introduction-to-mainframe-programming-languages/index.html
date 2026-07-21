@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introduction to Mainframe Programming Languages</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:wght@700;900&display=swap"
+          rel="stylesheet">
+    <style>
+        :root {
+            --bg: #080c14;
+            --surface: #0d1520;
+            --surface2: #111c2e;
+            --border: #1a2e4a;
+            --cyan: #00d4ff;
+            --cyan-dim: rgba(0, 212, 255, 0.12);
+            --cyan-glow: rgba(0, 212, 255, 0.35);
+            --amber: #ffb830;
+            --green: #00ff9d;
+            --red: #ff4757;
+            --purple: #b78dff;
+            --text: #c8daf0;
+            --text-dim: #5a7a9a;
+            --text-bright: #e8f4ff;
+            --mono: 'Space Mono', monospace;
+            --sans: 'DM Sans', sans-serif;
+            --serif: 'Playfair Display', serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--sans);
+            font-size: 16px;
+            line-height: 1.75;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, 0.03) 2px, rgba(0, 0, 0, 0.03) 4px);
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .page-wrap {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            min-height: 100vh;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            padding: 48px 24px 32px;
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            overflow-y: auto;
+            background: var(--bg);
+        }
+
+        .sidebar-label {
+            font-family: var(--mono);
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .toc-link {
+            display: block;
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--text-dim);
+            text-decoration: none;
+            padding: 6px 10px;
+            border-radius: 4px;
+            border-left: 2px solid transparent;
+            transition: all 0.2s;
+            line-height: 1.4;
+        }
+
+        .toc-link:hover, .toc-link.active {
+            color: var(--cyan);
+            border-left-color: var(--cyan);
+            background: var(--cyan-dim);
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+            font-family: var(--mono);
+            font-size: 10px;
+            color: var(--text-dim);
+            line-height: 1.8;
+        }
+
+        .sidebar-footer a {
+            color: var(--cyan);
+            text-decoration: none;
+        }
+
+        .main {
+            padding: 0 64px 120px;
+            max-width: 860px;
+        }
+
+        .hero {
+            padding: 80px 0 64px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 72px;
+        }
+
+        .hero-eyebrow {
+            font-family: var(--mono);
+            font-size: 11px;
+            letter-spacing: 0.25em;
+            color: var(--cyan);
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .hero-eyebrow::before {
+            content: '';
+            display: block;
+            width: 32px;
+            height: 1px;
+            background: var(--cyan);
+        }
+
+        h1.hero-title {
+            font-family: var(--serif);
+            font-size: clamp(2.1rem, 4vw, 3.2rem);
+            font-weight: 900;
+            color: var(--text-bright);
+            line-height: 1.1;
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-sub {
+            font-family: var(--sans);
+            font-size: 1.15rem;
+            color: var(--text-dim);
+            font-weight: 300;
+            margin-bottom: 32px;
+        }
+
+        .hero-meta {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--text-dim);
+        }
+
+        .hero-meta span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .hero-meta .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--cyan);
+            display: inline-block;
+        }
+
+        section {
+            margin-bottom: 96px;
+        }
+
+        .section-label {
+            font-family: var(--mono);
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            color: var(--cyan);
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        h2 {
+            font-family: var(--serif);
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-bright);
+            margin-bottom: 24px;
+            line-height: 1.2;
+        }
+
+        p {
+            color: var(--text);
+            margin-bottom: 16px;
+        }
+
+        code.inline {
+            font-family: var(--mono);
+            background: var(--surface2);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.88em;
+            color: var(--green);
+        }
+
+        .concept-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 24px 0;
+        }
+
+        .concept-card {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            background: var(--surface);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .concept-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 3px;
+            height: 100%;
+            background: var(--cyan);
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .concept-card:hover::before {
+            opacity: 1;
+        }
+
+        .concept-term {
+            font-family: var(--mono);
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--cyan);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 8px;
+        }
+
+        .concept-def {
+            font-size: 0.82rem;
+            color: var(--text-dim);
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        pre.code-block {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px 20px;
+            font-family: var(--mono);
+            font-size: 12.5px;
+            color: var(--green);
+            overflow-x: auto;
+            margin: 16px 0;
+            line-height: 1.7;
+        }
+
+        /* ── LANGUAGE EXPLORER ── */
+        .lang-wrap {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 32px;
+            margin: 32px 0;
+        }
+
+        .lang-wrap h3 {
+            margin-top: 0;
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            letter-spacing: 0.15em;
+            color: var(--cyan);
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .lang-sub {
+            font-size: 0.82rem;
+            color: var(--text-dim);
+            margin-bottom: 24px;
+            font-family: var(--mono);
+        }
+
+        .lang-pills {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
+
+        .lang-pill {
+            font-family: var(--mono);
+            font-size: 11px;
+            padding: 9px 16px;
+            border-radius: 100px;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text-dim);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .lang-pill:hover {
+            border-color: var(--cyan);
+            color: var(--cyan);
+        }
+
+        .lang-pill.active {
+            border-color: var(--cyan);
+            color: var(--bg);
+            background: var(--cyan);
+            font-weight: 700;
+        }
+
+        .lang-detail {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 24px;
+        }
+
+        .lang-detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 4px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .lang-name {
+            font-family: var(--sans);
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--text-bright);
+        }
+
+        .lang-era {
+            font-family: var(--mono);
+            font-size: 10px;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .lang-desc {
+            font-size: 0.88rem;
+            color: var(--text-dim);
+            margin: 10px 0 16px;
+        }
+
+        .lang-use {
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--amber);
+            margin-top: 12px;
+        }
+
+        /* ── BEGINNER PATH FINDER ── */
+        .quiz-wrap {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 32px;
+            margin: 32px 0;
+        }
+
+        .quiz-wrap h3 {
+            margin-top: 0;
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            letter-spacing: 0.15em;
+            color: var(--cyan);
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+
+        .quiz-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .quiz-opt {
+            font-family: var(--sans);
+            font-size: 0.88rem;
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            color: var(--text);
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s;
+        }
+
+        .quiz-opt:hover {
+            border-color: var(--cyan);
+        }
+
+        .quiz-result {
+            background: var(--bg);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 8px;
+            padding: 20px;
+            font-family: var(--mono);
+            font-size: 0.85rem;
+            color: var(--text);
+            display: none;
+        }
+
+        .quiz-result.show {
+            display: block;
+        }
+
+        .quiz-result strong {
+            color: var(--cyan);
+        }
+
+        .callout {
+            border-left: 3px solid var(--cyan);
+            padding: 20px 24px;
+            background: var(--cyan-dim);
+            border-radius: 0 8px 8px 0;
+            margin: 28px 0;
+            font-family: var(--mono);
+            font-size: 0.88rem;
+            line-height: 1.7;
+            color: var(--text);
+        }
+
+        .summary-box {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.06) 0%, rgba(0, 0, 0, 0) 100%);
+            border: 1px solid rgba(0, 212, 255, 0.25);
+            border-radius: 12px;
+            padding: 40px;
+            margin: 40px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .summary-box::after {
+            content: '01101';
+            position: absolute;
+            right: -10px;
+            bottom: -20px;
+            font-family: var(--serif);
+            font-size: 70px;
+            font-weight: 900;
+            color: rgba(0, 212, 255, 0.04);
+            pointer-events: none;
+            line-height: 1;
+        }
+
+        .summary-box h2 {
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+        }
+
+        .summary-box p {
+            font-size: 0.95rem;
+        }
+
+        .author-bio {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 28px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: var(--surface);
+            margin-top: 64px;
+        }
+
+        .author-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            border: 2px solid var(--cyan);
+            flex-shrink: 0;
+            background: var(--cyan-dim);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--mono);
+            font-size: 1.2rem;
+            color: var(--cyan);
+            font-weight: 700;
+        }
+
+        .author-info {
+            flex: 1;
+        }
+
+        .author-name {
+            font-weight: 600;
+            color: var(--text-bright);
+            margin-bottom: 2px;
+            font-size: 0.95rem;
+        }
+
+        .author-title {
+            font-family: var(--mono);
+            font-size: 10px;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 10px;
+        }
+
+        .author-links {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .author-link {
+            font-family: var(--mono);
+            font-size: 10px;
+            color: var(--text-dim);
+            text-decoration: none;
+            border: 1px solid var(--border);
+            padding: 4px 10px;
+            border-radius: 4px;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .author-link:hover {
+            border-color: var(--cyan);
+            color: var(--cyan);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--text-dim);
+            text-decoration: none;
+            margin-bottom: 24px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .back-link:hover {
+            color: var(--cyan);
+        }
+
+        @media (max-width: 900px) {
+            .page-wrap {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            .main {
+                padding: 24px 24px 80px;
+                max-width: 100%;
+            }
+
+            .concept-grid, .quiz-options {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: none;
+        }
+    </style>
+</head>
+<body>
+<div class="page-wrap">
+    <aside class="sidebar">
+        <a href="../" class="back-link">← Series index</a>
+        <div class="sidebar-label">In this article</div>
+        <a href="#what-is-programming" class="toc-link">What Is Programming?</a>
+        <a href="#types" class="toc-link">Types of Languages</a>
+        <a href="#vs-scripting" class="toc-link">Programming vs. Scripting</a>
+        <a href="#explorer" class="toc-link">↳ Language Explorer (Interactive)</a>
+        <a href="#pathfinder" class="toc-link">↳ Where Should I Start?</a>
+        <a href="#summary" class="toc-link">Summary</a>
+        <div class="sidebar-footer">
+            <div>Series: Mainframe 101 · Part 2</div>
+            <div>~9 min read</div>
+            <br>
+            <div>
+                <a href="https://zubairidrisaweda.medium.com/introduction-to-mainframe-programming-languages-51f3ba5c04bd"
+                   target="_blank">Read on Medium →</a></div>
+        </div>
+    </aside>
+
+    <main class="main">
+        <header class="hero" id="top">
+            <div class="hero-eyebrow">Mainframe 101 · Part 02</div>
+            <h1 class="hero-title">Introduction to Mainframe Programming Languages</h1>
+            <p class="hero-sub">Part One: Learning to Speak the Machine's Native Tongues</p>
+            <div class="hero-meta">
+                <span><span class="dot"></span> Zubair Idris Aweda</span>
+                <span><span class="dot"></span> 9 min read</span>
+                <span><span class="dot"></span> Interactive</span>
+            </div>
+        </header>
+
+        <section id="what-is-programming" class="reveal">
+            <div class="section-label">01 — Foundations</div>
+            <h2>What Is Programming, Really?</h2>
+            <p>Programming is the process of writing instructions a computer can follow. A computer doesn't inherently
+                know how to calculate interest, validate an address, or transfer funds — someone has to describe every
+                step, precisely and unambiguously. Programming languages exist to make that description possible in a
+                way humans can write and machines can execute.</p>
+        </section>
+
+        <section id="types" class="reveal">
+            <div class="section-label">02 — Categories</div>
+            <h2>Types of Programming Languages</h2>
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <div class="concept-term">Low-level vs. High-level</div>
+                    <p class="concept-def">Low-level (assembly) maps closely to hardware — full control, less readable.
+                        High-level (Python, Java) abstracts hardware away for easier writing.</p>
+                </div>
+                <div class="concept-card">
+                    <div class="concept-term">Compiled vs. Interpreted</div>
+                    <p class="concept-def">Compiled (COBOL, Java) is translated ahead of time into an executable.
+                        Interpreted (Python, REXX) is read line-by-line at runtime.</p>
+                </div>
+                <div class="concept-card">
+                    <div class="concept-term">Procedural</div>
+                    <p class="concept-def">Structures programs as a sequence of instructions and procedures — COBOL and
+                        C are classic examples.</p>
+                </div>
+                <div class="concept-card">
+                    <div class="concept-term">Object-Oriented</div>
+                    <p class="concept-def">Organises code around objects that bundle data and behaviour together — Java
+                        is the mainframe's leading example.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="vs-scripting" class="reveal">
+            <div class="section-label">03 — A Key Distinction</div>
+            <h2>Programming vs. Scripting Languages</h2>
+            <p>On a mainframe, this split maps cleanly onto how work divides:</p>
+            <div class="callout">
+                <strong style="color:var(--text-bright);">Programming languages</strong> (COBOL, PL/I, HLASM, Java)
+                build the actual business applications — compiled, rigorously tested, run millions of times a
+                day.<br><br>
+                <strong style="color:var(--text-bright);">Scripting languages</strong> (REXX, CLIST — covered in Part
+                Two) automate operational tasks: submitting jobs, manipulating datasets, orchestrating workflows.
+            </div>
+        </section>
+
+        <section id="explorer" class="reveal">
+            <div class="section-label">04 — Interactive</div>
+            <h2>Language Explorer</h2>
+            <p>Click a language to see a snippet, its era, and where it actually shows up in production today.</p>
+
+            <div class="lang-wrap">
+                <h3>Mainframe Language Explorer</h3>
+                <p class="lang-sub">Select a language below</p>
+                <div class="lang-pills" id="langPills">
+                    <button class="lang-pill active" onclick="selectLang(0, this)">HLASM</button>
+                    <button class="lang-pill" onclick="selectLang(1, this)">COBOL</button>
+                    <button class="lang-pill" onclick="selectLang(2, this)">PL/I</button>
+                    <button class="lang-pill" onclick="selectLang(3, this)">Java</button>
+                    <button class="lang-pill" onclick="selectLang(4, this)">Python</button>
+                    <button class="lang-pill" onclick="selectLang(5, this)">Go</button>
+                </div>
+                <div class="lang-detail" id="langDetail"></div>
+            </div>
+        </section>
+
+        <section id="pathfinder" class="reveal">
+            <div class="section-label">05 — Interactive</div>
+            <h2>Where Should a Beginner Start?</h2>
+            <p>Answer honestly, and get a recommendation based on what a lot of real mainframers actually did first.</p>
+
+            <div class="quiz-wrap">
+                <h3>Which language should I learn first?</h3>
+                <div class="quiz-options" id="quizOptions">
+                    <button class="quiz-opt" onclick="showQuizResult(0)">I've never written code professionally before
+                    </button>
+                    <button class="quiz-opt" onclick="showQuizResult(1)">I already know an object-oriented or scripting
+                        language
+                    </button>
+                    <button class="quiz-opt" onclick="showQuizResult(2)">I want to understand what's happening at the
+                        hardware level
+                    </button>
+                    <button class="quiz-opt" onclick="showQuizResult(3)">I want to build modern APIs on top of existing
+                        mainframe logic
+                    </button>
+                </div>
+                <div class="quiz-result" id="quizResult"></div>
+            </div>
+        </section>
+
+        <section id="summary" class="reveal">
+            <div class="section-label">06 — Wrap Up</div>
+            <div class="summary-box">
+                <h2>Summary</h2>
+                <p>From HLASM's closeness to the hardware, through COBOL and PL/I's decades of business logic, to
+                    Java, Python, and Go bringing z/OS into step with modern development — most real applications
+                    layer several of these languages together rather than picking just one.</p>
+                <p style="margin-top:12px;font-family:var(--mono);font-size:0.85rem;color:var(--text-dim);">Part Two of
+                    this series covers mainframe scripting languages: REXX, CLIST, and shell.</p>
+            </div>
+        </section>
+
+        <div class="author-bio reveal">
+            <div class="author-avatar">ZIA</div>
+            <div class="author-info">
+                <div class="author-name">Zubair Idris Aweda</div>
+                <div class="author-title">Software Engineer · Technical Writer</div>
+                <div class="author-links">
+                    <a href="https://www.linkedin.com/in/zubairidrisaweda/" target="_blank"
+                       class="author-link">LinkedIn</a>
+                    <a href="https://x.com/greatzubs" target="_blank" class="author-link">Twitter/X</a>
+                    <a href="https://github.com/Zubs" target="_blank" class="author-link">GitHub</a>
+                    <a href="https://zubairidrisaweda.medium.com/" target="_blank" class="author-link">Medium</a>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+    const langs = [
+        {
+            name: 'HLASM',
+            era: 'c. 1970s · Low-level',
+            desc: "IBM's assembly language for z/OS — maps almost directly to actual machine instructions. Rarely a first language, but still used for performance-critical routines and low-level system interfaces.",
+            code: `         LA    R5,1          LOAD IMMEDIATE VALUE 1
+         LA    R6,2          LOAD IMMEDIATE VALUE 2
+         AR    R5,R6         ADD REGISTER 6 TO REGISTER 5
+         ST    R5,RESULT     STORE RESULT`,
+            use: 'Used for: performance-critical routines, low-level OS interfaces'
+        },
+        {
+            name: 'COBOL',
+            era: '1959 · Procedural',
+            desc: "The language most associated with mainframes. Designed to be readable and almost English-like, so business logic stays maintainable for decades. Still runs an estimated hundreds of billions of lines in production.",
+            code: `IDENTIFICATION DIVISION.
+PROGRAM-ID. HELLO-WORLD.
+PROCEDURE DIVISION.
+    DISPLAY "HELLO, MAINFRAME WORLD!".
+    STOP RUN.`,
+            use: 'Used for: core banking, payroll, insurance claims, government benefits'
+        },
+        {
+            name: 'PL/I',
+            era: '1960s · Multi-paradigm',
+            desc: "IBM's attempt to combine Fortran's scientific computing strength with COBOL's business-data strength. Never achieved COBOL's dominance, but remains common in insurance and financial services.",
+            code: `HELLO: PROCEDURE OPTIONS(MAIN);
+    PUT SKIP LIST('HELLO, MAINFRAME WORLD!');
+END HELLO;`,
+            use: 'Used for: actuarial calculations, risk modelling, data transformation'
+        },
+        {
+            name: 'Java',
+            era: 'Modern · Object-Oriented',
+            desc: "Runs on a full, certified JVM on z/OS. Brought genuine object-orientation and the wider Java ecosystem to the mainframe, largely unmodified.",
+            code: `public class HelloMainframe {
+    public static void main(String[] args) {
+        System.out.println("Hello, Mainframe World!");
+    }
+}`,
+            use: 'Used for: web services & APIs exposing mainframe logic, middleware'
+        },
+        {
+            name: 'Python',
+            era: 'Modern · Interpreted',
+            desc: "IBM's Open Enterprise Python for z/OS brings the same readable, widely-known language onto the platform — often the most approachable entry point for newcomers.",
+            code: `print("Hello, Mainframe World!")`,
+            use: 'Used for: automation, data analysis, AI/ML close to mainframe data'
+        },
+        {
+            name: 'Go',
+            era: 'Newest arrival · Compiled',
+            desc: "Available on z/OS via IBM's Open Enterprise SDK for Go. Designed for simplicity, fast compilation, and strong concurrency support.",
+            code: `package main
+
+import "fmt"
+
+func main() {
+    fmt.Println("Hello, Mainframe World!")
+}`,
+            use: 'Used for: lightweight microservices, cloud-native integration'
+        },
+    ];
+
+    function renderLang(idx) {
+        const l = langs[idx];
+        document.getElementById('langDetail').innerHTML = `
+            <div class="lang-detail-header">
+                <span class="lang-name">${l.name}</span>
+                <span class="lang-era">${l.era}</span>
+            </div>
+            <p class="lang-desc">${l.desc}</p>
+            <pre class="code-block" style="margin:0 0 8px;">${l.code}</pre>
+            <div class="lang-use">${l.use}</div>
+        `;
+    }
+
+    function selectLang(idx, btn) {
+        document.querySelectorAll('.lang-pill').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        renderLang(idx);
+    }
+
+    renderLang(0);
+
+    const quizResults = [
+        "<strong>Start with COBOL.</strong> It remains the language most mainframe job postings expect, and its readable, English-like syntax makes it a genuinely gentle introduction to structured programming — even with zero professional coding experience.",
+        "<strong>Start with Java or Python.</strong> You'll apply skills you already have to a new environment, letting you focus your learning on the platform itself (JCL, datasets, ISPF) rather than a new language at the same time.",
+        "<strong>Explore HLASM — later.</strong> It's rarely a first language on any platform, mainframe or otherwise. Build a foundation in COBOL or Java first, then a small amount of HLASM exposure will deepen your understanding of what's happening underneath.",
+        "<strong>Look at Java or Go.</strong> Both are commonly used to build modern APIs and microservices that expose existing COBOL or PL/I business logic — often via z/OS Connect — without touching the original code."
+    ];
+
+    function showQuizResult(idx) {
+        const el = document.getElementById('quizResult');
+        el.innerHTML = quizResults[idx];
+        el.classList.add('show');
+    }
+
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                e.target.classList.add('visible');
+                revealObserver.unobserve(e.target);
+            }
+        });
+    }, {threshold: 0.08});
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    const sections = document.querySelectorAll('section[id], header[id]');
+    const tocLinks = document.querySelectorAll('.toc-link');
+    const tocObserver = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                tocLinks.forEach(l => l.classList.remove('active'));
+                const match = document.querySelector(`.toc-link[href="#${e.target.id}"]`);
+                if (match) match.classList.add('active');
+            }
+        });
+    }, {threshold: 0.3});
+    sections.forEach(s => tocObserver.observe(s));
+</script>
+</body>
+</html>

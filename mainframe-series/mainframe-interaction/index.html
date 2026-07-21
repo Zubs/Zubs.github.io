@@ -1,0 +1,1550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mainframe Interaction — Keeping Up With The Mainframes</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:wght@700;900&display=swap"
+          rel="stylesheet">
+    <style>
+        :root {
+            --bg: #080c14;
+            --surface: #0d1520;
+            --surface2: #111c2e;
+            --border: #1a2e4a;
+            --cyan: #00d4ff;
+            --cyan-dim: rgba(0, 212, 255, 0.12);
+            --cyan-glow: rgba(0, 212, 255, 0.35);
+            --amber: #ffb830;
+            --green: #00ff9d;
+            --red: #ff4757;
+            --text: #c8daf0;
+            --text-dim: #5a7a9a;
+            --text-bright: #e8f4ff;
+            --mono: 'Space Mono', monospace;
+            --sans: 'DM Sans', sans-serif;
+            --serif: 'Playfair Display', serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--sans);
+            font-size: 16px;
+            line-height: 1.75;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, 0.03) 2px, rgba(0, 0, 0, 0.03) 4px);
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .page-wrap {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            min-height: 100vh;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            padding: 48px 24px 32px;
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            overflow-y: auto;
+            background: var(--bg);
+        }
+
+        .sidebar-label {
+            font-family: var(--mono);
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .toc-link {
+            display: block;
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--text-dim);
+            text-decoration: none;
+            padding: 6px 10px;
+            border-radius: 4px;
+            border-left: 2px solid transparent;
+            transition: all 0.2s;
+            line-height: 1.4;
+        }
+
+        .toc-link:hover, .toc-link.active {
+            color: var(--cyan);
+            border-left-color: var(--cyan);
+            background: var(--cyan-dim);
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+            font-family: var(--mono);
+            font-size: 10px;
+            color: var(--text-dim);
+            line-height: 1.8;
+        }
+
+        .sidebar-footer a {
+            color: var(--cyan);
+            text-decoration: none;
+        }
+
+        .main {
+            padding: 0 64px 120px;
+            max-width: 900px;
+        }
+
+        .hero {
+            padding: 80px 0 64px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 72px;
+        }
+
+        .hero-eyebrow {
+            font-family: var(--mono);
+            font-size: 11px;
+            letter-spacing: 0.25em;
+            color: var(--cyan);
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .hero-eyebrow::before {
+            content: '';
+            display: block;
+            width: 32px;
+            height: 1px;
+            background: var(--cyan);
+        }
+
+        h1.hero-title {
+            font-family: var(--serif);
+            font-size: clamp(2.2rem, 4vw, 3.4rem);
+            font-weight: 900;
+            color: var(--text-bright);
+            line-height: 1.1;
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-sub {
+            font-family: var(--sans);
+            font-size: 1.15rem;
+            color: var(--text-dim);
+            font-weight: 300;
+            margin-bottom: 32px;
+        }
+
+        .hero-meta {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--text-dim);
+        }
+
+        .hero-meta span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .hero-meta .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--cyan);
+            display: inline-block;
+        }
+
+        section {
+            margin-bottom: 96px;
+        }
+
+        .section-label {
+            font-family: var(--mono);
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            color: var(--cyan);
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        h2 {
+            font-family: var(--serif);
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-bright);
+            margin-bottom: 24px;
+            line-height: 1.2;
+        }
+
+        h3 {
+            font-family: var(--sans);
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-bright);
+            margin: 32px 0 12px;
+        }
+
+        p {
+            color: var(--text);
+            margin-bottom: 16px;
+        }
+
+        code.inline {
+            font-family: var(--mono);
+            background: var(--surface2);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.88em;
+            color: var(--green);
+        }
+
+        .callout {
+            border-left: 3px solid var(--cyan);
+            padding: 20px 24px;
+            background: var(--cyan-dim);
+            border-radius: 0 8px 8px 0;
+            margin: 28px 0;
+            font-family: var(--mono);
+            font-size: 0.88rem;
+            line-height: 1.7;
+            color: var(--text);
+        }
+
+        .concept-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 24px 0;
+        }
+
+        .concept-card {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            background: var(--surface);
+            transition: border-color 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .concept-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 3px;
+            height: 100%;
+            background: var(--cyan);
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .concept-card:hover {
+            border-color: rgba(0, 212, 255, 0.3);
+        }
+
+        .concept-card:hover::before {
+            opacity: 1;
+        }
+
+        .concept-term {
+            font-family: var(--mono);
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--cyan);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 8px;
+        }
+
+        .concept-def {
+            font-size: 0.82rem;
+            color: var(--text-dim);
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        pre.code-block {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px 20px;
+            font-family: var(--mono);
+            font-size: 12.5px;
+            color: var(--green);
+            overflow-x: auto;
+            margin: 16px 0;
+            line-height: 1.7;
+        }
+
+        /* ═══════════════════════════════════════
+           INTERACTIVE 1: ANIMATED CONNECTION TRACE
+        ═══════════════════════════════════════ */
+        .trace-wrap {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 32px;
+            margin: 32px 0;
+        }
+
+        .trace-wrap h3 {
+            margin-top: 0;
+            margin-bottom: 4px;
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            letter-spacing: 0.15em;
+            color: var(--cyan);
+            text-transform: uppercase;
+        }
+
+        .trace-sub {
+            font-size: 0.82rem;
+            color: var(--text-dim);
+            margin-bottom: 24px;
+            font-family: var(--mono);
+        }
+
+        .trace-rail {
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 4px;
+            margin-bottom: 8px;
+        }
+
+        .trace-line {
+            position: absolute;
+            top: 27px;
+            left: 30px;
+            right: 30px;
+            height: 2px;
+            background: var(--border);
+            z-index: 0;
+        }
+
+        .trace-line-fill {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 0%;
+            background: var(--cyan);
+            box-shadow: 0 0 8px var(--cyan-glow);
+            transition: width 0.5s linear;
+        }
+
+        .trace-node-wrap {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            width: 25%;
+            cursor: pointer;
+        }
+
+        .trace-node {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            border: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            background: var(--bg);
+            transition: all 0.3s ease;
+        }
+
+        .trace-node-wrap.lit .trace-node {
+            border-color: var(--cyan);
+            background: var(--cyan-dim);
+            box-shadow: 0 0 22px var(--cyan-glow);
+            transform: scale(1.08);
+        }
+
+        .trace-node-wrap.selected .trace-node {
+            border-color: var(--amber);
+            box-shadow: 0 0 22px rgba(255, 184, 48, 0.4);
+        }
+
+        .trace-node-label {
+            font-family: var(--mono);
+            font-size: 10.5px;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            text-align: center;
+            transition: color 0.2s;
+        }
+
+        .trace-node-wrap.lit .trace-node-label, .trace-node-wrap.selected .trace-node-label {
+            color: var(--cyan);
+        }
+
+        .trace-controls {
+            display: flex;
+            gap: 10px;
+            margin: 24px 0 16px;
+            flex-wrap: wrap;
+        }
+
+        .trace-btn {
+            font-family: var(--mono);
+            font-size: 11px;
+            padding: 9px 18px;
+            border-radius: 100px;
+            border: 1px solid var(--cyan);
+            background: var(--cyan-dim);
+            color: var(--cyan);
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            transition: all 0.2s;
+            font-weight: 700;
+        }
+
+        .trace-btn:hover {
+            background: var(--cyan);
+            color: var(--bg);
+        }
+
+        .trace-btn:disabled {
+            opacity: 0.4;
+            cursor: default;
+            background: transparent;
+            color: var(--text-dim);
+            border-color: var(--border);
+        }
+
+        .trace-detail {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px 22px;
+            min-height: 92px;
+        }
+
+        .trace-detail-title {
+            font-family: var(--sans);
+            font-weight: 700;
+            color: var(--text-bright);
+            font-size: 0.98rem;
+            margin-bottom: 6px;
+        }
+
+        .trace-detail-body {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            line-height: 1.6;
+        }
+
+        .trace-detail-body ul {
+            margin: 8px 0 0 16px;
+            font-family: var(--mono);
+            font-size: 0.78rem;
+            list-style: none;
+        }
+
+        .trace-detail-body ul li::before {
+            content: '→ ';
+            color: var(--cyan);
+        }
+
+        /* ═══════════════════════════════════════
+           INTERACTIVE 2: ISPF PANEL NAVIGATOR
+        ═══════════════════════════════════════ */
+        .ispf-wrap {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 32px;
+            margin: 32px 0;
+        }
+
+        .ispf-wrap h3 {
+            margin-top: 0;
+            margin-bottom: 4px;
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            letter-spacing: 0.15em;
+            color: var(--cyan);
+            text-transform: uppercase;
+        }
+
+        .ispf-sub {
+            font-size: 0.82rem;
+            color: var(--text-dim);
+            margin-bottom: 20px;
+            font-family: var(--mono);
+        }
+
+        .ispf-breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--text-dim);
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+        }
+
+        .ispf-breadcrumb .crumb {
+            color: var(--cyan);
+        }
+
+        .ispf-breadcrumb .sep {
+            color: var(--text-faint, var(--border));
+        }
+
+        .ispf-screen {
+            background: #010c06;
+            border: 2px solid #143322;
+            border-radius: 6px;
+            padding: 18px 22px;
+            font-family: var(--mono);
+            font-size: 12.5px;
+            color: #6dffb0;
+            min-height: 300px;
+            line-height: 1.65;
+            box-shadow: inset 0 0 40px rgba(0, 255, 150, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ispf-panel {
+            display: none;
+            animation: panelIn 0.25s ease;
+        }
+
+        .ispf-panel.active {
+            display: block;
+        }
+
+        @keyframes panelIn {
+            from {
+                opacity: 0;
+                transform: translateY(4px);
+            }
+            to {
+                opacity: 1;
+                transform: none;
+            }
+        }
+
+        .ispf-title-bar {
+            color: #b8ffce;
+            text-align: center;
+            margin-bottom: 4px;
+            letter-spacing: 0.05em;
+        }
+
+        .ispf-hr {
+            color: #1c4a30;
+            margin-bottom: 10px;
+            white-space: pre;
+        }
+
+        .ispf-opt-row {
+            display: flex;
+            gap: 10px;
+            padding: 3px 0;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+
+        .ispf-opt-row:hover {
+            background: rgba(109, 255, 176, 0.08);
+        }
+
+        .ispf-opt-num {
+            color: #f0c64d;
+            width: 16px;
+            flex-shrink: 0;
+        }
+
+        .ispf-opt-name {
+            color: #6dffb0;
+        }
+
+        .ispf-opt-desc {
+            color: #3a8a5c;
+        }
+
+        .ispf-cmdline {
+            margin-top: 18px;
+            color: #b8ffce;
+            border-top: 1px solid #143322;
+            padding-top: 10px;
+        }
+
+        .ispf-cursor {
+            display: inline-block;
+            width: 8px;
+            height: 14px;
+            background: #6dffb0;
+            animation: blink 1s step-end infinite;
+            vertical-align: middle;
+            margin-left: 4px;
+        }
+
+        @keyframes blink {
+            0%, 49% {
+                opacity: 1;
+            }
+            50%, 100% {
+                opacity: 0;
+            }
+        }
+
+        .ispf-edit-line {
+            display: flex;
+            gap: 8px;
+        }
+
+        .ispf-edit-num {
+            color: #3a8a5c;
+            width: 36px;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+
+        .ispf-edit-num:hover {
+            color: #f0c64d;
+        }
+
+        .ispf-edit-text {
+            color: #6dffb0;
+            white-space: pre;
+        }
+
+        .ispf-edit-hint {
+            color: #3a8a5c;
+            font-size: 11px;
+            margin-top: 14px;
+            border-top: 1px solid #143322;
+            padding-top: 10px;
+        }
+
+        .ispf-util-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+            border-bottom: 1px solid #0e2417;
+            font-size: 12px;
+        }
+
+        .ispf-util-row span:first-child {
+            color: #f0c64d;
+        }
+
+        .ispf-util-row span:last-child {
+            color: #3a8a5c;
+        }
+
+        .ispf-sdsf-row {
+            display: grid;
+            grid-template-columns: 90px 60px 60px 1fr;
+            gap: 8px;
+            padding: 3px 0;
+            font-size: 11.5px;
+        }
+
+        .ispf-sdsf-head {
+            color: #3a8a5c;
+            border-bottom: 1px solid #143322;
+            padding-bottom: 6px;
+            margin-bottom: 4px;
+        }
+
+        .ispf-sdsf-row span:nth-child(3) {
+            color: var(--amber, #f0c64d);
+        }
+
+        .ispf-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+
+        .ispf-btn {
+            font-family: var(--mono);
+            font-size: 11px;
+            padding: 8px 16px;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text-dim);
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            transition: all 0.2s;
+        }
+
+        .ispf-btn:hover {
+            border-color: var(--cyan);
+            color: var(--cyan);
+            background: var(--cyan-dim);
+        }
+
+        .ispf-btn.pf3 {
+            border-color: rgba(255, 71, 87, 0.4);
+            color: var(--red);
+            margin-left: auto;
+        }
+
+        .ispf-btn.pf3:hover {
+            border-color: var(--red);
+            background: rgba(255, 71, 87, 0.1);
+        }
+
+        .ispf-hint {
+            font-family: var(--mono);
+            font-size: 10px;
+            color: var(--text-dim);
+            letter-spacing: 0.08em;
+            margin-bottom: 14px;
+            text-transform: uppercase;
+        }
+
+        /* ═══════════════════════════════════════
+           INTERACTIVE 3: LIVE TSO/ISPF TERMINAL
+        ═══════════════════════════════════════ */
+        .term-wrap {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 32px;
+            margin: 32px 0;
+        }
+
+        .term-wrap h3 {
+            margin-top: 0;
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            letter-spacing: 0.15em;
+            color: var(--cyan);
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .term-sub {
+            font-size: 0.82rem;
+            color: var(--text-dim);
+            margin-bottom: 20px;
+            font-family: var(--mono);
+        }
+
+        .term-screen {
+            background: #01120a;
+            border: 2px solid #143322;
+            border-radius: 6px 6px 0 0;
+            padding: 18px 20px;
+            font-family: var(--mono);
+            font-size: 12.5px;
+            color: #6dffb0;
+            height: 280px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            line-height: 1.55;
+            box-shadow: inset 0 0 40px rgba(0, 255, 150, 0.05);
+        }
+
+        .term-line-cmd {
+            color: #b8ffce;
+        }
+
+        .term-line-err {
+            color: #ff9d8a;
+        }
+
+        .term-line-ok {
+            color: #6dffb0;
+        }
+
+        .term-inputline {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: #01120a;
+            border: 2px solid #143322;
+            border-top: none;
+            border-radius: 0 0 6px 6px;
+            padding: 10px 20px;
+        }
+
+        .term-prompt {
+            color: #f0c64d;
+            font-family: var(--mono);
+            font-size: 12.5px;
+        }
+
+        .term-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: #b8ffce;
+            font-family: var(--mono);
+            font-size: 12.5px;
+            caret-color: #6dffb0;
+        }
+
+        .term-pfbar {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-top: 14px;
+        }
+
+        .term-pfkey {
+            font-family: var(--mono);
+            font-size: 10px;
+            padding: 6px 10px;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--amber);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .term-pfkey:hover {
+            border-color: var(--amber);
+            background: rgba(255, 184, 48, 0.1);
+        }
+
+        .term-hint {
+            font-family: var(--mono);
+            font-size: 10px;
+            color: var(--text-dim);
+            letter-spacing: 0.05em;
+            margin-top: 10px;
+        }
+
+        .summary-box {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.06) 0%, rgba(0, 0, 0, 0) 100%);
+            border: 1px solid rgba(0, 212, 255, 0.25);
+            border-radius: 12px;
+            padding: 40px;
+            margin: 40px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .summary-box::after {
+            content: 'TN3270';
+            position: absolute;
+            right: -10px;
+            bottom: -20px;
+            font-family: var(--serif);
+            font-size: 90px;
+            font-weight: 900;
+            color: rgba(0, 212, 255, 0.04);
+            pointer-events: none;
+            line-height: 1;
+        }
+
+        .summary-box h2 {
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+        }
+
+        .summary-box p {
+            font-size: 0.95rem;
+        }
+
+        .author-bio {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 28px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: var(--surface);
+            margin-top: 64px;
+        }
+
+        .author-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            border: 2px solid var(--cyan);
+            flex-shrink: 0;
+            background: var(--cyan-dim);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--mono);
+            font-size: 1.2rem;
+            color: var(--cyan);
+            font-weight: 700;
+        }
+
+        .author-info {
+            flex: 1;
+        }
+
+        .author-name {
+            font-weight: 600;
+            color: var(--text-bright);
+            margin-bottom: 2px;
+            font-size: 0.95rem;
+        }
+
+        .author-title {
+            font-family: var(--mono);
+            font-size: 10px;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 10px;
+        }
+
+        .author-links {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .author-link {
+            font-family: var(--mono);
+            font-size: 10px;
+            color: var(--text-dim);
+            text-decoration: none;
+            border: 1px solid var(--border);
+            padding: 4px 10px;
+            border-radius: 4px;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .author-link:hover {
+            border-color: var(--cyan);
+            color: var(--cyan);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--text-dim);
+            text-decoration: none;
+            margin-bottom: 24px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .back-link:hover {
+            color: var(--cyan);
+        }
+
+        @media (max-width: 900px) {
+            .page-wrap {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            .main {
+                padding: 24px 24px 80px;
+                max-width: 100%;
+            }
+
+            .concept-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .trace-node-label {
+                display: none;
+            }
+
+            .ispf-sdsf-row {
+                grid-template-columns: 70px 40px 40px 1fr;
+                font-size: 10px;
+            }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: none;
+        }
+    </style>
+</head>
+<body>
+<div class="page-wrap">
+    <aside class="sidebar">
+        <a href="../" class="back-link">← Series index</a>
+        <div class="sidebar-label">In this article</div>
+        <a href="#why-interaction" class="toc-link">Why Interaction Matters</a>
+        <a href="#trace" class="toc-link">↳ Connection Trace (Interactive)</a>
+        <a href="#tso" class="toc-link">TSO/E</a>
+        <a href="#ispf" class="toc-link">ISPF</a>
+        <a href="#ispf-nav" class="toc-link">↳ ISPF Panel Navigator</a>
+        <a href="#uss" class="toc-link">UNIX System Services</a>
+        <a href="#tn3270" class="toc-link">TN3270 Emulator</a>
+        <a href="#terminal" class="toc-link">↳ Live Terminal (Interactive)</a>
+        <a href="#summary" class="toc-link">Summary</a>
+        <div class="sidebar-footer">
+            <div>Series: Mainframe 101 · Part 1</div>
+            <div>~9 min read</div>
+            <br>
+            <div><a href="https://zubairidrisaweda.medium.com/mainframe-interaction-cc7e34db6a85" target="_blank">Read
+                on Medium →</a></div>
+        </div>
+    </aside>
+
+    <main class="main">
+        <header class="hero" id="top">
+            <div class="hero-eyebrow">Mainframe 101 · Part 01</div>
+            <h1 class="hero-title">Mainframe Interaction</h1>
+            <p class="hero-sub">Keeping Up With The Mainframes</p>
+            <div class="hero-meta">
+                <span><span class="dot"></span> Zubair Idris Aweda</span>
+                <span><span class="dot"></span> 9 min read</span>
+                <span><span class="dot"></span> Interactive</span>
+            </div>
+        </header>
+
+        <section id="why-interaction" class="reveal">
+            <div class="section-label">01 — Overview</div>
+            <h2>Why Interaction Matters</h2>
+            <p>Mainframes are famous for batch processing, jobs submitted, queued, and executed without a human sitting
+                in front of a screen. But someone has to write the code that runs in those batch jobs, allocate the
+                datasets those jobs read and write, and monitor the system when things go wrong. That "someone" needs
+                a way to log in, type commands, edit files, and see results in real time.</p>
+            <p>On z/OS, this interactive layer is built around a handful of core facilities: <strong
+                    style="color:var(--text-bright)">TSO/E</strong>,
+                <strong style="color:var(--text-bright)">ISPF</strong>, and <strong style="color:var(--text-bright)">UNIX
+                    System Services (USS)</strong>.
+                Layered on top of all of this is how people actually connect in the first place, usually a terminal
+                emulator speaking the <strong style="color:var(--cyan)">TN3270</strong> protocol.</p>
+
+            <div class="trace-wrap" id="trace">
+                <h3>Trace a Connection</h3>
+                <p class="trace-sub">Press "Simulate Connection" to watch a session travel through the stack — or click
+                    any stage to jump straight to it</p>
+
+                <div class="trace-rail">
+                    <div class="trace-line">
+                        <div class="trace-line-fill" id="traceLineFill"></div>
+                    </div>
+                    <div class="trace-node-wrap lit" data-idx="0" onclick="jumpTrace(0)">
+                        <div class="trace-node">💻</div>
+                        <div class="trace-node-label">Your PC</div>
+                    </div>
+                    <div class="trace-node-wrap" data-idx="1" onclick="jumpTrace(1)">
+                        <div class="trace-node">📡</div>
+                        <div class="trace-node-label">TN3270</div>
+                    </div>
+                    <div class="trace-node-wrap" data-idx="2" onclick="jumpTrace(2)">
+                        <div class="trace-node">⌨️</div>
+                        <div class="trace-node-label">TSO/E</div>
+                    </div>
+                    <div class="trace-node-wrap" data-idx="3" onclick="jumpTrace(3)">
+                        <div class="trace-node">🗂️</div>
+                        <div class="trace-node-label">ISPF</div>
+                    </div>
+                    <div class="trace-node-wrap" data-idx="4" onclick="jumpTrace(4)">
+                        <div class="trace-node">🐧</div>
+                        <div class="trace-node-label">USS</div>
+                    </div>
+                </div>
+
+                <div class="trace-controls">
+                    <button class="trace-btn" id="traceSimBtn" onclick="simulateTrace()">▶ Simulate Connection</button>
+                    <button class="trace-btn" onclick="jumpTrace(Math.min(traceIdx+1,4))"
+                            style="background:transparent;border-color:var(--border);color:var(--text-dim);">Next stage
+                        →
+                    </button>
+                </div>
+
+                <div class="trace-detail">
+                    <div class="trace-detail-title" id="traceTitle">Your PC / Laptop</div>
+                    <div class="trace-detail-body" id="traceBody">Everything starts here — with a TN3270 emulator
+                        installed, ready to open a session to the mainframe.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="tso" class="reveal">
+            <div class="section-label">02 — Command Line</div>
+            <h2>TSO/E: The Command-Line Foundation</h2>
+            <p>TSO stands for Time Sharing Option; TSO/E is its extended, modern form. It's an interactive,
+                conversational interface to z/OS — the mainframe equivalent of a command shell, giving each logged-on
+                user their own session and resources.</p>
+            <pre class="code-block">LISTDS 'ZUBAIR.TEST.DATA'</pre>
+            <p>Short, dataset-oriented, uppercase by convention — that's the flavour of most TSO/E commands. On its
+                own, though, TSO/E is fairly bare: a prompt and a way to issue commands. That's where ISPF comes in.</p>
+        </section>
+
+        <section id="ispf" class="reveal">
+            <div class="section-label">03 — Panels</div>
+            <h2>ISPF: Making TSO/E Usable</h2>
+            <p>ISPF (Interactive System Productivity Facility) is a menu-driven, panel-based application layered on
+                TSO/E. Rather than just describing its panels, try navigating a small mock version of it below —
+                exactly the way a real mainframer would, by typing an option number and pressing Enter, or by
+                clicking directly on an option.</p>
+
+            <div class="ispf-wrap" id="ispf-nav">
+                <h3>ISPF Panel Navigator</h3>
+                <p class="ispf-sub">Click an option, or type its number into the command line and press Enter</p>
+                <div class="ispf-breadcrumb" id="ispfBreadcrumb"><span class="crumb">Primary Option Menu</span></div>
+
+                <div class="ispf-screen">
+                    <!-- PANEL 0: Primary Option Menu -->
+                    <div class="ispf-panel active" data-panel="0">
+                        <div class="ispf-title-bar">ISPF PRIMARY OPTION MENU</div>
+                        <div class="ispf-hr">────────────────────────────────────────────────</div>
+                        <div class="ispf-opt-row" onclick="goPanel(1)"><span class="ispf-opt-num">0</span><span
+                                class="ispf-opt-name">Settings</span><span class="ispf-opt-desc">— Terminal and user parameters</span>
+                        </div>
+                        <div class="ispf-opt-row" onclick="goPanel(1)"><span class="ispf-opt-num">1</span><span
+                                class="ispf-opt-name">View</span><span class="ispf-opt-desc">— Display source data or listings</span>
+                        </div>
+                        <div class="ispf-opt-row" onclick="goPanel(2)"><span class="ispf-opt-num">2</span><span
+                                class="ispf-opt-name">Edit</span><span class="ispf-opt-desc">— Create or change source data</span>
+                        </div>
+                        <div class="ispf-opt-row" onclick="goPanel(3)"><span class="ispf-opt-num">3</span><span
+                                class="ispf-opt-name">Utilities</span><span class="ispf-opt-desc">— Perform utility functions</span>
+                        </div>
+                        <div class="ispf-opt-row" onclick="goPanel(1)"><span class="ispf-opt-num">4</span><span
+                                class="ispf-opt-name">Foreground</span><span class="ispf-opt-desc">— Interactive language processing</span>
+                        </div>
+                        <div class="ispf-opt-row" onclick="goPanel(1)"><span class="ispf-opt-num">5</span><span
+                                class="ispf-opt-name">Batch</span><span class="ispf-opt-desc">— Submit job for language processing</span>
+                        </div>
+                        <div class="ispf-opt-row" onclick="goPanel(4)"><span class="ispf-opt-num">6</span><span
+                                class="ispf-opt-name">Command</span><span class="ispf-opt-desc">— Enter TSO or Workstation commands</span>
+                        </div>
+                        <div class="ispf-opt-row" onclick="goPanel(1)"><span class="ispf-opt-num">7</span><span
+                                class="ispf-opt-name">Dialog Test</span><span class="ispf-opt-desc">— Perform dialog testing</span>
+                        </div>
+                        <div class="ispf-opt-row" onclick="goPanel(1)"><span class="ispf-opt-num">9</span><span
+                                class="ispf-opt-name">IBM Products</span><span class="ispf-opt-desc">— IBM program development products</span>
+                        </div>
+                        <div class="ispf-opt-row" onclick="goPanel(5)"><span class="ispf-opt-num">S</span><span
+                                class="ispf-opt-name">SDSF</span><span class="ispf-opt-desc">— System Display and Search Facility</span>
+                        </div>
+                        <div class="ispf-cmdline">Option ===> <span class="ispf-cursor"></span></div>
+                    </div>
+
+                    <!-- PANEL 1: Generic "not modeled" panel -->
+                    <div class="ispf-panel" data-panel="1">
+                        <div class="ispf-title-bar">FEATURE NOT MODELLED IN THIS DEMO</div>
+                        <div class="ispf-hr">────────────────────────────────────────────────</div>
+                        <p style="color:#3a8a5c;">This mock-up focuses on Edit, Utilities, and SDSF — the three
+                            options a new mainframer touches most often. Press PF3 to go back.</p>
+                    </div>
+
+                    <!-- PANEL 2: Edit -->
+                    <div class="ispf-panel" data-panel="2">
+                        <div class="ispf-title-bar">EDIT — ZUBAIR.TEST.COBOL(HELLO) Columns 001 072</div>
+                        <div class="ispf-hr">Command ===> Scroll ===> PAGE</div>
+                        <div class="ispf-edit-line"><span class="ispf-edit-num" onclick="editLineTip('c')">000010</span><span
+                                class="ispf-edit-text">IDENTIFICATION DIVISION.</span></div>
+                        <div class="ispf-edit-line"><span class="ispf-edit-num" onclick="editLineTip('c')">000020</span><span
+                                class="ispf-edit-text">PROGRAM-ID. HELLO.</span></div>
+                        <div class="ispf-edit-line"><span class="ispf-edit-num" onclick="editLineTip('c')">000030</span><span
+                                class="ispf-edit-text">PROCEDURE DIVISION.</span></div>
+                        <div class="ispf-edit-line"><span class="ispf-edit-num" onclick="editLineTip('d')">000040</span><span
+                                class="ispf-edit-text">    DISPLAY "HELLO, MAINFRAME WORLD!".</span></div>
+                        <div class="ispf-edit-line"><span class="ispf-edit-num" onclick="editLineTip('i')">000050</span><span
+                                class="ispf-edit-text">    STOP RUN.</span></div>
+                        <div class="ispf-edit-hint" id="editHint">Click a line number to try a line command: C copies, D
+                            deletes, I inserts below.
+                        </div>
+                    </div>
+
+                    <!-- PANEL 3: Utilities -->
+                    <div class="ispf-panel" data-panel="3">
+                        <div class="ispf-title-bar">UTILITY SELECTION MENU</div>
+                        <div class="ispf-hr">────────────────────────────────────────────────</div>
+                        <div class="ispf-util-row"><span>1  Library</span><span>Data set and library utility</span>
+                        </div>
+                        <div class="ispf-util-row"><span>2  Data Set</span><span>Data set utility (create, rename, delete)</span>
+                        </div>
+                        <div class="ispf-util-row"><span>3  Move/Copy</span><span>Move, copy, or promote members</span>
+                        </div>
+                        <div class="ispf-util-row"><span>4  Dslist</span><span>Data set list</span></div>
+                        <div class="ispf-util-row"><span>6  Command</span><span>Enter TSO commands</span></div>
+                        <div class="ispf-cmdline">Option ===> <span class="ispf-cursor"></span></div>
+                    </div>
+
+                    <!-- PANEL 4: Command -->
+                    <div class="ispf-panel" data-panel="4">
+                        <div class="ispf-title-bar">TSO COMMAND SHELL</div>
+                        <div class="ispf-hr">────────────────────────────────────────────────</div>
+                        <p style="color:#6dffb0;">Enter TSO commands directly from ISPF — this is the bridge
+                            between the panel world and the command-line world of TSO/E covered earlier.</p>
+                        <div class="ispf-cmdline">Command ===> <span class="ispf-cursor"></span></div>
+                    </div>
+
+                    <!-- PANEL 5: SDSF -->
+                    <div class="ispf-panel" data-panel="5">
+                        <div class="ispf-title-bar">SDSF STATUS OF JOBS ON SYS1</div>
+                        <div class="ispf-hr">────────────────────────────────────────────────</div>
+                        <div class="ispf-sdsf-row ispf-sdsf-head">
+                            <span>JOBNAME</span><span>JOBID</span><span>OWNER</span><span>STATUS</span></div>
+                        <div class="ispf-sdsf-row"><span>PAYROLL</span><span>JOB01234</span><span>ZUBAIR</span><span>OUTPUT — RC=0000</span>
+                        </div>
+                        <div class="ispf-sdsf-row"><span>SORTJOB</span><span>JOB01235</span><span>ZUBAIR</span><span>EXECUTING</span>
+                        </div>
+                        <div class="ispf-sdsf-row"><span>NIGHTBAT</span><span>JOB01236</span><span>SYSTEM</span><span>ACTIVE</span>
+                        </div>
+                        <div class="ispf-sdsf-row"><span>RPTGEN</span><span>JOB01237</span><span>ZUBAIR</span><span>QUEUED</span>
+                        </div>
+                        <div class="ispf-edit-hint">SDSF is usually the first place you look when a batch job doesn't
+                            behave as expected.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ispf-controls">
+                    <button class="ispf-btn" onclick="goPanel(2)">Try: 2 Edit</button>
+                    <button class="ispf-btn" onclick="goPanel(3)">Try: 3 Utilities</button>
+                    <button class="ispf-btn" onclick="goPanel(5)">Try: S SDSF</button>
+                    <button class="ispf-btn pf3" onclick="goPanel(0)">PF3 = Back to Primary Menu</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="uss" class="reveal">
+            <div class="section-label">04 — Open Systems</div>
+            <h2>UNIX System Services (USS)</h2>
+            <p>USS gives z/OS a fully POSIX-compliant UNIX environment — a hierarchical file system and shell running
+                right inside the mainframe, alongside the dataset-oriented TSO/ISPF world.</p>
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <div class="concept-term">OMVS</div>
+                    <p class="concept-def">Reached from within ISPF — drops you into a UNIX shell session on your
+                        3270-style terminal, running familiar commands like ls, cd, cp, and grep.</p>
+                </div>
+                <div class="concept-card">
+                    <div class="concept-term">SSH</div>
+                    <p class="concept-def">Connect directly with any standard SSH client, much like connecting to any
+                        Linux server — increasingly the preferred route for modern developers.</p>
+                </div>
+            </div>
+            <pre class="code-block">$ cd /u/zubair
+$ ls -la
+$ cat profile.sh</pre>
+            <p>This underpins Git, Python, Node.js, and much of z/OS Connect and z/OSMF running natively on the platform
+                today.</p>
+        </section>
+
+        <section id="tn3270" class="reveal">
+            <div class="section-label">05 — Getting Connected</div>
+            <h2>A Closer Look at the TN3270 Emulator</h2>
+            <p>None of this is reachable without connecting first. Mainframe terminals historically used the 3270
+                protocol — block-mode, fixed-grid, over a direct connection. TN3270 (Telnet 3270) carries that same
+                protocol over ordinary TCP/IP, and an emulator on your PC renders it as a full-screen display.</p>
+            <div class="callout">Function keys (PF1–PF24) map to common actions — PF3 to exit, PF7/PF8 to scroll.
+                Learning these is one of the fastest ways to get quicker at navigating ISPF.
+            </div>
+
+            <div class="term-wrap" id="terminal">
+                <h3>Live TSO/E Terminal</h3>
+                <p class="term-sub">Type a real command below and press Enter — try HELP for a list, or click a PF
+                    key</p>
+                <div class="term-screen" id="termScreen"><span class="term-line-ok">z/OS TSO/E — SESSION ESTABLISHED
+READY</span>
+                </div>
+                <div class="term-inputline">
+                    <span class="term-prompt">READY&gt;</span>
+                    <input type="text" class="term-input" id="termInput"
+                           placeholder="Type a command, e.g. LISTDS, TIME, HELP..." autocomplete="off"
+                           spellcheck="false" onkeydown="handleTermKey(event)">
+                </div>
+                <div class="term-pfbar">
+                    <button class="term-pfkey" onclick="pfPress(1)">PF1 Help</button>
+                    <button class="term-pfkey" onclick="pfPress(3)">PF3 Exit</button>
+                    <button class="term-pfkey" onclick="pfPress(7)">PF7 Up</button>
+                    <button class="term-pfkey" onclick="pfPress(8)">PF8 Down</button>
+                    <button class="term-pfkey" onclick="pfPress(12)">PF12 Cancel</button>
+                    <button class="term-pfkey" style="border-color:var(--red);color:var(--red);margin-left:auto;"
+                            onclick="clearTerm()">Clear Screen
+                    </button>
+                </div>
+                <div class="term-hint">Try: LISTDS · TIME · ISPF · LOGON · WHOAMI · HELP</div>
+            </div>
+        </section>
+
+        <section id="summary" class="reveal">
+            <div class="section-label">06 — Wrap Up</div>
+            <div class="summary-box">
+                <h2>Summary</h2>
+                <p>TSO/E, ISPF, and USS are the three interactive facilities that turn a mainframe into a place people
+                    actually work, layered on top of a TN3270 connection that's remained functionally unchanged for
+                    decades, and now just as reachable over SSH.</p>
+                <p style="margin-top:12px;">Get comfortable with all three, and you have everything you need to edit,
+                    compile, and manage work on z/OS.</p>
+            </div>
+        </section>
+
+        <div class="author-bio reveal">
+            <div class="author-avatar">ZIA</div>
+            <div class="author-info">
+                <div class="author-name">Zubair Idris Aweda</div>
+                <div class="author-title">Software Engineer · Technical Writer</div>
+                <div class="author-links">
+                    <a href="https://www.linkedin.com/in/zubairidrisaweda/" target="_blank"
+                       class="author-link">LinkedIn</a>
+                    <a href="https://x.com/greatzubs" target="_blank" class="author-link">Twitter/X</a>
+                    <a href="https://github.com/Zubs" target="_blank" class="author-link">GitHub</a>
+                    <a href="https://zubairidrisaweda.medium.com/" target="_blank" class="author-link">Medium</a>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+    /* ── CONNECTION TRACE ── */
+    const traceData = [
+        {
+            title: 'Your PC / Laptop',
+            body: 'Everything starts here — with a TN3270 emulator installed, ready to open a session to the mainframe.'
+        },
+        {
+            title: 'TN3270 — The Connection',
+            body: 'Carries the classic 3270 terminal protocol over TCP/IP, so a modern laptop can connect to z/OS as if it were a physical terminal.<ul><li>Full-screen, block-mode data transfer</li><li>Usually the first thing you launch</li></ul>'
+        },
+        {
+            title: 'TSO/E — Your Session',
+            body: 'Once connected, you log on to TSO/E: your own interactive session and address space on z/OS.<ul><li>Command-line style "READY" prompt</li><li>Allocate datasets, submit jobs</li></ul>'
+        },
+        {
+            title: 'ISPF — Your Workspace',
+            body: 'A panel-driven application on top of TSO/E — where most day-to-day editing and dataset work happens.<ul><li>Option 2: Edit</li><li>SDSF: job output & logs</li></ul>'
+        },
+        {
+            title: 'UNIX System Services — The Other Side',
+            body: 'A fully POSIX-compliant UNIX shell and file system, reachable from ISPF (OMVS) or directly over SSH.<ul><li>ls, cd, cp, vi, grep — as normal</li><li>Underpins Git, Python, Node.js on z/OS</li></ul>'
+        }
+    ];
+    let traceIdx = 0;
+    let traceTimer = null;
+
+    function renderTraceDetail(idx) {
+        document.getElementById('traceTitle').textContent = traceData[idx].title;
+        document.getElementById('traceBody').innerHTML = traceData[idx].body;
+    }
+
+    function jumpTrace(idx) {
+        clearInterval(traceTimer);
+        document.getElementById('traceSimBtn').disabled = false;
+        traceIdx = idx;
+        document.querySelectorAll('.trace-node-wrap').forEach((el, i) => {
+            el.classList.toggle('lit', i <= idx);
+            el.classList.toggle('selected', i === idx);
+        });
+        document.getElementById('traceLineFill').style.width = (idx / 4 * 100) + '%';
+        renderTraceDetail(idx);
+    }
+
+    function simulateTrace() {
+        const btn = document.getElementById('traceSimBtn');
+        btn.disabled = true;
+        jumpTrace(0);
+        let step = 0;
+        traceTimer = setInterval(() => {
+            step++;
+            if (step > 4) {
+                clearInterval(traceTimer);
+                btn.disabled = false;
+                return;
+            }
+            jumpTrace(step);
+            btn.disabled = true;
+        }, 1100);
+    }
+
+    jumpTrace(0);
+
+    /* ── ISPF PANEL NAVIGATOR ── */
+    const panelNames = {
+        0: 'Primary Option Menu',
+        1: 'Not Modelled',
+        2: 'Edit — HELLO',
+        3: 'Utility Selection Menu',
+        4: 'TSO Command Shell',
+        5: 'SDSF — Job Queue'
+    };
+
+    function goPanel(n) {
+        document.querySelectorAll('.ispf-panel').forEach(p => p.classList.toggle('active', p.dataset.panel === String(n)));
+        const crumbEl = document.getElementById('ispfBreadcrumb');
+        if (n === 0) {
+            crumbEl.innerHTML = '<span class="crumb">Primary Option Menu</span>';
+        } else {
+            crumbEl.innerHTML = `<span class="crumb">Primary Option Menu</span><span class="sep">›</span><span class="crumb">${panelNames[n]}</span>`;
+        }
+    }
+
+    function editLineTip(cmd) {
+        const map = {
+            c: "'C' marks this line to COPY.",
+            d: "'D' marks this line for DELETE.",
+            i: "'I' inserts a new blank line below this one."
+        };
+        document.getElementById('editHint').textContent = map[cmd] + ' (In a real ISPF session you\'d then press Enter to execute the line command.)';
+    }
+
+    /* ── LIVE TERMINAL ── */
+    const termScreen = document.getElementById('termScreen');
+    const termInput = document.getElementById('termInput');
+
+    function termWrite(text, cls) {
+        const span = document.createElement('span');
+        span.className = cls || 'term-line-ok';
+        span.textContent = text + '\n';
+        termScreen.appendChild(span);
+        termScreen.scrollTop = termScreen.scrollHeight;
+    }
+
+    const knownCommands = {
+        LISTDS: `LISTDS 'ZUBAIR.TEST.DATA'
+ZUBAIR.TEST.DATA
+--RECFM-LRECL-BLKSIZE-DSORG
+  FB     80    27920    PS
+--VOLUMES--
+  SYSDA1
+READY`,
+        TIME: `TIME
+IKJ56650I TIME-14:32:07  CPU-00:00:00  SERVICE-412
+READY`,
+        ISPF: `ISPF
+Launching ISPF... see the "ISPF Panel Navigator" above for a hands-on look.
+READY`,
+        LOGON: `LOGON ZUBAIR
+IKJ56455I ZUBAIR LOGON IN PROGRESS AT 14:32:11
+READY`,
+        WHOAMI: `WHOAMI
+USERID = ZUBAIR   PROC = ISPFPROC   TERM = 3270
+READY`,
+        HELP: `HELP
+Available demo commands: LISTDS, TIME, ISPF, LOGON, WHOAMI, HELP
+Try PF keys below too — PF1, PF3, PF7, PF8, PF12
+READY`
+    };
+
+    function runCommand(raw) {
+        const cmd = raw.trim();
+        if (!cmd) return;
+        termWrite('READY> ' + cmd, 'term-line-cmd');
+        const upper = cmd.toUpperCase().split(' ')[0];
+        if (knownCommands[upper]) {
+            termWrite(knownCommands[upper], 'term-line-ok');
+        } else {
+            termWrite(`IKJ56650I ${upper} - COMMAND NOT FOUND\nREADY`, 'term-line-err');
+        }
+    }
+
+    function handleTermKey(e) {
+        if (e.key === 'Enter') {
+            runCommand(termInput.value);
+            termInput.value = '';
+        }
+    }
+
+    const pfResponses = {
+        1: 'PF1 (Help) pressed — see HELP command above for available demo commands.',
+        3: 'PF3 (Exit) pressed — returning to previous panel...',
+        7: 'PF7 (Up) pressed — scrolled up one page.',
+        8: 'PF8 (Down) pressed — scrolled down one page.',
+        12: 'PF12 (Cancel) pressed — cancelling current operation...'
+    };
+
+    function pfPress(n) {
+        termWrite(`[PF${n}]`, 'term-line-cmd');
+        termWrite(pfResponses[n] + '\nREADY', 'term-line-ok');
+    }
+
+    function clearTerm() {
+        termScreen.innerHTML = '';
+        termWrite('READY', 'term-line-ok');
+    }
+
+    /* ── SCROLL REVEAL + TOC ── */
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                e.target.classList.add('visible');
+                revealObserver.unobserve(e.target);
+            }
+        });
+    }, {threshold: 0.08});
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    const sections = document.querySelectorAll('section[id], header[id]');
+    const tocLinks = document.querySelectorAll('.toc-link');
+    const tocObserver = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                tocLinks.forEach(l => l.classList.remove('active'));
+                const match = document.querySelector(`.toc-link[href="#${e.target.id}"]`);
+                if (match) match.classList.add('active');
+            }
+        });
+    }, {threshold: 0.3});
+    sections.forEach(s => tocObserver.observe(s));
+</script>
+</body>
+</html>

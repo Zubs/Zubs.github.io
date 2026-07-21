@@ -1,0 +1,1377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mainframe Communications — The Portals Between Worlds</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:wght@700;900&display=swap"
+          rel="stylesheet">
+    <style>
+        :root {
+            --bg: #080c14;
+            --surface: #0d1520;
+            --surface2: #111c2e;
+            --border: #1a2e4a;
+            --cyan: #00d4ff;
+            --cyan-dim: rgba(0, 212, 255, 0.12);
+            --cyan-glow: rgba(0, 212, 255, 0.35);
+            --amber: #ffb830;
+            --green: #00ff9d;
+            --red: #ff4757;
+            --text: #c8daf0;
+            --text-dim: #5a7a9a;
+            --text-bright: #e8f4ff;
+            --mono: 'Space Mono', monospace;
+            --sans: 'DM Sans', sans-serif;
+            --serif: 'Playfair Display', serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--sans);
+            font-size: 16px;
+            line-height: 1.75;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, 0.03) 2px, rgba(0, 0, 0, 0.03) 4px);
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .page-wrap {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            min-height: 100vh;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            padding: 48px 24px 32px;
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            overflow-y: auto;
+            background: var(--bg);
+        }
+
+        .sidebar-label {
+            font-family: var(--mono);
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .toc-link {
+            display: block;
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--text-dim);
+            text-decoration: none;
+            padding: 6px 10px;
+            border-radius: 4px;
+            border-left: 2px solid transparent;
+            transition: all 0.2s;
+            line-height: 1.4;
+        }
+
+        .toc-link:hover, .toc-link.active {
+            color: var(--cyan);
+            border-left-color: var(--cyan);
+            background: var(--cyan-dim);
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+            font-family: var(--mono);
+            font-size: 10px;
+            color: var(--text-dim);
+            line-height: 1.8;
+        }
+
+        .sidebar-footer a {
+            color: var(--cyan);
+            text-decoration: none;
+        }
+
+        .main {
+            padding: 0 64px 120px;
+            max-width: 900px;
+        }
+
+        .hero {
+            padding: 80px 0 64px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 72px;
+        }
+
+        .hero-eyebrow {
+            font-family: var(--mono);
+            font-size: 11px;
+            letter-spacing: 0.25em;
+            color: var(--cyan);
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .hero-eyebrow::before {
+            content: '';
+            display: block;
+            width: 32px;
+            height: 1px;
+            background: var(--cyan);
+        }
+
+        h1.hero-title {
+            font-family: var(--serif);
+            font-size: clamp(2.1rem, 4vw, 3.2rem);
+            font-weight: 900;
+            color: var(--text-bright);
+            line-height: 1.1;
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-sub {
+            font-family: var(--sans);
+            font-size: 1.15rem;
+            color: var(--text-dim);
+            font-weight: 300;
+            margin-bottom: 32px;
+        }
+
+        .hero-meta {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--text-dim);
+        }
+
+        .hero-meta span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .hero-meta .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--cyan);
+            display: inline-block;
+        }
+
+        section {
+            margin-bottom: 96px;
+        }
+
+        .section-label {
+            font-family: var(--mono);
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            color: var(--cyan);
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        h2 {
+            font-family: var(--serif);
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-bright);
+            margin-bottom: 24px;
+            line-height: 1.2;
+        }
+
+        p {
+            color: var(--text);
+            margin-bottom: 16px;
+        }
+
+        code.inline {
+            font-family: var(--mono);
+            background: var(--surface2);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.88em;
+            color: var(--green);
+        }
+
+        pre.code-block {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px 20px;
+            font-family: var(--mono);
+            font-size: 12.5px;
+            color: var(--green);
+            overflow-x: auto;
+            margin: 16px 0;
+            line-height: 1.7;
+        }
+
+        .callout {
+            border-left: 3px solid var(--cyan);
+            padding: 20px 24px;
+            background: var(--cyan-dim);
+            border-radius: 0 8px 8px 0;
+            margin: 28px 0;
+            font-family: var(--mono);
+            font-size: 0.88rem;
+            line-height: 1.7;
+            color: var(--text);
+        }
+
+        .callout a {
+            color: var(--cyan);
+        }
+
+        .concept-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 24px 0;
+        }
+
+        .concept-card {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            background: var(--surface);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .concept-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 3px;
+            height: 100%;
+            background: var(--cyan);
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .concept-card:hover::before {
+            opacity: 1;
+        }
+
+        .concept-term {
+            font-family: var(--mono);
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--cyan);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 8px;
+        }
+
+        .concept-def {
+            font-size: 0.82rem;
+            color: var(--text-dim);
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* ═══════════════════════════════════════
+           INTERACTIVE 1: ROUTE TRACER (SNA vs TCP/IP)
+        ═══════════════════════════════════════ */
+        .route-wrap {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 32px;
+            margin: 32px 0;
+        }
+
+        .route-wrap h3 {
+            margin-top: 0;
+            margin-bottom: 4px;
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            letter-spacing: 0.15em;
+            color: var(--cyan);
+            text-transform: uppercase;
+        }
+
+        .route-sub {
+            font-size: 0.82rem;
+            color: var(--text-dim);
+            margin-bottom: 22px;
+            font-family: var(--mono);
+        }
+
+        .route-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 26px;
+            flex-wrap: wrap;
+        }
+
+        .route-btn {
+            font-family: var(--mono);
+            font-size: 11px;
+            padding: 9px 18px;
+            border-radius: 100px;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text-dim);
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            transition: all 0.2s;
+            font-weight: 700;
+        }
+
+        .route-btn.sna {
+            border-color: var(--amber);
+            color: var(--amber);
+        }
+
+        .route-btn.sna:hover, .route-btn.sna.running {
+            background: rgba(255, 184, 48, 0.12);
+        }
+
+        .route-btn.tcp {
+            border-color: var(--cyan);
+            color: var(--cyan);
+        }
+
+        .route-btn.tcp:hover, .route-btn.tcp.running {
+            background: var(--cyan-dim);
+        }
+
+        .route-btn:disabled {
+            opacity: 0.45;
+            cursor: default;
+        }
+
+        .route-rail {
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 4px;
+            margin-bottom: 20px;
+            min-height: 90px;
+        }
+
+        .route-line {
+            position: absolute;
+            top: 27px;
+            left: 30px;
+            right: 30px;
+            height: 2px;
+            background: var(--border);
+            z-index: 0;
+        }
+
+        .route-line-fill {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s linear, background 0.2s;
+            box-shadow: 0 0 8px currentColor;
+        }
+
+        .route-node-wrap {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            width: 20%;
+        }
+
+        .route-node {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            border: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            background: var(--bg);
+            transition: all 0.3s ease;
+        }
+
+        .route-node-wrap.lit .route-node {
+            transform: scale(1.08);
+        }
+
+        .route-node-label {
+            font-family: var(--mono);
+            font-size: 9.5px;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            text-align: center;
+            transition: color 0.2s;
+        }
+
+        .route-detail {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 18px 20px;
+            min-height: 70px;
+            font-size: 0.86rem;
+            color: var(--text-dim);
+        }
+
+        .route-detail strong {
+            color: var(--text-bright);
+        }
+
+        /* ═══════════════════════════════════════
+           HARDWARE CARDS (kept from before)
+        ═══════════════════════════════════════ */
+        .hw-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+            margin: 24px 0;
+        }
+
+        .hw-card {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 18px;
+            background: var(--surface);
+            cursor: pointer;
+            transition: border-color 0.2s;
+            text-align: center;
+        }
+
+        .hw-card:hover, .hw-card.active {
+            border-color: var(--cyan);
+        }
+
+        .hw-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .hw-name {
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--text-bright);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .hw-detail {
+            grid-column: 1 / -1;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 18px 20px;
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            display: none;
+        }
+
+        .hw-detail.show {
+            display: block;
+        }
+
+        /* ═══════════════════════════════════════
+           INTERACTIVE 2: VIPA FAILOVER SIMULATOR
+        ═══════════════════════════════════════ */
+        .vipa-wrap {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 32px;
+            margin: 32px 0;
+        }
+
+        .vipa-wrap h3 {
+            margin-top: 0;
+            margin-bottom: 4px;
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            letter-spacing: 0.15em;
+            color: var(--cyan);
+            text-transform: uppercase;
+        }
+
+        .vipa-sub {
+            font-size: 0.82rem;
+            color: var(--text-dim);
+            margin-bottom: 24px;
+            font-family: var(--mono);
+        }
+
+        .vipa-cluster {
+            display: flex;
+            justify-content: center;
+            gap: 28px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .vipa-server {
+            width: 150px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            padding: 16px;
+            text-align: center;
+            background: var(--bg);
+            position: relative;
+            transition: all 0.4s ease;
+        }
+
+        .vipa-server.down {
+            opacity: 0.35;
+            border-color: var(--red);
+            border-style: dashed;
+        }
+
+        .vipa-server.holding {
+            border-color: var(--cyan);
+            box-shadow: 0 0 20px var(--cyan-glow);
+        }
+
+        .vipa-server-icon {
+            font-size: 26px;
+            margin-bottom: 8px;
+        }
+
+        .vipa-server-name {
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--text-bright);
+            margin-bottom: 4px;
+        }
+
+        .vipa-server-status {
+            font-family: var(--mono);
+            font-size: 9.5px;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .vipa-badge {
+            display: none;
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--cyan);
+            color: var(--bg);
+            font-family: var(--mono);
+            font-size: 9px;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 100px;
+            white-space: nowrap;
+            box-shadow: 0 0 10px var(--cyan-glow);
+        }
+
+        .vipa-server.holding .vipa-badge {
+            display: block;
+        }
+
+        .vipa-server.down .vipa-server-status {
+            color: var(--red);
+        }
+
+        .vipa-controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .vipa-btn {
+            font-family: var(--mono);
+            font-size: 11px;
+            padding: 9px 18px;
+            border-radius: 100px;
+            border: 1px solid var(--red);
+            background: rgba(255, 71, 87, 0.1);
+            color: var(--red);
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            transition: all 0.2s;
+            font-weight: 700;
+        }
+
+        .vipa-btn:hover {
+            background: var(--red);
+            color: var(--bg);
+        }
+
+        .vipa-btn:disabled {
+            opacity: 0.4;
+            cursor: default;
+        }
+
+        .vipa-btn.reset {
+            border-color: var(--border);
+            background: transparent;
+            color: var(--text-dim);
+        }
+
+        .vipa-btn.reset:hover {
+            border-color: var(--cyan);
+            color: var(--cyan);
+            background: var(--cyan-dim);
+        }
+
+        .vipa-log {
+            margin-top: 18px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 14px 18px;
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--text-dim);
+            min-height: 26px;
+            line-height: 1.8;
+        }
+
+        .vipa-log .ok {
+            color: var(--green);
+        }
+
+        .vipa-log .warn {
+            color: var(--red);
+        }
+
+        /* ═══════════════════════════════════════
+           SECURITY LAYERS (kept + animated trace)
+        ═══════════════════════════════════════ */
+        .layer-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin: 24px 0 8px;
+        }
+
+        .layer-item {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px 20px;
+            background: var(--surface);
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .layer-item:hover {
+            border-color: rgba(0, 212, 255, 0.4);
+        }
+
+        .layer-item.active {
+            border-color: var(--cyan);
+            background: var(--surface2);
+        }
+
+        .layer-item.tracing {
+            border-color: var(--green);
+            box-shadow: 0 0 16px rgba(0, 255, 157, 0.25);
+        }
+
+        .layer-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .layer-name {
+            font-family: var(--sans);
+            font-weight: 600;
+            color: var(--text-bright);
+            font-size: 0.95rem;
+        }
+
+        .layer-tag {
+            font-family: var(--mono);
+            font-size: 9px;
+            padding: 3px 8px;
+            border-radius: 100px;
+            background: var(--cyan-dim);
+            color: var(--cyan);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .layer-check {
+            display: none;
+            color: var(--green);
+            font-family: var(--mono);
+            font-size: 12px;
+            margin-left: 8px;
+        }
+
+        .layer-item.tracing .layer-check, .layer-item.traced .layer-check {
+            display: inline;
+        }
+
+        .layer-detail {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            margin-top: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, margin-top 0.3s;
+        }
+
+        .layer-item.active .layer-detail, .layer-item.tracing .layer-detail {
+            max-height: 100px;
+            margin-top: 10px;
+        }
+
+        .layer-trace-btn {
+            font-family: var(--mono);
+            font-size: 11px;
+            padding: 9px 18px;
+            border-radius: 100px;
+            border: 1px solid var(--green);
+            background: rgba(0, 255, 157, 0.08);
+            color: var(--green);
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            transition: all 0.2s;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .layer-trace-btn:hover {
+            background: var(--green);
+            color: var(--bg);
+        }
+
+        .layer-trace-btn:disabled {
+            opacity: 0.4;
+            cursor: default;
+        }
+
+        .layer-status {
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--text-dim);
+            margin-top: 10px;
+            min-height: 18px;
+        }
+
+        .layer-status .done {
+            color: var(--green);
+        }
+
+        .summary-box {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.06) 0%, rgba(0, 0, 0, 0) 100%);
+            border: 1px solid rgba(0, 212, 255, 0.25);
+            border-radius: 12px;
+            padding: 40px;
+            margin: 40px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .summary-box::after {
+            content: '⇄';
+            position: absolute;
+            right: 10px;
+            bottom: -30px;
+            font-family: var(--serif);
+            font-size: 120px;
+            font-weight: 900;
+            color: rgba(0, 212, 255, 0.05);
+            pointer-events: none;
+            line-height: 1;
+        }
+
+        .summary-box h2 {
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+        }
+
+        .summary-box p {
+            font-size: 0.95rem;
+        }
+
+        .author-bio {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 28px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: var(--surface);
+            margin-top: 64px;
+        }
+
+        .author-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            border: 2px solid var(--cyan);
+            flex-shrink: 0;
+            background: var(--cyan-dim);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--mono);
+            font-size: 1.2rem;
+            color: var(--cyan);
+            font-weight: 700;
+        }
+
+        .author-info {
+            flex: 1;
+        }
+
+        .author-name {
+            font-weight: 600;
+            color: var(--text-bright);
+            margin-bottom: 2px;
+            font-size: 0.95rem;
+        }
+
+        .author-title {
+            font-family: var(--mono);
+            font-size: 10px;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 10px;
+        }
+
+        .author-links {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .author-link {
+            font-family: var(--mono);
+            font-size: 10px;
+            color: var(--text-dim);
+            text-decoration: none;
+            border: 1px solid var(--border);
+            padding: 4px 10px;
+            border-radius: 4px;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .author-link:hover {
+            border-color: var(--cyan);
+            color: var(--cyan);
+        }
+
+        .coauthor-note {
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            margin-top: 16px;
+        }
+
+        .coauthor-note a {
+            color: var(--cyan);
+            text-decoration: none;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--text-dim);
+            text-decoration: none;
+            margin-bottom: 24px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .back-link:hover {
+            color: var(--cyan);
+        }
+
+        @media (max-width: 900px) {
+            .page-wrap {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            .main {
+                padding: 24px 24px 80px;
+                max-width: 100%;
+            }
+
+            .concept-grid, .hw-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .route-node-label {
+                display: none;
+            }
+
+            .vipa-cluster {
+                gap: 14px;
+            }
+
+            .vipa-server {
+                width: 100px;
+                padding: 10px;
+            }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: none;
+        }
+    </style>
+</head>
+<body>
+<div class="page-wrap">
+    <aside class="sidebar">
+        <a href="../" class="back-link">← Series index</a>
+        <div class="sidebar-label">In this article</div>
+        <a href="#what-comms" class="toc-link">What the Comms Server Does</a>
+        <a href="#route-tracer" class="toc-link">↳ Route Tracer (Interactive)</a>
+        <a href="#hardware" class="toc-link">↳ Hardware Underneath</a>
+        <a href="#availability" class="toc-link">Staying Up (VIPA)</a>
+        <a href="#vipa-sim" class="toc-link">↳ Failover Simulator (Interactive)</a>
+        <a href="#modern" class="toc-link">Not Stuck in the Past</a>
+        <a href="#security" class="toc-link">↳ Secure Connection Trace</a>
+        <a href="#summary" class="toc-link">Summary</a>
+        <div class="sidebar-footer">
+            <div>Series: Mainframe 101 · Part 6</div>
+            <div>~9 min read</div>
+            <br>
+            <div><a href="https://zubairidrisaweda.medium.com/mainframe-communications-61a759991776" target="_blank">Read
+                on Medium →</a></div>
+        </div>
+    </aside>
+
+    <main class="main">
+        <header class="hero" id="top">
+            <div class="hero-eyebrow">Mainframe 101 · Part 06</div>
+            <h1 class="hero-title">Mainframe Communications</h1>
+            <p class="hero-sub">The Portals Between Worlds</p>
+            <div class="hero-meta">
+                <span><span class="dot"></span> Zubair Idris Aweda</span>
+                <span><span class="dot"></span> 9 min read</span>
+                <span><span class="dot"></span> Interactive</span>
+            </div>
+        </header>
+
+        <section id="what-comms" class="reveal">
+            <div class="section-label">01 — Overview</div>
+            <h2>What the Communications Server Actually Does</h2>
+            <p>The z/OS Communications Server is what turns a mainframe from an isolated, powerful machine into a
+                fully connected part of the modern world — the component responsible for how data enters, leaves, and
+                stays protected. It has to support two very different networking philosophies, because mainframes have
+                been carrying enterprise traffic since long before the modern internet existed.</p>
+
+            <div class="route-wrap" id="route-tracer">
+                <h3>Trace the Route</h3>
+                <p class="route-sub">Pick a protocol and watch how a request actually gets from your app to the
+                    mainframe</p>
+                <div class="route-controls">
+                    <button class="route-btn sna" id="btnSna" onclick="runRoute('sna')">▶ Trace via SNA (Enterprise
+                        Extender)
+                    </button>
+                    <button class="route-btn tcp" id="btnTcp" onclick="runRoute('tcp')">▶ Trace via TCP/IP</button>
+                </div>
+                <div class="route-rail" id="routeRail"></div>
+                <div class="route-detail" id="routeDetail">Choose a protocol above to trace its path to z/OS.</div>
+            </div>
+        </section>
+
+        <section id="hardware" class="reveal">
+            <div class="section-label">02 — Interactive</div>
+            <h2>The Hardware Underneath</h2>
+            <p>Click a component to see what it actually does.</p>
+            <div class="hw-grid">
+                <div class="hw-card" onclick="showHw(0, this)">
+                    <div class="hw-icon">🔌</div>
+                    <div class="hw-name">OSA</div>
+                </div>
+                <div class="hw-card" onclick="showHw(1, this)">
+                    <div class="hw-icon">⚡</div>
+                    <div class="hw-name">HiperSockets</div>
+                </div>
+                <div class="hw-card" onclick="showHw(2, this)">
+                    <div class="hw-icon">🔗</div>
+                    <div class="hw-name">SMC-R / SMC-D</div>
+                </div>
+                <div class="hw-detail" id="hwDetail"></div>
+            </div>
+        </section>
+
+        <section id="availability" class="reveal">
+            <div class="section-label">03 — Resilience</div>
+            <h2>Staying Up When Everything Depends on It</h2>
+            <p>A <strong style="color:var(--text-bright)">VIPA (Virtual IP Address)</strong> is tied to a service
+                rather than a piece of hardware. If the machine hosting that service fails, the VIPA simply moves to
+                another healthy machine in the cluster — the user notices, at worst, a brief pause. Try it below.</p>
+
+            <div class="vipa-wrap" id="vipa-sim">
+                <h3>VIPA Failover Simulator</h3>
+                <p class="vipa-sub">One server currently holds the VIPA and serves all traffic. Fail it, and watch the
+                    address move.</p>
+                <div class="vipa-cluster" id="vipaCluster"></div>
+                <div class="vipa-controls">
+                    <button class="vipa-btn" id="vipaFailBtn" onclick="failCurrentServer()">⚠ Simulate Hardware
+                        Failure
+                    </button>
+                    <button class="vipa-btn reset" onclick="resetVipa()">↺ Reset Cluster</button>
+                </div>
+                <div class="vipa-log" id="vipaLog">All three systems healthy. SYS-A currently holds the VIPA and is
+                    serving 100% of traffic.
+                </div>
+            </div>
+        </section>
+
+        <section id="modern" class="reveal">
+            <div class="section-label">04 — Not Frozen in Time</div>
+            <h2>Not Stuck in the Past</h2>
+            <p>Modern IBM Z hardware runs containers, including Kubernetes workloads, using the same dependable
+                networking infrastructure that's carried traditional workloads for decades. IBM has even introduced
+                AI-powered packet batching — a model that observes traffic patterns and predicts the optimal batching
+                strategy in real time, cutting CPU usage without meaningfully affecting speed.</p>
+        </section>
+
+        <section id="security" class="reveal">
+            <div class="section-label">05 — Defence in Depth</div>
+            <h2>Security at Every Layer</h2>
+            <p>Little of this depends on individual developers remembering to "do the right thing" — security here is
+                a property of the infrastructure, not something each service has to implement correctly on its own.
+                Trace what happens to a single connection as it passes through every layer.</p>
+
+            <button class="layer-trace-btn" id="layerTraceBtn" onclick="traceSecurity()">▶ Simulate a Secure
+                Connection
+            </button>
+            <div class="layer-status" id="layerStatus"></div>
+
+            <div class="layer-stack">
+                <div class="layer-item" data-layer="0" onclick="toggleLayer(this)">
+                    <div class="layer-head"><span class="layer-name">IP Filtering <span
+                            class="layer-check">✓</span></span><span class="layer-tag">Network</span></div>
+                    <div class="layer-detail">Controls exactly which traffic is permitted in or out — a strict
+                        checkpoint at every entry point.
+                    </div>
+                </div>
+                <div class="layer-item" data-layer="1" onclick="toggleLayer(this)">
+                    <div class="layer-head"><span class="layer-name">IPSec <span
+                            class="layer-check">✓</span></span><span class="layer-tag">Network</span></div>
+                    <div class="layer-detail">Encrypts data travelling between systems, so intercepted traffic reveals
+                        nothing useful.
+                    </div>
+                </div>
+                <div class="layer-item" data-layer="2" onclick="toggleLayer(this)">
+                    <div class="layer-head"><span class="layer-name">AT-TLS <span
+                            class="layer-check">✓</span></span><span class="layer-tag">Application</span></div>
+                    <div class="layer-detail">Automatically encrypts application traffic without the application itself
+                        needing to do anything differently.
+                    </div>
+                </div>
+                <div class="layer-item" data-layer="3" onclick="toggleLayer(this)">
+                    <div class="layer-head"><span class="layer-name">zERT <span class="layer-check">✓</span></span><span
+                            class="layer-tag">Visibility</span></div>
+                    <div class="layer-detail">Monitors network connections and reports on encryption status — a clear
+                        picture of what's protected and what isn't.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="summary" class="reveal">
+            <div class="section-label">06 — Wrap Up</div>
+            <div class="summary-box">
+                <h2>Summary</h2>
+                <p>The z/OS Communications Server speaks two networking languages, relies on specialised hardware to
+                    move data efficiently, stays available through mechanisms like VIPA, and wraps all of this in
+                    layered security. None of it is visible when you tap your card at a checkout — that invisibility
+                    is the point.</p>
+                <div class="coauthor-note">This article was co-authored with <a
+                        href="https://www.linkedin.com/in/zainab-moyinoluwa-salaudeen-66346139a/" target="_blank">Salaudeen
+                    Zainab Moyinoluwa</a>, and inspired by Edward Seidl's "z/OS Communications Server Network Security
+                    Overview" talk at the WAVEZ Spring 2026 Event.
+                </div>
+            </div>
+        </section>
+
+        <div class="author-bio reveal">
+            <div class="author-avatar">ZIA</div>
+            <div class="author-info">
+                <div class="author-name">Zubair Idris Aweda</div>
+                <div class="author-title">Software Engineer · Technical Writer</div>
+                <div class="author-links">
+                    <a href="https://www.linkedin.com/in/zubairidrisaweda/" target="_blank"
+                       class="author-link">LinkedIn</a>
+                    <a href="https://x.com/greatzubs" target="_blank" class="author-link">Twitter/X</a>
+                    <a href="https://github.com/Zubs" target="_blank" class="author-link">GitHub</a>
+                    <a href="https://zubairidrisaweda.medium.com/" target="_blank" class="author-link">Medium</a>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+    /* ── ROUTE TRACER ── */
+    const routes = {
+        sna: {
+            color: 'var(--amber)',
+            nodes: [
+                {icon: '💻', label: 'App'},
+                {icon: '📦', label: 'Enterprise\nExtender'},
+                {icon: '🌐', label: 'IP Network'},
+                {icon: '🖧', label: 'VTAM'},
+                {icon: '🏦', label: 'CICS / IMS'}
+            ],
+            detail: "<strong>SNA, wrapped for the modern network.</strong> Enterprise Extender wraps SNA traffic inside standard IP packets so it can travel over today's TCP/IP networks. VTAM on z/OS unwraps it — the application still believes it's on its original SNA network the whole time. This is how CICS, IMS, and Db2 workloads built decades ago keep working, unmodified, today."
+        },
+        tcp: {
+            color: 'var(--cyan)',
+            nodes: [
+                {icon: '💻', label: 'App'},
+                {icon: '🌐', label: 'Internet /\nIP Network'},
+                {icon: '🔌', label: 'OSA'},
+                {icon: '🖥️', label: 'z/OS TCP/IP'},
+                {icon: '🏦', label: 'CICS / Web / API'}
+            ],
+            detail: "<strong>Ordinary TCP/IP, all the way through.</strong> Your banking app's request travels over the same TCP/IP stack that runs the rest of the internet, arrives via an OSA adapter, and is handled by z/OS's TCP/IP stack — with no indication it just reached a system with roots going back decades."
+        }
+    };
+
+    function renderRouteRail(key) {
+        const r = routes[key];
+        const rail = document.getElementById('routeRail');
+        rail.innerHTML = `<div class="route-line"><div class="route-line-fill" id="routeLineFill" style="background:${r.color};color:${r.color};"></div></div>` +
+            r.nodes.map((n, i) => `
+                <div class="route-node-wrap" data-idx="${i}">
+                    <div class="route-node" style="border-color:var(--border);">${n.icon}</div>
+                    <div class="route-node-label">${n.label.replace('\n', '<br>')}</div>
+                </div>`).join('');
+    }
+
+    let routeTimer = null;
+
+    function runRoute(key) {
+        clearInterval(routeTimer);
+        document.getElementById('btnSna').disabled = true;
+        document.getElementById('btnTcp').disabled = true;
+        document.getElementById('btnSna').classList.remove('running');
+        document.getElementById('btnTcp').classList.remove('running');
+        document.getElementById(key === 'sna' ? 'btnSna' : 'btnTcp').classList.add('running');
+
+        renderRouteRail(key);
+        document.getElementById('routeDetail').innerHTML = 'Tracing…';
+
+        const r = routes[key];
+        let step = 0;
+        const total = r.nodes.length;
+        routeTimer = setInterval(() => {
+            step++;
+            document.getElementById('routeLineFill').style.width = (step / (total - 1) * 100) + '%';
+            document.querySelectorAll('.route-node-wrap').forEach((el, i) => {
+                if (i < step) {
+                    el.classList.add('lit');
+                    el.querySelector('.route-node').style.borderColor = r.color;
+                    el.querySelector('.route-node').style.boxShadow = `0 0 18px ${r.color}`;
+                    el.querySelector('.route-node-label').style.color = r.color;
+                }
+            });
+            if (step >= total - 1) {
+                clearInterval(routeTimer);
+                document.getElementById('routeDetail').innerHTML = r.detail;
+                document.getElementById('btnSna').disabled = false;
+                document.getElementById('btnTcp').disabled = false;
+            }
+        }, 550);
+    }
+
+    renderRouteRail('tcp');
+
+    /* ── HARDWARE CARDS ── */
+    const hwText = [
+        "<strong style='color:var(--text-bright)'>OSA (Open Systems Adapter)</strong> — the mainframe's network card. Connects to external networks and can be shared across multiple operating system instances on the same physical machine.",
+        "<strong style='color:var(--text-bright)'>HiperSockets</strong> — lets applications on the same physical machine talk directly through memory at high speed, no cables, no external switches, no wasteful round trip.",
+        "<strong style='color:var(--text-bright)'>SMC-R / SMC-D</strong> — allow systems to share memory directly for extremely fast communication. SMC-R works across physical machines via RDMA; SMC-D works between logical partitions on the same machine. Both are transparent to applications."
+    ];
+
+    function showHw(idx, card) {
+        document.querySelectorAll('.hw-card').forEach(c => c.classList.remove('active'));
+        card.classList.add('active');
+        const el = document.getElementById('hwDetail');
+        el.innerHTML = hwText[idx];
+        el.classList.add('show');
+    }
+
+    /* ── VIPA FAILOVER SIMULATOR ── */
+    const vipaServers = [
+        {id: 'a', name: 'SYS-A'},
+        {id: 'b', name: 'SYS-B'},
+        {id: 'c', name: 'SYS-C'}
+    ];
+    let vipaHolder = 0;
+    let vipaDown = [];
+
+    function renderVipa() {
+        const cluster = document.getElementById('vipaCluster');
+        cluster.innerHTML = vipaServers.map((s, i) => {
+            const isDown = vipaDown.includes(i);
+            const isHolding = i === vipaHolder && !isDown;
+            return `
+            <div class="vipa-server ${isDown ? 'down' : ''} ${isHolding ? 'holding' : ''}" id="vipaServer${i}">
+                <div class="vipa-badge">HOLDS VIPA</div>
+                <div class="vipa-server-icon">${isDown ? '💥' : '🖥️'}</div>
+                <div class="vipa-server-name">${s.name}</div>
+                <div class="vipa-server-status">${isDown ? 'FAILED' : (isHolding ? 'Serving 100% traffic' : 'Standby — healthy')}</div>
+            </div>`;
+        }).join('');
+    }
+
+    function failCurrentServer() {
+        if (vipaDown.length >= vipaServers.length - 1) return;
+        const failing = vipaHolder;
+        vipaDown.push(failing);
+        const log = document.getElementById('vipaLog');
+        log.innerHTML = `<span class="warn">⚠ ${vipaServers[failing].name} has failed.</span> Locating a healthy system to take over the VIPA…`;
+        renderVipa();
+
+        setTimeout(() => {
+            const nextHealthy = vipaServers.findIndex((s, i) => !vipaDown.includes(i));
+            vipaHolder = nextHealthy;
+            renderVipa();
+            const remaining = vipaServers.length - vipaDown.length;
+            log.innerHTML = `<span class="ok">✓ VIPA moved to ${vipaServers[vipaHolder].name}.</span> Traffic resumed with, at worst, a brief pause — no manual intervention required. ${remaining > 1 ? (remaining - 1) + ' standby system(s) remain available.' : 'This is now the last healthy system.'}`;
+            if (vipaDown.length >= vipaServers.length - 1) {
+                document.getElementById('vipaFailBtn').disabled = true;
+            }
+        }, 1200);
+    }
+
+    function resetVipa() {
+        vipaHolder = 0;
+        vipaDown = [];
+        document.getElementById('vipaFailBtn').disabled = false;
+        renderVipa();
+        document.getElementById('vipaLog').innerHTML = 'All three systems healthy. SYS-A currently holds the VIPA and is serving 100% of traffic.';
+    }
+
+    renderVipa();
+
+    /* ── SECURITY LAYERS ── */
+    function toggleLayer(el) {
+        const wasActive = el.classList.contains('active');
+        document.querySelectorAll('.layer-item').forEach(l => l.classList.remove('active'));
+        if (!wasActive) el.classList.add('active');
+    }
+
+    let secTimer = null;
+
+    function traceSecurity() {
+        clearInterval(secTimer);
+        const btn = document.getElementById('layerTraceBtn');
+        btn.disabled = true;
+        document.querySelectorAll('.layer-item').forEach(l => {
+            l.classList.remove('tracing', 'traced', 'active');
+        });
+        const items = document.querySelectorAll('.layer-item');
+        const statusEl = document.getElementById('layerStatus');
+        const labels = ['Checking IP filter rules…', 'Establishing IPSec tunnel…', 'Negotiating AT-TLS handshake…', 'Logging connection in zERT…'];
+        let step = 0;
+        statusEl.textContent = labels[0];
+        items[0].classList.add('tracing');
+        secTimer = setInterval(() => {
+            items[step].classList.remove('tracing');
+            items[step].classList.add('traced');
+            step++;
+            if (step >= items.length) {
+                clearInterval(secTimer);
+                statusEl.innerHTML = '<span class="done">✓ Connection established — filtered, encrypted twice over, and logged, with no application code involved.</span>';
+                btn.disabled = false;
+                return;
+            }
+            items[step].classList.add('tracing');
+            statusEl.textContent = labels[step];
+        }, 700);
+    }
+
+    /* ── SCROLL REVEAL + TOC ── */
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                e.target.classList.add('visible');
+                revealObserver.unobserve(e.target);
+            }
+        });
+    }, {threshold: 0.08});
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    const sections = document.querySelectorAll('section[id], header[id]');
+    const tocLinks = document.querySelectorAll('.toc-link');
+    const tocObserver = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                tocLinks.forEach(l => l.classList.remove('active'));
+                const match = document.querySelector(`.toc-link[href="#${e.target.id}"]`);
+                if (match) match.classList.add('active');
+            }
+        });
+    }, {threshold: 0.3});
+    sections.forEach(s => tocObserver.observe(s));
+</script>
+</body>
+</html>
