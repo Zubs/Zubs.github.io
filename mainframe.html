@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description"
+          content="Zubair Idris Aweda — Former IBM Z Student Ambassador and Mainframe Student Society VP/Secretary at Wolverhampton. Credly-verified enterprise computing badges, mainframe writing, and JCLcheck, a live JCL validation SaaS."/>
+    <meta property="og:title" content="Mainframe & Enterprise Computing — Zubair Idris Aweda"/>
+    <meta property="og:description"
+          content="Mainframe portfolio: Former IBM Z Student Ambassador, Mainframe Student Society leadership, Credly badges, mainframe writing, and JCLcheck."/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:url" content="https://zubs.github.io/mainframe.html"/>
+    <title>Mainframe & Enterprise Computing — Zubair Idris Aweda</title>
+    <link rel="icon"
+          href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='28'>Z</text></svg>"/>
+    <link rel="stylesheet" href="style.css"/>
+    <style>
+        /* ── Sub-page hero (shared pattern across career-path pages) ── */
+        .subpage-hero {
+            padding: calc(var(--nav-h) + 5rem) 0 4rem;
+            border-bottom: 1px solid var(--rule);
+        }
+
+        .subpage-hero .breadcrumb {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--amber);
+            margin-bottom: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .subpage-hero .breadcrumb a {
+            color: var(--ink-light);
+            transition: color 0.2s;
+        }
+
+        .subpage-hero .breadcrumb a:hover {
+            color: var(--amber);
+        }
+
+        .subpage-hero .breadcrumb span {
+            color: var(--rule);
+        }
+
+        .subpage-intro {
+            max-width: 640px;
+            font-size: 1.05rem;
+            color: var(--ink-mid);
+            margin-top: 1.2rem;
+            line-height: 1.75;
+        }
+
+        .subpage-ctas {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .subpage-stats {
+            display: flex;
+            gap: 2.5rem;
+            flex-wrap: wrap;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--rule);
+        }
+
+        .subpage-stat-num {
+            font-family: var(--font-display);
+            font-size: 2.1rem;
+            color: var(--accent);
+            line-height: 1;
+        }
+
+        .subpage-stat-label {
+            font-family: var(--font-mono);
+            font-size: 0.62rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--ink-light);
+            margin-top: 0.4rem;
+        }
+
+        /* ── Event / conference cards ── */
+        .event-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 1.5px;
+            background: var(--rule);
+            border: 1.5px solid var(--rule);
+            margin-bottom: 1rem;
+        }
+
+        .event-card {
+            background: var(--bg);
+            padding: 1.8rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            transition: background 0.25s;
+        }
+
+        .section--alt .event-card {
+            background: var(--bg-warm);
+        }
+
+        .event-card:hover {
+            background: var(--white);
+        }
+
+        .event-kind {
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--amber);
+        }
+
+        .event-name {
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            color: var(--ink);
+            line-height: 1.25;
+        }
+
+        .event-desc {
+            font-size: 0.85rem;
+            color: var(--ink-mid);
+            line-height: 1.55;
+        }
+
+        .event-note {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--ink-light);
+            margin-top: 1.2rem;
+            line-height: 1.7;
+        }
+
+        /* ── Credly badge grid ── */
+        .badge-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .badge-card {
+            background: var(--bg);
+            border: 1px solid var(--rule);
+            padding: 1rem 0.5rem 0.6rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: border-color 0.2s, transform 0.2s;
+        }
+
+        .badge-card:hover {
+            border-color: var(--amber);
+            transform: translateY(-3px);
+        }
+
+        .cert-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            border-top: 1px solid var(--rule);
+            margin-top: 2.5rem;
+        }
+
+        .cert-list li {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--rule);
+            font-size: 0.9rem;
+            color: var(--ink-mid);
+            flex-wrap: wrap;
+        }
+
+        .cert-list li strong {
+            color: var(--ink);
+            font-weight: 500;
+        }
+
+        .cert-list .cert-year {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--ink-light);
+            white-space: nowrap;
+        }
+
+        /* ── Writing list ── */
+        .write-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .write-item {
+            display: grid;
+            grid-template-columns: 140px 1fr auto;
+            gap: 1.5rem;
+            align-items: baseline;
+            padding: 1.6rem 0;
+            border-top: 1px solid var(--rule);
+            transition: opacity 0.2s;
+        }
+
+        .write-list a.write-item:hover {
+            opacity: 0.6;
+        }
+
+        .write-list > *:last-child {
+            border-bottom: 1px solid var(--rule);
+        }
+
+        .write-source {
+            font-family: var(--font-mono);
+            font-size: 0.62rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--amber);
+        }
+
+        .write-title {
+            font-family: var(--font-display);
+            font-size: 1.15rem;
+            color: var(--ink);
+            line-height: 1.35;
+        }
+
+        .write-cta {
+            font-family: var(--font-mono);
+            font-size: 0.62rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--ink-light);
+            white-space: nowrap;
+        }
+
+        @media (max-width: 640px) {
+            .write-item {
+                grid-template-columns: 1fr;
+                gap: 0.4rem;
+            }
+
+            .subpage-stats {
+                gap: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+    <div class="container">
+        <div class="nav-inner">
+            <a href="index.html" class="nav-logo">Zubair Idris Aweda</a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="index.html#experience">Experience</a></li>
+                <li><a href="projects.html">Projects</a></li>
+                <li><a href="testimonials.html">Testimonials</a></li>
+                <li><a href="#" style="color:var(--amber)">Mainframe</a></li>
+                <li><a href="research.html">Research</a></li>
+                <li><a href="engineering.html">Engineering</a></li>
+                <li><a href="index.html#contact">Contact</a></li>
+            </ul>
+            <a href="Zubair-Idris-Aweda-ATS-Resume.pdf" target="_blank" class="nav-cta" id="nav-cv-btn">CV ↗</a>
+            <button class="nav-burger" id="burger" aria-label="Toggle menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<!-- HERO -->
+<div class="subpage-hero section--alt">
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="index.html">Home</a>
+            <span>/</span>
+            Mainframe
+        </div>
+        <h1 class="section-title" style="font-size:clamp(2.4rem,6vw,4rem);">
+            The Mainframe<br><em>Path</em>
+        </h1>
+        <p class="subpage-intro">
+            IBM Z systems still run the world's banking, insurance, and healthcare backbones, and
+            I've spent my final years at Wolverhampton building real depth here, not just curiosity.
+            I was one of the top <strong>IBM Z Student Ambassadors</strong> globally, served as
+            <strong>Secretary / Vice-President of the Mainframe Student Society</strong>, earned a
+            perfect score in my <strong>High Performance Computing</strong> module, and shipped
+            <strong>JCLcheck</strong>, a real lexer/parser/AST validation engine for JCL. Open to
+            graduate and entry-level mainframe engineering roles.
+        </p>
+        <div class="subpage-ctas">
+            <a href="Zubair-Idris-Aweda-ATS-Resume.pdf" target="_blank" class="btn btn-primary">Download CV ↗</a>
+            <a href="https://www.credly.com/users/zubairidrisaweda" target="_blank" rel="noopener"
+               class="btn btn-ghost">Credly Profile ↗</a>
+            <a href="https://jclcheck.xyz" target="_blank" rel="noopener" class="btn btn-ghost">Try JCLcheck ↗</a>
+        </div>
+        <div class="subpage-stats">
+            <div>
+                <p class="subpage-stat-num">100%</p>
+                <p class="subpage-stat-label">High Performance Computing</p>
+            </div>
+            <div>
+                <p class="subpage-stat-num">8</p>
+                <p class="subpage-stat-label">Credly Badges</p>
+            </div>
+            <div>
+                <p class="subpage-stat-num">Superstar</p>
+                <p class="subpage-stat-label">IBM Z Student Ambassador Tier</p>
+            </div>
+            <div>
+                <p class="subpage-stat-num">1</p>
+                <p class="subpage-stat-label">Live JCL Validation SaaS</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- LEADERSHIP & ROLES -->
+<section class="section">
+    <div class="container">
+        <p class="section-label reveal">Leadership</p>
+        <h2 class="section-title reveal">Roles & <em>Advocacy</em></h2>
+        <div class="section-rule reveal"></div>
+        <div class="exp-list">
+            <div class="exp-item reveal">
+                <div class="exp-meta">
+                    <p class="exp-date">2025 – 2026</p>
+                    <p class="exp-company">IBM Z Student Ambassador Program</p>
+                    <p class="exp-type">Global · Ambassador</p>
+                </div>
+                <div class="exp-content">
+                    <h3 class="exp-role">IBM Z Student Ambassador — Highest Tier Achieved</h3>
+                    <ul class="exp-bullets">
+                        <li>Reached the highest tier in the ambassador program by championing mainframe
+                            technologies across university channels and digital platforms.
+                        </li>
+                        <li>Featured in an exclusive interview on the official IBM Z Student Ambassador
+                            program page to discuss personal experience and technology advocacy.
+                        </li>
+                        <li>Recognised and featured by the Open Mainframe Project for promoting
+                            open-source enterprise computing through technical writing.
+                        </li>
+                    </ul>
+                    <div class="exp-stack">
+                        <span>IBM Z</span><span>z/OS</span><span>Enterprise Systems</span><span>Advocacy</span>
+                    </div>
+                </div>
+            </div>
+            <div class="exp-item reveal">
+                <div class="exp-meta">
+                    <p class="exp-date">2025 – 2026</p>
+                    <p class="exp-company">Mainframe Student Society, Wolverhampton</p>
+                    <p class="exp-type">MaSS UoW</p>
+                </div>
+                <div class="exp-content">
+                    <h3 class="exp-role">Secretary / Vice-President</h3>
+                    <ul class="exp-bullets">
+                        <li>Organised and facilitated weekly technical meet-ups and high-profile
+                            educational events, including "Mainframe and Computer Science" aimed at
+                            bridging the knowledge gap for CS students.
+                        </li>
+                        <li>Managed society operations, community outreach, and social media advocacy
+                            to grow student engagement with IBM Z technologies.
+                        </li>
+                    </ul>
+                    <div class="exp-stack">
+                        <span>Community Leadership</span><span>Event Organising</span><span>Outreach</span>
+                    </div>
+                </div>
+            </div>
+            <div class="exp-item reveal">
+                <div class="exp-meta">
+                    <p class="exp-date">Summer 2026</p>
+                    <p class="exp-company">Mainframe Open Education</p>
+                    <p class="exp-type">LFX Mentorship</p>
+                </div>
+                <div class="exp-content">
+                    <h3 class="exp-role">Mentee, Educational Content & Advocacy</h3>
+                    <ul class="exp-bullets">
+                        <li>Accepted into the highly selective, unpaid Summer 2026 mentorship programme
+                            to develop technical content for mainframe beginners.
+                        </li>
+                        <li>Acting as a relatable voice for the student and early-career community,
+                            translating foundational technical workflows into interactive learning
+                            modules.
+                        </li>
+                    </ul>
+                    <div class="exp-stack">
+                        <span>Open Mainframe Project</span><span>Technical Content</span><span>Mentorship</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CONFERENCES & EVENTS -->
+<section class="section section--alt">
+    <div class="container">
+        <p class="section-label reveal">Community</p>
+        <h2 class="section-title reveal">Conferences & <em>Events</em></h2>
+        <div class="section-rule reveal"></div>
+        <p class="meta-label reveal" style="margin-bottom:1rem;">Attended</p>
+        <div class="event-grid reveal">
+            <div class="event-card">
+                <span class="event-kind">Conference · 2025</span>
+                <h3 class="event-name">WAVEZ Spring Event 2025</h3>
+            </div>
+            <div class="event-card">
+                <span class="event-kind">Conference · 2026</span>
+                <h3 class="event-name">WAVEZ Spring Event 2026</h3>
+            </div>
+            <div class="event-card">
+                <span class="event-kind">Conference · 2025</span>
+                <h3 class="event-name">GSUK 2025</h3>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ACADEMIC FOUNDATIONS -->
+<section class="section">
+    <div class="container">
+        <p class="section-label reveal">Academic Foundations</p>
+        <h2 class="section-title reveal">Built on <em>Systems Fundamentals</em></h2>
+        <div class="section-rule reveal"></div>
+        <div class="about-grid">
+            <div class="about-bio reveal">
+                <p>
+                    My BSc (Hons) Computer Science at the University of Wolverhampton finished with a
+                    First Class classification, and my final-year module work leaned directly into the
+                    systems fundamentals that mainframe and enterprise computing are built on.
+                </p>
+                <p>
+                    <strong>High Performance Computing (6CS005)</strong>, a Level 6 module covering
+                    parallel and concurrent computation at scale, was graded <strong>100% (P100)</strong>,
+                    the same discipline that underpins how mainframe workloads are managed and
+                    optimised in production. I paired that with modules in <strong>Complex Systems</strong>,
+                    <strong>Distributed and Cloud Systems Programming</strong>, and <strong>Numerical
+                    Methods and Concurrency</strong>, all part of building a genuine, examined
+                    understanding of large-scale system behaviour, not just an interest in it.
+                </p>
+            </div>
+            <div class="about-meta reveal">
+                <div class="meta-block">
+                    <p class="meta-label">Module</p>
+                    <p class="meta-value">6CS005 — High Performance Computing<br>
+                        <span style="color:var(--amber);font-size:0.85rem;">Grade: 100% (P100) · Level 6</span>
+                    </p>
+                </div>
+                <div class="meta-block">
+                    <p class="meta-label">Related Modules</p>
+                    <p class="meta-value">5CS022 — Distributed and Cloud Systems Programming (P82)<br>
+                        5CS021 — Numerical Methods and Concurrency (P90)<br>
+                        6CS014 — Complex Systems (P71)
+                    </p>
+                </div>
+                <div class="meta-block">
+                    <p class="meta-label">Degree</p>
+                    <p class="meta-value">BSc (Hons) Computer Science<br>
+                        <span style="color:var(--amber);font-size:0.85rem;">First Class · University of Wolverhampton</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CREDENTIALS & BADGES -->
+<section class="section section--alt">
+    <div class="container">
+        <p class="section-label reveal">Credentials</p>
+        <h2 class="section-title reveal">Badges & <em>Certifications</em></h2>
+        <div class="section-rule reveal"></div>
+        <p class="reveal" style="color:var(--ink-mid);max-width:560px;margin-bottom:2rem;font-size:0.95rem;">
+            Verified via Credly — full profile at
+            <a href="https://www.credly.com/users/zubairidrisaweda" target="_blank" rel="noopener"
+               style="color:var(--accent);border-bottom:1px solid var(--accent);">credly.com/users/zubairidrisaweda
+                ↗</a>
+        </p>
+        <div class="badge-grid reveal">
+            <div class="badge-card">
+                <div data-iframe-width="150" data-iframe-height="270"
+                     data-share-badge-id="1794c638-5397-4b4a-8c0d-2be8f7d80346"
+                     data-share-badge-host="https://www.credly.com"></div>
+            </div>
+            <div class="badge-card">
+                <div data-iframe-width="150" data-iframe-height="270"
+                     data-share-badge-id="e34e2e62-7d8c-41e4-8843-a4ffac58b7d3"
+                     data-share-badge-host="https://www.credly.com"></div>
+            </div>
+            <div class="badge-card">
+                <div data-iframe-width="150" data-iframe-height="270"
+                     data-share-badge-id="16a0eecb-c008-4724-bcac-43745801f6a8"
+                     data-share-badge-host="https://www.credly.com"></div>
+            </div>
+            <div class="badge-card">
+                <div data-iframe-width="150" data-iframe-height="270"
+                     data-share-badge-id="22fabeae-4147-4a80-8fde-6a66c04826a5"
+                     data-share-badge-host="https://www.credly.com"></div>
+            </div>
+            <div class="badge-card">
+                <div data-iframe-width="150" data-iframe-height="270"
+                     data-share-badge-id="5800407d-30d5-406b-96e1-6674911d0383"
+                     data-share-badge-host="https://www.credly.com"></div>
+            </div>
+            <div class="badge-card">
+                <div data-iframe-width="150" data-iframe-height="270"
+                     data-share-badge-id="ceee8a8e-18cf-4390-89e1-461978d5b8bf"
+                     data-share-badge-host="https://www.credly.com"></div>
+            </div>
+            <div class="badge-card">
+                <div data-iframe-width="150" data-iframe-height="270"
+                     data-share-badge-id="36230776-1dcc-44a8-86b0-5d95f8c1c8ef"
+                     data-share-badge-host="https://www.credly.com"></div>
+            </div>
+            <div class="badge-card">
+                <div data-iframe-width="150" data-iframe-height="270"
+                     data-share-badge-id="62f90ceb-f06c-468f-b1d1-641ff9efa699"
+                     data-share-badge-host="https://www.credly.com"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- WRITING -->
+<section class="section">
+    <div class="container">
+        <p class="section-label reveal">Writing</p>
+        <h2 class="section-title reveal">Mainframe <em>Writing</em></h2>
+        <div class="section-rule reveal"></div>
+        <p class="reveal" style="color:var(--ink-mid);max-width:560px;margin-bottom:1rem;font-size:0.95rem;">
+            I write beginner-friendly explainers on mainframe internals, published on Medium, with an
+            interactive companion series built for the way I wish I'd first learned this material.
+        </p>
+        <div class="write-list reveal">
+            <a class="write-item"
+               href="https://zubairidrisaweda.medium.com/introduction-to-the-mainframe-workload-manager-wlm-107499ecc9ce"
+               target="_blank" rel="noopener">
+                <span class="write-source">Medium</span>
+                <span class="write-title">Introduction to the Mainframe Workload Manager (WLM)</span>
+                <span class="write-cta">Read ↗</span>
+            </a>
+            <a class="write-item"
+               href="https://zubs.github.io/mainframe-series/introduction-to-the-mainframe-workload-manager-wlm/"
+               target="_blank" rel="noopener">
+                <span class="write-source">Interactive Series</span>
+                <span class="write-title">(Interactive) Introduction to the Mainframe Workload Manager (WLM)</span>
+                <span class="write-cta">Open ↗</span>
+            </a>
+            <a class="write-item" href="https://zubairidrisaweda.medium.com" target="_blank" rel="noopener">
+                <span class="write-source">Medium</span>
+                <span class="write-title">All mainframe & enterprise computing articles</span>
+                <span class="write-cta">View profile ↗</span>
+            </a>
+            <a class="write-item" href="https://zubs.github.io/mainframe-series/" target="_blank" rel="noopener">
+                <span class="write-source">Interactive Series</span>
+                <span class="write-title">Full interactive mainframe series</span>
+                <span class="write-cta">Browse ↗</span>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- FEATURED BUILD: JCLCHECK -->
+<section id="jclcheck" class="section section--alt">
+    <div class="container">
+        <p class="section-label reveal">Featured Build</p>
+        <h2 class="section-title reveal">JCL<em>check</em></h2>
+        <div class="section-rule reveal"></div>
+        <div class="about-grid">
+            <div class="about-bio reveal">
+                <p>
+                    JCLcheck is a real, self-contained JCL validation engine — lexer, parser, AST, and
+                    rule-engine — that I built and shipped as a live SaaS-style product. It runs entirely without a
+                    mainframe: paste JCL into the browser
+                    workbench and it's validated against rules distilled from the IBM JCL Reference.
+                </p>
+                <p>
+                    The engine checks statement ordering, DD-statement rules, keyword legality (with
+                    Levenshtein-distance "did you mean…" suggestions), DISP/SPACE/DCB/REGION/TIME/DSN
+                    value syntax, and full in-stream PROC resolution with symbolic parameter (&amp;SYM)
+                    validation and DD-override matching, every diagnostic ships with a plain-English
+                    message and a suggested fix, built for people still learning the syntax.
+                </p>
+                <p>
+                    The frontend is a Vue 3 workbench with a 3270-terminal-styled editor, line-numbered
+                    diagnostic gutter, and PF-key action bar (F1 Help / F5 Validate / F9 Sample / F12
+                    Clear) — built for learning JCL and training new mainframe developers without
+                    needing z/OS access.
+                </p>
+                <div style="display:flex;gap:1rem;margin-top:1.8rem;flex-wrap:wrap;">
+                    <a href="https://jclcheck.xyz" target="_blank" rel="noopener" class="btn btn-primary"
+                       style="font-size:0.68rem;padding:0.7rem 1.5rem;">Launch JCLcheck ↗</a>
+                    <a href="https://github.com/Zubs/jclcheck" target="_blank" rel="noopener" class="btn btn-ghost"
+                       style="font-size:0.68rem;padding:0.7rem 1.5rem;">View Source ↗</a>
+                </div>
+            </div>
+            <div class="about-meta reveal">
+                <div class="meta-block">
+                    <p class="meta-label">Role</p>
+                    <p class="meta-value">Sole Engineer & Founder</p>
+                </div>
+                <div class="meta-block">
+                    <p class="meta-label">Architecture</p>
+                    <p class="meta-value">Hand-written lexer → paren/quote-aware param tokenizer →
+                        parser → AST → rule engine, orchestrated by a validation pipeline. Node.js/Express
+                        API, Vue 3 + Vite frontend.
+                    </p>
+                </div>
+                <div class="meta-block">
+                    <p class="meta-label">Status</p>
+                    <p class="meta-value">Live at
+                        <a href="https://jclcheck.xyz" target="_blank" rel="noopener"
+                           style="color:var(--accent);border-bottom:1px solid transparent;transition:border-color 0.2s;"
+                           onmouseover="this.style.borderColor='var(--accent)'"
+                           onmouseout="this.style.borderColor='transparent'">jclcheck.xyz ↗</a>
+                    </p>
+                </div>
+                <div class="meta-block">
+                    <p class="meta-label">Stack</p>
+                    <div class="tags">
+                        <span class="tag">Node.js</span>
+                        <span class="tag">Express</span>
+                        <span class="tag">Vue 3 / Vite</span>
+                        <span class="tag">Lexer / Parser / AST</span>
+                        <span class="tag">JCL</span>
+                        <span class="tag">IBM JCL Reference</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CONTACT / CTA -->
+<section id="contact" class="section">
+    <div class="container">
+        <p class="section-label reveal">Let's Connect</p>
+        <h2 class="section-title reveal">Open to <em>Mainframe Roles</em></h2>
+        <div class="section-rule reveal"></div>
+        <div class="contact-grid">
+            <div>
+                <p class="contact-text reveal">
+                    I'm looking for graduate or junior mainframe engineering roles where I can keep
+                    building on IBM Z/z/OS foundations — JCL, enterprise batch processing, and the
+                    systems that keep banking and insurance infrastructure running. If your team is
+                    hiring, or you just want to talk mainframes, I'd love to hear from you.
+                </p>
+                <div class="contact-email reveal">
+                    <span>Reach me directly at</span>
+                    <a href="mailto:zubairidrisaweda@gmail.com">zubairidrisaweda@gmail.com</a>
+                </div>
+            </div>
+            <div class="contact-options">
+                <div class="contact-option reveal">
+                    <p class="contact-option-label">Mainframe Engineering</p>
+                    <p class="contact-option-title">Graduate / Junior Mainframe Roles</p>
+                    <p class="contact-option-desc">
+                        IBM Z, z/OS, JCL, enterprise batch systems. Eager to keep building on the
+                        foundations from the Student Ambassador programme and MaSS leadership.
+                    </p>
+                    <a href="Zubair-Idris-Aweda-ATS-Resume.pdf" target="_blank" class="btn btn-amber"
+                       style="font-size:0.68rem;padding:0.7rem 1.5rem;">Download CV ↗</a>
+                </div>
+                <div class="contact-option reveal"
+                     style="flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1rem;">
+                    <div>
+                        <p class="contact-option-label">Elsewhere</p>
+                        <div style="display:flex;flex-wrap:wrap;gap:0.8rem;margin-top:0.5rem;">
+                            <a href="https://www.credly.com/users/zubairidrisaweda" target="_blank" rel="noopener"
+                               class="btn btn-outline-light" style="font-size:0.62rem;padding:0.5rem 1rem;">Credly
+                                ↗</a>
+                            <a href="https://www.linkedin.com/in/zubairidrisaweda/" target="_blank" rel="noopener"
+                               class="btn btn-outline-light" style="font-size:0.62rem;padding:0.5rem 1rem;">LinkedIn
+                                ↗</a>
+                            <a href="https://github.com/Zubs" target="_blank" rel="noopener"
+                               class="btn btn-outline-light" style="font-size:0.62rem;padding:0.5rem 1rem;">GitHub
+                                ↗</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div class="container">
+        <div class="footer-inner">
+            <p class="footer-copy">© 2026 Zubair Idris Aweda.</p>
+            <div class="footer-links">
+                <a href="index.html">Home ↗</a>
+                <a href="https://github.com/Zubs/Zubs.github.io" target="_blank" rel="noopener">Source ↗</a>
+                <a href="mailto:zubairidrisaweda@gmail.com">Email</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="script.js"></script>
+<script type="text/javascript" async src="//cdn.credly.com/assets/utilities/embed.js"></script>
+</body>
+</html>

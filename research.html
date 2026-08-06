@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description"
+          content="Zubair Idris Aweda — BSc dissertation research on detecting and mitigating OWASP Top 10 vulnerabilities: a controlled A/B study comparing manual penetration testing against SonarQube, OWASP ZAP, and Snyk. First Class Computer Science graduate open to PhD opportunities."/>
+    <meta property="og:title" content="Research — Zubair Idris Aweda"/>
+    <meta property="og:description"
+          content="Dissertation research comparing manual and automated OWASP Top 10 vulnerability detection across a deliberately vulnerable and hardened banking web app."/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:url" content="https://zubs.github.io/research.html"/>
+    <title>Research — Zubair Idris Aweda</title>
+    <link rel="icon"
+          href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='28'>Z</text></svg>"/>
+    <link rel="stylesheet" href="style.css"/>
+    <style>
+        /* ── Sub-page hero (shared pattern across career-path pages) ── */
+        .subpage-hero {
+            padding: calc(var(--nav-h) + 5rem) 0 4rem;
+            border-bottom: 1px solid var(--rule);
+        }
+
+        .subpage-hero .breadcrumb {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--amber);
+            margin-bottom: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .subpage-hero .breadcrumb a {
+            color: var(--ink-light);
+            transition: color 0.2s;
+        }
+
+        .subpage-hero .breadcrumb a:hover {
+            color: var(--amber);
+        }
+
+        .subpage-hero .breadcrumb span {
+            color: var(--rule);
+        }
+
+        .subpage-intro {
+            max-width: 660px;
+            font-size: 1.05rem;
+            color: var(--ink-mid);
+            margin-top: 1.2rem;
+            line-height: 1.75;
+        }
+
+        .subpage-ctas {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .subpage-stats {
+            display: flex;
+            gap: 2.5rem;
+            flex-wrap: wrap;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--rule);
+        }
+
+        .subpage-stat-num {
+            font-family: var(--font-display);
+            font-size: 2.1rem;
+            color: var(--accent);
+            line-height: 1;
+        }
+
+        .subpage-stat-label {
+            font-family: var(--font-mono);
+            font-size: 0.62rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--ink-light);
+            margin-top: 0.4rem;
+        }
+
+        /* ── Academic question callout ── */
+        .aq-block {
+            background: var(--bg);
+            border-left: 3px solid var(--amber);
+            padding: 1.6rem 1.8rem;
+            margin: 1.6rem 0 2rem;
+        }
+
+        .aq-label {
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--amber);
+            margin-bottom: 0.5rem;
+        }
+
+        .aq-text {
+            font-family: var(--font-display);
+            font-style: italic;
+            font-size: 1.25rem;
+            color: var(--ink);
+            line-height: 1.5;
+        }
+
+        /* ── Finding / tool result cards ── */
+        .finding-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5px;
+            background: var(--rule);
+            border: 1.5px solid var(--rule);
+            margin-bottom: 1rem;
+        }
+
+        .finding-card {
+            background: var(--bg);
+            padding: 1.8rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .section--alt .finding-card {
+            background: var(--bg-warm);
+        }
+
+        .finding-tool {
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--amber);
+        }
+
+        .finding-num {
+            font-family: var(--font-display);
+            font-size: 2.3rem;
+            color: var(--ink);
+            line-height: 1;
+            margin: 0.3rem 0;
+        }
+
+        .finding-num small {
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            color: var(--ink-light);
+        }
+
+        .finding-desc {
+            font-size: 0.85rem;
+            color: var(--ink-mid);
+            line-height: 1.55;
+        }
+
+        /* ── Detection coverage table ── */
+        .cov-wrap {
+            overflow-x: auto;
+            border: 1px solid var(--rule);
+        }
+
+        .cov-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.82rem;
+            min-width: 640px;
+        }
+
+        .cov-table th, .cov-table td {
+            padding: 0.75rem 0.9rem;
+            text-align: left;
+            border-bottom: 1px solid var(--rule);
+        }
+
+        .cov-table thead th {
+            font-family: var(--font-mono);
+            font-size: 0.62rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--amber);
+            background: var(--bg-warm);
+            white-space: nowrap;
+        }
+
+        .cov-table tbody th {
+            font-family: var(--font-sans);
+            font-weight: 500;
+            color: var(--ink);
+            white-space: nowrap;
+        }
+
+        .cov-table td {
+            color: var(--ink-mid);
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+        }
+
+        .cov-yes {
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        .cov-partial {
+            color: var(--amber);
+        }
+
+        .cov-no {
+            color: var(--ink-faint, var(--ink-light));
+            opacity: 0.5;
+        }
+
+        .cov-note {
+            font-family: var(--font-mono);
+            font-size: 0.68rem;
+            color: var(--ink-light);
+            margin-top: 0.8rem;
+            line-height: 1.6;
+        }
+
+        /* ── Survey stat strip ── */
+        .survey-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 2rem;
+            margin-top: 1rem;
+        }
+
+        .survey-stat-num {
+            font-family: var(--font-display);
+            font-size: 2.4rem;
+            color: var(--accent);
+            line-height: 1;
+        }
+
+        .survey-stat-label {
+            font-size: 0.85rem;
+            color: var(--ink-mid);
+            margin-top: 0.5rem;
+            line-height: 1.4;
+        }
+
+        /* ── Resource / document list ── */
+        .write-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .write-item {
+            display: grid;
+            grid-template-columns: 140px 1fr auto;
+            gap: 1.5rem;
+            align-items: baseline;
+            padding: 1.6rem 0;
+            border-top: 1px solid var(--rule);
+            transition: opacity 0.2s;
+        }
+
+        .write-list a.write-item:hover {
+            opacity: 0.6;
+        }
+
+        .write-list > *:last-child {
+            border-bottom: 1px solid var(--rule);
+        }
+
+        .write-source {
+            font-family: var(--font-mono);
+            font-size: 0.62rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--amber);
+        }
+
+        .write-title {
+            font-family: var(--font-display);
+            font-size: 1.15rem;
+            color: var(--ink);
+            line-height: 1.35;
+        }
+
+        .write-cta {
+            font-family: var(--font-mono);
+            font-size: 0.62rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--ink-light);
+            white-space: nowrap;
+        }
+
+        /* ── Vuln strategy rows ── */
+        .strategy-row {
+            display: grid;
+            grid-template-columns: 90px 1fr;
+            gap: 1.5rem;
+            padding: 1.1rem 0;
+            border-top: 1px solid var(--rule);
+        }
+
+        .strategy-row:last-child {
+            border-bottom: 1px solid var(--rule);
+        }
+
+        .strategy-tag {
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--amber);
+        }
+
+        .strategy-text {
+            font-size: 0.85rem;
+            color: var(--ink-mid);
+            line-height: 1.55;
+        }
+
+        .strategy-text strong {
+            color: var(--ink);
+            font-weight: 500;
+        }
+
+        /* ── Professional snapshot list ── */
+        .snap-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            margin-top: 0.5rem;
+        }
+
+        .snap-item {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            padding: 0.9rem 0;
+            border-bottom: 1px solid var(--rule);
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+
+        .snap-item span:first-child {
+            color: var(--ink);
+        }
+
+        .snap-item span:last-child {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--ink-light);
+            white-space: nowrap;
+        }
+
+        @media (max-width: 640px) {
+            .write-item {
+                grid-template-columns: 1fr;
+                gap: 0.4rem;
+            }
+
+            .strategy-row {
+                grid-template-columns: 1fr;
+                gap: 0.4rem;
+            }
+
+            .subpage-stats {
+                gap: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+    <div class="container">
+        <div class="nav-inner">
+            <a href="index.html" class="nav-logo">Zubair Idris Aweda</a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="index.html#experience">Experience</a></li>
+                <li><a href="projects.html">Projects</a></li>
+                <li><a href="testimonials.html">Testimonials</a></li>
+                <li><a href="mainframe.html">Mainframe</a></li>
+                <li><a href="#" style="color:var(--amber)">Research</a></li>
+                <li><a href="engineering.html">Engineering</a></li>
+                <li><a href="index.html#contact">Contact</a></li>
+            </ul>
+            <a href="Zubair-Idris-Aweda-Academic-Resume.pdf" target="_blank" class="nav-cta" id="nav-cv-btn">CV ↗</a>
+            <button class="nav-burger" id="burger" aria-label="Toggle menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<!-- HERO -->
+<div class="subpage-hero section--alt">
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="index.html">Home</a>
+            <span>/</span>
+            Research
+        </div>
+        <h1 class="section-title" style="font-size:clamp(2.4rem,6vw,4rem);">
+            The Research<br><em>Path</em>
+        </h1>
+        <p class="subpage-intro">
+            My BSc dissertation wasn't a literature exercise, it was a controlled experiment. I built
+            two parallel versions of a banking web app, one deliberately vulnerable and one hardened,
+            then ran a real four-method comparison (manual penetration testing, SonarQube, OWASP ZAP,
+            and Snyk) plus a 24-developer survey to answer one question: how are OWASP Top 10 threats
+            best managed in modern web applications? First Class Computer Science graduate, open to
+            PhD opportunities in software engineering, robotics, human-robot interaction, and
+            intelligent systems.
+        </p>
+        <div class="subpage-ctas">
+            <a href="https://docs.google.com/document/u/1/d/1NEtt0ljmCa8-U6JpPVzC4yl_cHpu8mBf7iFkr2C47ro/mobilebasic"
+               target="_blank" rel="noopener" class="btn btn-primary">Read the Dissertation ↗</a>
+            <a href="https://gamma.app/docs/Detecting-and-Mitigating-OWASP-Top-10-Threats-lticsiyqwt61eek"
+               target="_blank" rel="noopener" class="btn btn-ghost">View Defence Slides ↗</a>
+            <a href="Zubair-Idris-Aweda-Academic-Resume.pdf" target="_blank" class="btn btn-ghost">Download CV ↗</a>
+        </div>
+        <div class="subpage-stats">
+            <div>
+                <p class="subpage-stat-num">90.44%</p>
+                <p class="subpage-stat-label">Degree Average</p>
+            </div>
+            <div>
+                <p class="subpage-stat-num">P81</p>
+                <p class="subpage-stat-label">Project & Professionalism (6CS007)</p>
+            </div>
+            <div>
+                <p class="subpage-stat-num">4</p>
+                <p class="subpage-stat-label">Detection Methods Compared</p>
+            </div>
+            <div>
+                <p class="subpage-stat-num">24</p>
+                <p class="subpage-stat-label">Developers Surveyed</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- GROUNDED IN PRACTICE -->
+<section class="section">
+    <div class="container">
+        <p class="section-label reveal">About Me</p>
+        <h2 class="section-title reveal">Built on Experience & <em>Academic Excellence</em></h2>
+        <div class="section-rule reveal"></div>
+        <div class="about-grid">
+            <div class="about-bio reveal">
+                <p>
+                    I graduated from the University of Wolverhampton with a <strong>First Class BSc
+                    (Hons) in Computer Science</strong>, finishing with a <strong>90.44% average</strong>
+                    across three years, including a perfect 100% in Introductory Programming, Fundamentals
+                    of Computing, and Object-Oriented Design, and a P81 on my final-year dissertation
+                    module. But the grades sit on top of something more useful: I'd already spent
+                    three-plus years shipping production software professionally before I wrote a single
+                    page of that dissertation, architecting backend microservices at Stax Payments,
+                    building omnichannel notification systems at AYU Digital, and reducing technical debt
+                    through TypeScript migrations at Humongous.io.
+                </p>
+                <p>
+                    I've also spent years explaining technical ideas to other people, 15+ published
+                    technical articles with 443K+ combined readership on freeCodeCamp, plus hands-on
+                    teaching roles covering backend development, Laravel, and Python across multiple
+                    bootcamps and career expos. Research is only as useful as it is communicable, and
+                    that's a muscle I've been building for a while.
+                </p>
+                <a href="engineering.html" class="btn btn-ghost" style="margin-top:0.5rem;">See the Engineering
+                    Path ↗</a>
+            </div>
+            <div class="about-meta reveal">
+                <div class="meta-block">
+                    <p class="meta-label">Academic Excellence</p>
+                    <p class="meta-value">BSc (Hons) Computer Science — First Class<br>
+                        <span style="color:var(--amber);font-size:0.85rem;">90.44% average · University of Wolverhampton</span>
+                    </p>
+                </div>
+                <div class="meta-block">
+                    <p class="meta-label">Professional Snapshot</p>
+                    <div class="snap-list">
+                        <div class="snap-item"><span>Stax Payments — Mid-Senior Full-Stack Engineer</span><span>2022 – 2023</span>
+                        </div>
+                        <div class="snap-item"><span>AYU Digital — Software Engineer</span><span>2022</span>
+                        </div>
+                        <div class="snap-item"><span>Humongous.io — Software Engineer</span><span>2021</span>
+                        </div>
+                        <div class="snap-item"><span>freeCodeCamp — Technical Author</span><span>2021 – Present</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="meta-block">
+                    <p class="meta-label">Writing & Teaching</p>
+                    <p class="meta-value">443K+ readership across 15+ published articles; teaching
+                        roles at GDSC Ilorin, GDSC Unilag, and Engineering Career Expo</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- RESEARCH INTERESTS -->
+<section class="section section--alt">
+    <div class="container">
+        <p class="section-label reveal">Looking Ahead</p>
+        <h2 class="section-title reveal">Open to <em>Ideas & Topics</em></h2>
+        <div class="section-rule reveal"></div>
+        <div class="about-grid">
+            <div class="about-bio reveal">
+                <p>
+                    I'm not narrowly fixed on security research. I'm genuinely curious about how
+                    intelligent systems behave, how humans and machines can collaborate better, and how
+                    software engineering as a discipline keeps up with both, and I'd rather work on a
+                    well-posed question in an area I'm still learning than a shallow one in an area I
+                    already know.
+                </p>
+                <p>
+                    Below is the one formal research project I've done so far, my BSc dissertation,
+                    which convinced me I want more of exactly this: picking a genuine open question,
+                    building whatever's needed to test it properly, and following the evidence even
+                    when it complicates the story. If you're supervising or hiring for research that
+                    needs someone who can both write the paper and build the artefact, I'd love to talk.
+                </p>
+            </div>
+            <div class="about-meta reveal">
+                <div class="meta-block">
+                    <p class="meta-label">Interested Areas</p>
+                    <div class="tags">
+                        <span class="tag">Software Engineering</span>
+                        <span class="tag">Robotics</span>
+                        <span class="tag">Human-Robot Interaction</span>
+                        <span class="tag">Intelligent Systems</span>
+                        <span class="tag">AI Ethics & Societal Impact</span>
+                        <span class="tag">Distributed Systems</span>
+                        <span class="tag">Cognitive Science & ML</span>
+                        <span class="tag">Brain-Computer Interfaces</span>
+                    </div>
+                </div>
+                <div class="meta-block">
+                    <p class="meta-label">Research Approach</p>
+                    <p class="meta-value">Build the artefact, not just the argument, I'd rather test a
+                        claim empirically than cite around it.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- THE RESEARCH -->
+<section class="section">
+    <div class="container">
+        <p class="section-label reveal">Dissertation</p>
+        <h2 class="section-title reveal">Detecting & Mitigating <em>OWASP Top 10 Threats</em></h2>
+        <div class="section-rule reveal"></div>
+        <div class="about-grid">
+            <div class="about-bio reveal">
+                <p style="color:var(--ink-mid);margin-bottom:1.2rem;">
+                    Now, a closer look at research I've done before, the BSc dissertation behind those
+                    numbers above. It wasn't a literature exercise; it was a controlled experiment.
+                </p>
+                <div class="aq-block">
+                    <p class="aq-label">Academic Question</p>
+                    <p class="aq-text">"How can OWASP Top 10 threats be best managed in modern
+                        database-driven web applications?"</p>
+                </div>
+                <p>
+                    Rather than surveying the literature and stopping there, I built the artefact needed
+                    to actually test it: a full-stack banking-style web application, engineered in two
+                    parallel versions under an A/B methodology. <strong>Version A</strong> deliberately
+                    implements all ten OWASP categories, from SQL injection built via raw string
+                    concatenation to a hardcoded JWT secret and a vulnerable <code>node-serialize</code>
+                    dependency enabling remote code execution. <strong>Version B</strong> is the same
+                    application rebuilt with parameterised queries, bcrypt password hashing, UUID
+                    primary keys, strict server-side authorisation, structured logging, and SSRF-safe
+                    URL validation.
+                </p>
+                <p>
+                    Both versions were deployed independently and tested under identical conditions by
+                    four manual penetration testers and three industry-standard automated tools,
+                    SonarQube (SAST), OWASP ZAP (DAST), and Snyk (SCA), with every finding logged
+                    against its OWASP category, severity, and detection method. I paired this with a
+                    24-respondent developer survey on real-world security awareness and remediation
+                    behaviour, giving the research both a technical and a human-factors dimension.
+                </p>
+                <div style="display:flex;gap:1rem;margin-top:1.8rem;flex-wrap:wrap;">
+                    <a href="https://docs.google.com/document/u/1/d/1NEtt0ljmCa8-U6JpPVzC4yl_cHpu8mBf7iFkr2C47ro/mobilebasic"
+                       target="_blank" rel="noopener" class="btn btn-primary"
+                       style="font-size:0.68rem;padding:0.7rem 1.5rem;">Full Dissertation ↗</a>
+                    <a href="https://gamma.app/docs/Detecting-and-Mitigating-OWASP-Top-10-Threats-lticsiyqwt61eek"
+                       target="_blank" rel="noopener" class="btn btn-ghost"
+                       style="font-size:0.68rem;padding:0.7rem 1.5rem;">Defence Slides ↗</a>
+                </div>
+            </div>
+            <div class="about-meta reveal">
+                <div class="meta-block">
+                    <p class="meta-label">Module</p>
+                    <p class="meta-value">6CS007 — Project and Professionalism<br>
+                        <span style="color:var(--amber);font-size:0.85rem;">Grade: P81 · Level 6</span>
+                    </p>
+                </div>
+                <div class="meta-block">
+                    <p class="meta-label">Supervision</p>
+                    <p class="meta-value">Supervisor: Alix Bergeret<br>Reader: Sherin Nassa</p>
+                </div>
+                <div class="meta-block">
+                    <p class="meta-label">Method</p>
+                    <p class="meta-value">Controlled A/B artefact study, deliberately vulnerable vs.
+                        hardened application, manual + automated testing, developer survey</p>
+                </div>
+                <div class="meta-block">
+                    <p class="meta-label">Stack</p>
+                    <div class="tags">
+                        <span class="tag">Node.js</span>
+                        <span class="tag">Express</span>
+                        <span class="tag">PostgreSQL</span>
+                        <span class="tag">Vue.js</span>
+                        <span class="tag">SonarQube</span>
+                        <span class="tag">OWASP ZAP</span>
+                        <span class="tag">Snyk</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- KEY RESULTS -->
+<section class="section section--alt">
+    <div class="container">
+        <p class="section-label reveal">Findings</p>
+        <h2 class="section-title reveal">What the <em>Tools Found</em></h2>
+        <div class="section-rule reveal"></div>
+        <p class="reveal" style="color:var(--ink-mid);max-width:640px;margin-bottom:2rem;font-size:0.95rem;">
+            Each tool was run against both versions under identical conditions. The headline numbers
+            below are the vulnerable-version baseline against the secure-version result.
+        </p>
+        <div class="finding-grid reveal">
+            <div class="finding-card">
+                <span class="finding-tool">SonarQube · SAST</span>
+                <p class="finding-num">44 <small>→ 0</small></p>
+                <p class="finding-desc">21 vulnerabilities (13 BLOCKER SQL injection findings across
+                    all 5 backend controllers) plus 23 code smells on Version A. Zero findings on
+                    Version B, every taint flow the tool targets was eliminated.</p>
+            </div>
+            <div class="finding-card">
+                <span class="finding-tool">OWASP ZAP · DAST</span>
+                <p class="finding-num">15 <small>→ 11</small></p>
+                <p class="finding-desc">Alert types dropped from 15 to 11; medium-severity CORS and CSP
+                    misconfiguration alerts were eliminated entirely between versions.</p>
+            </div>
+            <div class="finding-card">
+                <span class="finding-tool">Snyk · SCA</span>
+                <p class="finding-num">15 <small>→ 14</small></p>
+                <p class="finding-desc">Correctly isolated the critical <code>node-serialize</code>
+                    arbitrary-code-execution dependency and confirmed its removal in Version B.</p>
+            </div>
+            <div class="finding-card">
+                <span class="finding-tool">Manual Testing</span>
+                <p class="finding-num">8<small>/10</small></p>
+                <p class="finding-desc">Four independent testers covered 8 of 10 OWASP categories,
+                    the broadest single-method coverage, including business-logic and access-control
+                    flaws no automated tool detected.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- DETECTION COVERAGE -->
+<section class="section">
+    <div class="container">
+        <p class="section-label reveal">Comparative Analysis</p>
+        <h2 class="section-title reveal">Manual vs. <em>Automated Detection</em></h2>
+        <div class="section-rule reveal"></div>
+        <p class="reveal" style="color:var(--ink-mid);max-width:640px;margin-bottom:1.5rem;font-size:0.95rem;">
+            Mapping all ten OWASP categories against every detection method exposed a clear pattern:
+            automated tools excel at code-level and dependency issues, while business logic and access
+            control flaws remained almost exclusively the domain of human testers.
+        </p>
+        <div class="cov-wrap reveal">
+            <table class="cov-table">
+                <thead>
+                <tr>
+                    <th>OWASP Category</th>
+                    <th>Manual</th>
+                    <th>SonarQube</th>
+                    <th>OWASP ZAP</th>
+                    <th>Snyk</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <th>A01 – Broken Access Control</th>
+                    <td class="cov-yes">✓ IDOR, external DB</td>
+                    <td class="cov-no">✗</td>
+                    <td class="cov-no">✗</td>
+                    <td class="cov-no">✗</td>
+                </tr>
+                <tr>
+                    <th>A02 – Cryptographic Failures</th>
+                    <td class="cov-yes">✓ hardcoded JWT</td>
+                    <td class="cov-yes">✓ BLOCKER</td>
+                    <td class="cov-no">✗</td>
+                    <td class="cov-no">✗</td>
+                </tr>
+                <tr>
+                    <th>A03 – Injection</th>
+                    <td class="cov-yes">✓ SQLi + XSS</td>
+                    <td class="cov-yes">✓ BLOCKER × 13</td>
+                    <td class="cov-partial">~ inferred (5xx)</td>
+                    <td class="cov-no">✗</td>
+                </tr>
+                <tr>
+                    <th>A04 – Insecure Design</th>
+                    <td class="cov-yes">✓ negative transfer</td>
+                    <td class="cov-no">✗</td>
+                    <td class="cov-no">✗</td>
+                    <td class="cov-no">✗</td>
+                </tr>
+                <tr>
+                    <th>A05 – Security Misconfiguration</th>
+                    <td class="cov-yes">✓ env vars, errors</td>
+                    <td class="cov-yes">✓ SSRF flag</td>
+                    <td class="cov-yes">✓ CORS, CSP</td>
+                    <td class="cov-no">✗</td>
+                </tr>
+                <tr>
+                    <th>A06 – Vulnerable Components</th>
+                    <td class="cov-no">✗</td>
+                    <td class="cov-no">✗</td>
+                    <td class="cov-no">✗</td>
+                    <td class="cov-yes">✓ node-serialize RCE</td>
+                </tr>
+                <tr>
+                    <th>A07 – Auth Failures</th>
+                    <td class="cov-partial">~ partial</td>
+                    <td class="cov-no">✗</td>
+                    <td class="cov-no">✗</td>
+                    <td class="cov-no">✗</td>
+                </tr>
+                <tr>
+                    <th>A08 – Software Integrity</th>
+                    <td class="cov-no">✗</td>
+                    <td class="cov-no">✗</td>
+                    <td class="cov-no">✗</td>
+                    <td class="cov-no">✗</td>
+                </tr>
+                <tr>
+                    <th>A09 – Logging & Monitoring</th>
+                    <td class="cov-no">✗</td>
+                    <td class="cov-no">✗</td>
+                    <td class="cov-no">✗</td>
+                    <td class="cov-no">✗</td>
+                </tr>
+                <tr>
+                    <th>A10 – SSRF</th>
+                    <td class="cov-partial">~ untested (bug)</td>
+                    <td class="cov-yes">✓ MAJOR</td>
+                    <td class="cov-no">✗</td>
+                    <td class="cov-no">✗</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <p class="cov-note reveal">✓ confirmed finding · ~ partial / inferred · ✗ not detected — full
+            methodology and per-category detail in the dissertation.</p>
+    </div>
+</section>
+
+<!-- VULNERABILITY / MITIGATION STRATEGY -->
+<section class="section section--alt">
+    <div class="container">
+        <p class="section-label reveal">Artefact Design</p>
+        <h2 class="section-title reveal">Every Category, <em>Deliberately</em></h2>
+        <div class="section-rule reveal"></div>
+        <p class="reveal" style="color:var(--ink-mid);max-width:640px;margin-bottom:0.5rem;font-size:0.95rem;">
+            Nothing in Version A was accidental. Each OWASP category was introduced through a targeted
+            implementation choice, then mitigated with a specific, verifiable fix in Version B.
+        </p>
+        <div class="reveal">
+            <div class="strategy-row">
+                <span class="strategy-tag">A03</span>
+                <p class="strategy-text"><strong>Injection.</strong> Raw string-concatenated SQL across
+                    all five backend controllers → replaced with parameterised queries using numbered
+                    placeholders, verified separately via <code>bcrypt.compare()</code>.</p>
+            </div>
+            <div class="strategy-row">
+                <span class="strategy-tag">A02</span>
+                <p class="strategy-text"><strong>Cryptographic Failures.</strong> Plaintext passwords
+                    and a hardcoded JWT secret committed to the repo → bcrypt hashing (cost factor 12)
+                    and a required <code>JWT_SECRET</code> environment variable, refusing to boot if
+                    absent.</p>
+            </div>
+            <div class="strategy-row">
+                <span class="strategy-tag">A01</span>
+                <p class="strategy-text"><strong>Broken Access Control.</strong> Sequential integer
+                    primary keys and trust in client-supplied IDs → UUID primary keys and server-side
+                    ownership checks returning 403 on mismatch.</p>
+            </div>
+            <div class="strategy-row">
+                <span class="strategy-tag">A04</span>
+                <p class="strategy-text"><strong>Insecure Design.</strong> Transfer endpoint accepted
+                    negative amounts, enabling fraudulent self-credit → Joi schema validation plus an
+                    explicit positive-amount guard before any database write.</p>
+            </div>
+            <div class="strategy-row">
+                <span class="strategy-tag">A06 / A08</span>
+                <p class="strategy-text"><strong>Vulnerable Components & Integrity.</strong>
+                    <code>node-serialize</code> deserialising cookies on every request (arbitrary code
+                    execution) → removed entirely, replaced with signed, <code>httpOnly</code>,
+                    <code>sameSite: strict</code> JSON cookies.</p>
+            </div>
+            <div class="strategy-row">
+                <span class="strategy-tag">A09</span>
+                <p class="strategy-text"><strong>Logging & Monitoring.</strong> No logging
+                    infrastructure at all → structured Winston logging of every auth, transfer, and
+                    access-control event to rotating files and a <code>system_logs</code> table.</p>
+            </div>
+            <div class="strategy-row">
+                <span class="strategy-tag">A10</span>
+                <p class="strategy-text"><strong>SSRF.</strong> Avatar upload fetched any user-supplied
+                    URL with no validation → an <code>isSafeUrl()</code> guard blocking non-HTTPS
+                    schemes and private/loopback address ranges before any outbound request.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- DEVELOPER SURVEY -->
+<section class="section">
+    <div class="container">
+        <p class="section-label reveal">Human Factors</p>
+        <h2 class="section-title reveal">What <em>Developers</em> Actually Do</h2>
+        <div class="section-rule reveal"></div>
+        <p class="reveal" style="color:var(--ink-mid);max-width:640px;margin-bottom:1rem;font-size:0.95rem;">
+            Technical results only tell half the story, so I ran a 24-respondent survey of developers
+            across experience levels to see how security awareness translates — or doesn't — into
+            practice.
+        </p>
+        <div class="survey-grid reveal">
+            <div>
+                <p class="survey-stat-num">63%</p>
+                <p class="survey-stat-label">Had prior awareness of the OWASP Top 10 before the survey
+                </p>
+            </div>
+            <div>
+                <p class="survey-stat-num">67%</p>
+                <p class="survey-stat-label">Rated their confidence detecting critical issues as only
+                    3/5</p>
+            </div>
+            <div>
+                <p class="survey-stat-num">75%</p>
+                <p class="survey-stat-label">Would fix a critical-but-slow vulnerability before a
+                    quick, moderate one</p>
+            </div>
+            <div>
+                <p class="survey-stat-num">2</p>
+                <p class="survey-stat-label">Respondents with 5+ years' experience rated themselves
+                    "not familiar at all"</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- READ THE RESEARCH -->
+<section class="section section--alt">
+    <div class="container">
+        <p class="section-label reveal">Full Write-Up</p>
+        <h2 class="section-title reveal">Read the <em>Research</em></h2>
+        <div class="section-rule reveal"></div>
+        <div class="write-list reveal">
+            <a class="write-item"
+               href="https://docs.google.com/document/u/1/d/1NEtt0ljmCa8-U6JpPVzC4yl_cHpu8mBf7iFkr2C47ro/mobilebasic"
+               target="_blank" rel="noopener">
+                <span class="write-source">Dissertation</span>
+                <span class="write-title">Detecting and Mitigating OWASP Top 10 Threats: Design,
+                    Implementation and Security Evaluation of a Database-Driven Web App</span>
+                <span class="write-cta">Read ↗</span>
+            </a>
+            <a class="write-item"
+               href="https://gamma.app/docs/Detecting-and-Mitigating-OWASP-Top-10-Threats-lticsiyqwt61eek"
+               target="_blank" rel="noopener">
+                <span class="write-source">Defence Slides</span>
+                <span class="write-title">Dissertation defence presentation</span>
+                <span class="write-cta">View ↗</span>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- CONTACT / CTA -->
+<section id="contact" class="section">
+    <div class="container">
+        <p class="section-label reveal">Let's Connect</p>
+        <h2 class="section-title reveal">Open to <em>PhD Opportunities</em></h2>
+        <div class="section-rule reveal"></div>
+        <div class="contact-grid">
+            <div>
+                <p class="contact-text reveal">
+                    I'm looking for PhD opportunities in software engineering, robotics, human-robot
+                    interaction, or intelligent systems, somewhere I can keep building real artefacts
+                    to test real questions, the way this dissertation started. If you're supervising or
+                    know a lab that is, I'd love to hear from you.
+                </p>
+                <div class="contact-email reveal">
+                    <span>Reach me directly at</span>
+                    <a href="mailto:zubairidrisaweda@gmail.com">zubairidrisaweda@gmail.com</a>
+                </div>
+            </div>
+            <div class="contact-options">
+                <div class="contact-option reveal">
+                    <p class="contact-option-label">Research</p>
+                    <p class="contact-option-title">PhD / Research Opportunities</p>
+                    <p class="contact-option-desc">
+                        Software Engineering, Robotics, Human-Robot Interaction, Intelligent Systems.
+                        Open to well-posed questions in adjacent areas too.
+                    </p>
+                    <a href="Zubair-Idris-Aweda-Academic-Resume.pdf" target="_blank" class="btn btn-amber"
+                       style="font-size:0.68rem;padding:0.7rem 1.5rem;">Download CV ↗</a>
+                </div>
+                <div class="contact-option reveal"
+                     style="flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1rem;">
+                    <div>
+                        <p class="contact-option-label">Elsewhere</p>
+                        <div style="display:flex;flex-wrap:wrap;gap:0.8rem;margin-top:0.5rem;">
+                            <a href="https://docs.google.com/document/u/1/d/1NEtt0ljmCa8-U6JpPVzC4yl_cHpu8mBf7iFkr2C47ro/mobilebasic"
+                               target="_blank" rel="noopener" class="btn btn-outline-light"
+                               style="font-size:0.62rem;padding:0.5rem 1rem;">Dissertation ↗</a>
+                            <a href="https://www.linkedin.com/in/zubairidrisaweda/" target="_blank" rel="noopener"
+                               class="btn btn-outline-light" style="font-size:0.62rem;padding:0.5rem 1rem;">LinkedIn
+                                ↗</a>
+                            <a href="https://github.com/Zubs" target="_blank" rel="noopener"
+                               class="btn btn-outline-light" style="font-size:0.62rem;padding:0.5rem 1rem;">GitHub
+                                ↗</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div class="container">
+        <div class="footer-inner">
+            <p class="footer-copy">© 2026 Zubair Idris Aweda.</p>
+            <div class="footer-links">
+                <a href="index.html">Home ↗</a>
+                <a href="https://github.com/Zubs/Zubs.github.io" target="_blank" rel="noopener">Source ↗</a>
+                <a href="mailto:zubairidrisaweda@gmail.com">Email</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

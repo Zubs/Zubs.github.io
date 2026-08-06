@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description"
+          content="Zubair Idris Aweda — Full-stack software engineer with 3+ years of professional experience across PHP/Laravel, Node.js, Vue.js, and TypeScript. Open to remote (global), hybrid, on-site UK, and relocation."/>
+    <meta property="og:title" content="Software Engineering — Zubair Idris Aweda"/>
+    <meta property="og:description"
+          content="Full-stack software engineer, First Class Computer Science graduate. Open to remote, hybrid, on-site UK, and relocation for backend and full-stack roles."/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:url" content="https://zubs.github.io/engineering.html"/>
+    <title>Software Engineering — Zubair Idris Aweda</title>
+    <link rel="icon"
+          href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='28'>Z</text></svg>"/>
+    <link rel="stylesheet" href="style.css"/>
+    <style>
+        /* ── Sub-page hero (shared pattern across career-path pages) ── */
+        .subpage-hero {
+            padding: calc(var(--nav-h) + 5rem) 0 4rem;
+            border-bottom: 1px solid var(--rule);
+        }
+
+        .subpage-hero .breadcrumb {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--amber);
+            margin-bottom: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .subpage-hero .breadcrumb a {
+            color: var(--ink-light);
+            transition: color 0.2s;
+        }
+
+        .subpage-hero .breadcrumb a:hover {
+            color: var(--amber);
+        }
+
+        .subpage-hero .breadcrumb span {
+            color: var(--rule);
+        }
+
+        .subpage-intro {
+            max-width: 660px;
+            font-size: 1.05rem;
+            color: var(--ink-mid);
+            margin-top: 1.2rem;
+            line-height: 1.75;
+        }
+
+        .subpage-ctas {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .avail-strip {
+            display: flex;
+            gap: 0.7rem;
+            flex-wrap: wrap;
+            margin-top: 1.6rem;
+        }
+
+        .avail-pill {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--ink);
+            background: var(--bg);
+            border: 1px solid var(--grid-line-strong, var(--rule));
+            padding: 0.5rem 0.9rem;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .avail-pill::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: inline-block;
+        }
+
+        .subpage-stats {
+            display: flex;
+            gap: 2.5rem;
+            flex-wrap: wrap;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--rule);
+        }
+
+        .subpage-stat-num {
+            font-family: var(--font-display);
+            font-size: 2.1rem;
+            color: var(--accent);
+            line-height: 1;
+        }
+
+        .subpage-stat-label {
+            font-family: var(--font-mono);
+            font-size: 0.62rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--ink-light);
+            margin-top: 0.4rem;
+        }
+
+        /* ── Stack category blocks ── */
+        .stack-block {
+            margin-bottom: 1.8rem;
+        }
+
+        .stack-block:last-child {
+            margin-bottom: 0;
+        }
+
+        .stack-block .meta-label {
+            margin-bottom: 0.6rem;
+        }
+
+        /* ── Learning callout ── */
+        .learn-block {
+            background: var(--bg);
+            border-left: 3px solid var(--amber);
+            padding: 1.8rem 2rem;
+            max-width: 720px;
+        }
+
+        .section--alt .learn-block {
+            background: var(--bg-warm);
+        }
+
+        .learn-text {
+            font-family: var(--font-display);
+            font-style: italic;
+            font-size: 1.35rem;
+            color: var(--ink);
+            line-height: 1.5;
+        }
+
+        /* ── Availability cards ── */
+        .avail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5px;
+            background: var(--rule);
+            border: 1.5px solid var(--rule);
+        }
+
+        .avail-card {
+            background: var(--bg);
+            padding: 1.8rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .section--alt .avail-card {
+            background: var(--bg-warm);
+        }
+
+        .avail-card-icon {
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--amber);
+        }
+
+        .avail-card-title {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            color: var(--ink);
+            line-height: 1.25;
+        }
+
+        .avail-card-desc {
+            font-size: 0.85rem;
+            color: var(--ink-mid);
+            line-height: 1.55;
+        }
+
+        /* ── Write / speaking list ── */
+        .write-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .write-item {
+            display: grid;
+            grid-template-columns: 140px 1fr auto;
+            gap: 1.5rem;
+            align-items: baseline;
+            padding: 1.4rem 0;
+            border-top: 1px solid var(--rule);
+        }
+
+        .write-list > *:last-child {
+            border-bottom: 1px solid var(--rule);
+        }
+
+        a.write-item {
+            transition: opacity 0.2s;
+        }
+
+        a.write-item:hover {
+            opacity: 0.6;
+        }
+
+        .write-source {
+            font-family: var(--font-mono);
+            font-size: 0.62rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--amber);
+        }
+
+        .write-title {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            color: var(--ink);
+            line-height: 1.35;
+        }
+
+        .write-cta {
+            font-family: var(--font-mono);
+            font-size: 0.62rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--ink-light);
+            white-space: nowrap;
+        }
+
+        /* ── Teaching / speaking compact list ── */
+        .snap-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .snap-item {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            padding: 0.9rem 0;
+            border-bottom: 1px solid var(--rule);
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+
+        .snap-item span:first-child {
+            color: var(--ink);
+        }
+
+        .snap-item span:last-child {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--ink-light);
+            white-space: nowrap;
+        }
+
+        /* ── Project teaser chips ── */
+        .proj-chip-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.7rem;
+            margin: 1.5rem 0 2rem;
+        }
+
+        .proj-chip {
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            color: var(--ink-mid);
+            background: var(--bg);
+            border: 1px solid var(--rule);
+            padding: 0.5rem 1rem;
+            border-radius: 999px;
+        }
+
+        .section--alt .proj-chip {
+            background: var(--bg-warm);
+        }
+
+        @media (max-width: 640px) {
+            .write-item {
+                grid-template-columns: 1fr;
+                gap: 0.4rem;
+            }
+
+            .subpage-stats {
+                gap: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+    <div class="container">
+        <div class="nav-inner">
+            <a href="index.html" class="nav-logo">Zubair Idris Aweda</a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="index.html#experience">Experience</a></li>
+                <li><a href="projects.html">Projects</a></li>
+                <li><a href="testimonials.html">Testimonials</a></li>
+                <li><a href="mainframe.html">Mainframe</a></li>
+                <li><a href="research.html">Research</a></li>
+                <li><a href="#" style="color:var(--amber)">Engineering</a></li>
+                <li><a href="index.html#contact">Contact</a></li>
+            </ul>
+            <a href="Zubair-Idris-Aweda-ATS-Resume.pdf" target="_blank" class="nav-cta" id="nav-cv-btn">CV ↗</a>
+            <button class="nav-burger" id="burger" aria-label="Toggle menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<!-- HERO -->
+<div class="subpage-hero section--alt">
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="index.html">Home</a>
+            <span>/</span>
+            Engineering
+        </div>
+        <h1 class="section-title" style="font-size:clamp(2.4rem,6vw,4rem);">
+            The Engineering<br><em>Path</em>
+        </h1>
+        <p class="subpage-intro">
+            Full-stack software engineer with 3+ years shipping production systems professionally,
+            backed by a First Class Computer Science degree. I've worked across PHP/Laravel, Node.js,
+            Vue.js, and TypeScript in industry, and gone deeper into C/C++, Java, Python, and
+            FastAPI/Elasticsearch at university, and I'll pick up whatever stack a role actually needs.
+            I care more about solving the problem well than about which language I get to use doing it.
+        </p>
+        <div class="avail-strip">
+            <span class="avail-pill">Remote — Global</span>
+            <span class="avail-pill">Hybrid — UK</span>
+            <span class="avail-pill">On-site — UK</span>
+            <span class="avail-pill">Open to Relocation</span>
+        </div>
+        <div class="subpage-ctas">
+            <a href="Zubair-Idris-Aweda-ATS-Resume.pdf" target="_blank" class="btn btn-primary">Download CV ↗</a>
+            <a href="projects.html" class="btn btn-ghost">See My Projects ↗</a>
+            <a href="https://github.com/Zubs" target="_blank" rel="noopener" class="btn btn-ghost">GitHub ↗</a>
+        </div>
+        <div class="subpage-stats">
+            <div>
+                <p class="subpage-stat-num">3+</p>
+                <p class="subpage-stat-label">Years Professional Experience</p>
+            </div>
+            <div>
+                <p class="subpage-stat-num">17</p>
+                <p class="subpage-stat-label">Languages & Tools Used</p>
+            </div>
+            <div>
+                <p class="subpage-stat-num">443K+</p>
+                <p class="subpage-stat-label">Technical Article Readership</p>
+            </div>
+            <div>
+                <p class="subpage-stat-num">4</p>
+                <p class="subpage-stat-label">Years Top OSS Contributor</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- LANGUAGES & TOOLS -->
+<section class="section">
+    <div class="container">
+        <p class="section-label reveal">Stack</p>
+        <h2 class="section-title reveal">Languages & <em>Tools</em></h2>
+        <div class="section-rule reveal"></div>
+        <div class="about-grid">
+            <div class="about-bio reveal">
+                <p>
+                    My stack splits naturally into two halves: what I've shipped professionally, and
+                    what I've built deep expertise in through university coursework and independent
+                    projects. Both halves get used, my Big Data module project runs on FastAPI and
+                    Elasticsearch, my dissertation runs on Node.js and PostgreSQL, and JCLcheck's parser
+                    is hand-written vanilla JavaScript with no framework at all.
+                </p>
+                <div class="stack-block">
+                    <p class="meta-label">Professional (Industry)</p>
+                    <div class="tags">
+                        <span class="tag">PHP</span>
+                        <span class="tag">Laravel</span>
+                        <span class="tag">JavaScript</span>
+                        <span class="tag">TypeScript</span>
+                        <span class="tag">Node.js</span>
+                        <span class="tag">Express.js</span>
+                        <span class="tag">React.js</span>
+                        <span class="tag">Vue.js</span>
+                        <span class="tag">HTML5 / CSS3</span>
+                        <span class="tag">MySQL</span>
+                        <span class="tag">MongoDB</span>
+                    </div>
+                </div>
+                <div class="stack-block">
+                    <p class="meta-label">Academic & Project</p>
+                    <div class="tags">
+                        <span class="tag">C</span>
+                        <span class="tag">C++</span>
+                        <span class="tag">C# (Unity)</span>
+                        <span class="tag">Java</span>
+                        <span class="tag">Python</span>
+                        <span class="tag">Flask</span>
+                        <span class="tag">FastAPI</span>
+                        <span class="tag">Elasticsearch</span>
+                        <span class="tag">PostgreSQL</span>
+                        <span class="tag">Vue.js</span>
+                        <span class="tag">Node.js</span>
+                        <span class="tag">HTML / CSS / JavaScript</span>
+                        <span class="tag">PHP / Laravel</span>
+                        <span class="tag">MySQL</span>
+                    </div>
+                </div>
+            </div>
+            <div class="about-meta reveal">
+                <div class="meta-block">
+                    <p class="meta-label">Tools & Platforms</p>
+                    <p class="meta-value">Docker, Git/GitHub, CI/CD pipelines, REST APIs, Stripe,
+                        Twilio, Firebase, Mailgun</p>
+                </div>
+                <div class="meta-block">
+                    <p class="meta-label">Methodologies</p>
+                    <p class="meta-value">Agile, Scrum, SDLC, TDD, OOP, MVC Architecture</p>
+                </div>
+                <div class="meta-block">
+                    <p class="meta-label">Focus</p>
+                    <p class="meta-value">Backend Software Engineer (preferred), or Full-Stack with a
+                        strong backend lean</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- OPEN TO LEARNING -->
+<section class="section section--alt">
+    <div class="container">
+        <p class="section-label reveal">Adaptability</p>
+        <h2 class="section-title reveal">Whatever Gets the <em>Job Done</em></h2>
+        <div class="section-rule reveal"></div>
+        <div class="learn-block reveal">
+            <p class="learn-text">"Give me a stack I've never touched and a problem worth solving, and
+                I'll have it running by the time you're ready to review it."</p>
+        </div>
+        <p class="reveal" style="color:var(--ink-mid);max-width:640px;margin-top:1.5rem;font-size:0.95rem;">
+            My own project history proves this out, a hand-written lexer/parser/AST pipeline for
+            JCLcheck with zero prior compiler experience, FastAPI and Elasticsearch for a Big Data
+            module I hadn't used either tool in before, and Unity/C# for a games technology module.
+            I'm not attached to a specific language or framework; I'm attached to shipping something
+            that works, well-tested, and properly documented.
+        </p>
+    </div>
+</section>
+
+<!-- WHERE I CAN WORK -->
+<section class="section">
+    <div class="container">
+        <p class="section-label reveal">Availability</p>
+        <h2 class="section-title reveal">Where I Can <em>Work</em></h2>
+        <div class="section-rule reveal"></div>
+        <div class="avail-grid reveal">
+            <div class="avail-card">
+                <span class="avail-card-icon">Global</span>
+                <h3 class="avail-card-title">Remote</h3>
+                <p class="avail-card-desc">Open to fully remote roles anywhere in the world, I've
+                    already worked remotely across three continents' worth of teams.</p>
+            </div>
+            <div class="avail-card">
+                <span class="avail-card-icon">United Kingdom</span>
+                <h3 class="avail-card-title">Hybrid</h3>
+                <p class="avail-card-desc">Comfortable splitting time between home and office anywhere
+                    in the UK.</p>
+            </div>
+            <div class="avail-card">
+                <span class="avail-card-icon">United Kingdom</span>
+                <h3 class="avail-card-title">On-site</h3>
+                <p class="avail-card-desc">Happy to be in-office full time for the right team.</p>
+            </div>
+            <div class="avail-card">
+                <span class="avail-card-icon">Worldwide</span>
+                <h3 class="avail-card-title">Relocation</h3>
+                <p class="avail-card-desc">Open to relocating for the right role, flexible on
+                    location if the work and team are right.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- WRITING, TEACHING & SPEAKING -->
+<section class="section section--alt">
+    <div class="container">
+        <p class="section-label reveal">Beyond the Code</p>
+        <h2 class="section-title reveal">Writing, Teaching & <em>Speaking</em></h2>
+        <div class="section-rule reveal"></div>
+        <div class="about-grid">
+            <div class="about-bio reveal">
+                <p class="meta-label" style="margin-bottom:0.8rem;">Writing</p>
+                <div class="write-list" style="margin-bottom:2rem;">
+                    <a class="write-item" href="https://www.freecodecamp.org/news/author/zubs/" target="_blank"
+                       rel="noopener">
+                        <span class="write-source">freeCodeCamp</span>
+                        <span class="write-title">15+ published technical articles, 443K+ combined
+                            readership, translated into multiple languages</span>
+                        <span class="write-cta">Read ↗</span>
+                    </a>
+                    <a class="write-item" href="https://zubairidrisaweda.medium.com" target="_blank" rel="noopener">
+                        <span class="write-source">Medium</span>
+                        <span class="write-title">Mainframe and enterprise computing writing</span>
+                        <span class="write-cta">Read ↗</span>
+                    </a>
+                </div>
+                <p class="meta-label" style="margin-bottom:0.8rem;">Public Speaking</p>
+                <div class="snap-list">
+                    <div class="snap-item">
+                        <span>"Me and AI: Building Securely and Efficiently" — DevFest Bletchley Park</span><span>Nov 2025</span>
+                    </div>
+                    <div class="snap-item">
+                        <span>Observability with Google — DevFest Scotland Online</span><span>2024</span>
+                    </div>
+                    <div class="snap-item"><span>SQL Mysteries Workshop — GDSC Unilorin</span><span>2023</span>
+                    </div>
+                    <div class="snap-item"><span>Roadmap to Tech Specialisation — Chatham University DSC</span><span>2023</span>
+                    </div>
+                    <div class="snap-item"><span>OWASP Top 10 Security Talk — DevFest London & Ogbomoso</span><span>2022 / 2023</span>
+                    </div>
+                </div>
+            </div>
+            <div class="about-meta reveal">
+                <div class="meta-block">
+                    <p class="meta-label">Teaching</p>
+                    <div class="snap-list">
+                        <div class="snap-item">
+                            <span>Facilitator — GDSC University of Ilorin (Node.js/Express)</span><span>2024</span>
+                        </div>
+                        <div class="snap-item">
+                            <span>Lead Laravel Tutor — Engineering Career Expo 3.0</span><span>—</span>
+                        </div>
+                        <div class="snap-item"><span>Python Tutor — Engineering Career Expo</span><span>2020</span>
+                        </div>
+                        <div class="snap-item"><span>Backend Engineering Tutor — GDSC Unilag</span><span>—</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="meta-block">
+                    <p class="meta-label">Open Source</p>
+                    <p class="meta-value">freeCodeCamp Top Open Source Contributor, 2021 – 2024<br>
+                        <a href="https://github.com/Zubs" target="_blank" rel="noopener"
+                           style="color:var(--accent);border-bottom:1px solid var(--accent);">github.com/Zubs ↗</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- PROJECTS TEASER -->
+<section class="section">
+    <div class="container">
+        <p class="section-label reveal">Portfolio</p>
+        <h2 class="section-title reveal">Things I've <em>Built</em></h2>
+        <div class="section-rule reveal"></div>
+        <p class="reveal" style="color:var(--ink-mid);max-width:640px;font-size:0.95rem;">
+            From a hand-written JCL compiler pipeline to a full academic search engine over the arXiv
+            dataset, the projects page has the full write-ups, stacks, and links.
+        </p>
+        <div class="proj-chip-row reveal">
+            <span class="proj-chip">JCLcheck</span>
+            <span class="proj-chip">ScholarSearch</span>
+            <span class="proj-chip">OWASP SecBank</span>
+            <span class="proj-chip">IslamicHub</span>
+            <span class="proj-chip">Kueri</span>
+            <span class="proj-chip">ZTodo</span>
+            <span class="proj-chip">FootballSite</span>
+            <span class="proj-chip">Be Kind Initiative</span>
+            <span class="proj-chip">+ more</span>
+        </div>
+        <a href="projects.html" class="btn btn-primary reveal">View All Projects ↗</a>
+    </div>
+</section>
+
+<!-- CONTACT / CTA -->
+<section id="contact" class="section section--alt">
+    <div class="container">
+        <p class="section-label reveal">Let's Connect</p>
+        <h2 class="section-title reveal">Open to <em>Software Engineering Roles</em></h2>
+        <div class="section-rule reveal"></div>
+        <div class="contact-grid">
+            <div>
+                <p class="contact-text reveal">
+                    I'm looking for Backend Software Engineer roles (preferred) or Full-Stack roles
+                    with a strong backend lean, remote anywhere, hybrid or on-site in the UK, or
+                    relocation for the right opportunity. If you're hiring, or just want to talk shop,
+                    I'd love to hear from you.
+                </p>
+                <div class="contact-email reveal">
+                    <span>Reach me directly at</span>
+                    <a href="mailto:zubairidrisaweda@gmail.com">zubairidrisaweda@gmail.com</a>
+                </div>
+            </div>
+            <div class="contact-options">
+                <div class="contact-option reveal">
+                    <p class="contact-option-label">Software Engineering</p>
+                    <p class="contact-option-title">Backend / Full-Stack Roles</p>
+                    <p class="contact-option-desc">
+                        PHP/Laravel, Node.js, Vue.js, TypeScript — open to new stacks. Remote (global),
+                        hybrid or on-site (UK), or relocation.
+                    </p>
+                    <a href="Zubair-Idris-Aweda-ATS-Resume.pdf" target="_blank" class="btn btn-amber"
+                       style="font-size:0.68rem;padding:0.7rem 1.5rem;">Download CV ↗</a>
+                </div>
+                <div class="contact-option reveal"
+                     style="flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1rem;">
+                    <div>
+                        <p class="contact-option-label">Elsewhere</p>
+                        <div style="display:flex;flex-wrap:wrap;gap:0.8rem;margin-top:0.5rem;">
+                            <a href="projects.html" class="btn btn-outline-light"
+                               style="font-size:0.62rem;padding:0.5rem 1rem;">Projects ↗</a>
+                            <a href="https://www.linkedin.com/in/zubairidrisaweda/" target="_blank" rel="noopener"
+                               class="btn btn-outline-light" style="font-size:0.62rem;padding:0.5rem 1rem;">LinkedIn
+                                ↗</a>
+                            <a href="https://github.com/Zubs" target="_blank" rel="noopener"
+                               class="btn btn-outline-light" style="font-size:0.62rem;padding:0.5rem 1rem;">GitHub
+                                ↗</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div class="container">
+        <div class="footer-inner">
+            <p class="footer-copy">© 2026 Zubair Idris Aweda.</p>
+            <div class="footer-links">
+                <a href="index.html">Home ↗</a>
+                <a href="https://github.com/Zubs/Zubs.github.io" target="_blank" rel="noopener">Source ↗</a>
+                <a href="mailto:zubairidrisaweda@gmail.com">Email</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
