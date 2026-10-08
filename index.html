@@ -19,30 +19,25 @@
 <nav id="nav">
     <div class="container">
         <div class="nav-inner">
-            <a href="#hero" class="nav-logo">Zubair Idris Aweda</a>
+            <a href="index.html" class="nav-logo">Zubair Idris Aweda</a>
             <ul class="nav-links" id="navLinks">
-                <li><a href="#about">About</a></li>
-                <li><a href="#experience">Experience</a></li>
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="index.html#experience">Experience</a></li>
                 <li><a href="projects.html">Projects</a></li>
+                <li><a href="engineering.html">Engineering</a></li>
+                <li><a href="mainframe.html">Mainframe</a></li>
+                <li><a href="research.html">Research</a></li>
+                <li><a href="index.html#writing">Writing</a></li>
                 <li><a href="testimonials.html">Testimonials</a></li>
-                <li><a href="#research">Research</a></li>
-                <li><a href="#writing">Writing</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li><a href="index.html#contact">Contact</a></li>
             </ul>
-            <a href="Zubair-Idris-Aweda-ATS-Resume.pdf" target="_blank" class="nav-cta" style="display:none"
-               id="nav-cv-btn">CV ↗</a>
-            <button class="nav-burger" id="burger" aria-label="Toggle menu">
+            <a href="Zubair-Idris-Aweda-ATS-Resume.pdf" target="_blank" class="nav-cta" id="nav-cv-btn">CV ↗</a>
+            <button class="nav-burger" id="burger" aria-label="Toggle menu" aria-controls="navLinks">
                 <span></span><span></span><span></span>
             </button>
         </div>
     </div>
 </nav>
-<script>
-    // Show CV button after scroll
-    window.addEventListener('scroll', function () {
-        document.getElementById('nav-cv-btn').style.display = window.scrollY > 200 ? 'inline-flex' : 'none';
-    }, {passive: true});
-</script>
 <section id="hero">
     <div class="hero-grid-bg"></div>
     <div class="container">
@@ -66,7 +61,7 @@
             <a href="https://github.com/Zubs" target="_blank" rel="noopener">GitHub</a>
             <a href="https://www.linkedin.com/in/zubairidrisaweda/" target="_blank" rel="noopener">LinkedIn</a>
             <a href="https://www.freecodecamp.org/news/author/Zubs" target="_blank" rel="noopener">freeCodeCamp</a>
-            <a href="/cdn-cgi/l/email-protection#ff858a9d9e968d969b8d968c9e889a9b9ebf98929e9693d19c9092">Email</a>
+            <a href="mailto:zubairidrisaweda@gmail.com">Email</a>
         </div>
     </div>
     <div class="hero-scroll">Scroll</div>
@@ -79,10 +74,9 @@
         <div class="about-grid">
             <div class="about-bio reveal">
                 <p>
-                    I'm a mid-senior full-stack engineer and first class Computer Science graduate from the University
-                    of
-                    Wolverhampton,
-                    with 3+ years of hands-on experience shipping production-grade systems in the FinTech space.
+                    I'm a mid-senior full-stack engineer and First Class Computer Science graduate from the University
+                    of Wolverhampton, with 3+ years of hands-on experience shipping production-grade systems in the
+                    FinTech space.
                     I've maintained 99.9% uptime on payment infrastructure, architected microservices, and led
                     developer-experience improvements across distributed teams.
                 </p>
@@ -96,8 +90,7 @@
                     My emerging research interest lies at the intersection of intelligent systems and human experience —
                     specifically how robotics, AI, and cognitive science can be designed to serve people equitably.
                     I'm actively seeking both engineering roles and research opportunities (MS/PhD programmes) that let
-                    me
-                    pursue this work rigorously.
+                    me pursue this work rigorously.
                 </p>
                 <div style="display:flex;gap:1rem;margin-top:1.8rem;flex-wrap:wrap;">
                     <a href="#contact" class="btn btn-primary" style="font-size:0.68rem;padding:0.7rem 1.5rem;">Get in
@@ -109,7 +102,7 @@
             <div class="about-meta reveal">
                 <div class="meta-block">
                     <p class="meta-label">Location</p>
-                    <p class="meta-value">Wolverhampton, United Kingdom</p>
+                    <p class="meta-value">Derby, United Kingdom</p>
                 </div>
                 <div class="meta-block">
                     <p class="meta-label">Research Interests</p>
@@ -300,201 +293,6 @@
         </div>
     </div>
 </section>
-<section id="projects" class="section section--alt">
-    <div class="container">
-        <p class="section-label reveal">Work</p>
-        <h2 class="section-title reveal">Selected <em>Projects</em></h2>
-        <div class="section-rule reveal"></div>
-        <p class="reveal" style="color:var(--ink-mid);max-width:560px;margin-bottom:2.5rem;font-size:0.95rem;">
-            A quick look at some of my projects. For full write-ups with problem statements, features, and tech
-            decisions on every
-            project, see the
-            <a href="projects.html" style="color:var(--accent);border-bottom:1px solid var(--accent);">dedicated
-                projects page ↗</a>.
-        </p>
-        <div class="projects-filter reveal">
-            <button class="filter-btn active" data-filter="all">All</button>
-            <button class="filter-btn" data-filter="product">Product</button>
-            <button class="filter-btn" data-filter="opensource">Open Source</button>
-            <button class="filter-btn" data-filter="academic">Academic</button>
-            <button class="filter-btn" data-filter="experiment">Experiments</button>
-        </div>
-        <div class="projects-grid">
-            <div class="project-card reveal" data-category="product">
-                <div class="project-header">
-                    <h3 class="project-name">IslamicHub</h3>
-                    <div class="project-links">
-                        <a href="https://islamichub.xyz/" target="_blank" rel="noopener">Live ↗</a>
-                        <a href="https://github.com/Zubs/pillarsofislam" target="_blank" rel="noopener">GitHub ↗</a>
-                    </div>
-                </div>
-                <p class="project-category-badge">Product · Open Source · Academic</p>
-                <p class="project-desc">IslamicHub is a free Islamic education and tools platform — accurate prayer
-                    times with Qibla finder, Zakat calculator with live gold and silver prices, Islamic inheritance
-                    (Fara'id) calculator, and in-depth guides for all five pillars, grounded in Qur'an, Hadith, and all
-                    four schools of thought.</p>
-                <div class="project-footer">
-                    <span class="project-lang">Web</span>
-                    <span class="project-stars">★ –</span>
-                </div>
-            </div>
-            <div class="project-card reveal" data-category="product">
-                <div class="project-header">
-                    <h3 class="project-name">Kueri</h3>
-                    <div class="project-links">
-                        <a href="https://kueriapp.netlify.app/" target="_blank" rel="noopener">Live ↗</a>
-                    </div>
-                </div>
-                <p class="project-category-badge">Product · In Development</p>
-                <p class="project-desc">A developer productivity tool being built to streamline database querying
-                    workflows. Explore the live preview and follow the build journey.</p>
-                <div class="project-footer">
-                    <span class="project-lang">–</span>
-                    <span class="project-stars">Building in public</span>
-                </div>
-            </div>
-            <div class="project-card reveal" data-category="opensource" id="proj-toroman">
-                <div class="project-header">
-                    <h3 class="project-name">toRoman</h3>
-                    <div class="project-links">
-                        <a href="https://github.com/Zubs/toRoman" target="_blank" rel="noopener">GitHub ↗</a>
-                    </div>
-                </div>
-                <p class="project-category-badge">Open Source · Package</p>
-                <p class="project-desc" data-use-gh="true">A lightweight, dependency-free library for converting
-                    integers to Roman numerals — and back. Clean API, published for community use.</p>
-                <div class="project-footer">
-                    <span class="project-lang">TS</span>
-                    <span class="project-stars">★ –</span>
-                </div>
-            </div>
-            <div class="project-card reveal" data-category="academic" id="proj-owasp">
-                <div class="project-header">
-                    <h3 class="project-name">OWASP SecBank</h3>
-                    <div class="project-links">
-                        <a href="https://github.com/Zubs/owasp-sec-bank" target="_blank" rel="noopener">GitHub ↗</a>
-                    </div>
-                </div>
-                <p class="project-category-badge">Academic · Security</p>
-                <p class="project-desc" data-use-gh="true">A deliberately vulnerable banking application demonstrating
-                    the OWASP Top 10 security vulnerabilities — built for learning, analysis, and remediation practice.
-                    Presented at DevFest London 2023.</p>
-                <div class="project-footer">
-                    <span class="project-lang">PHP</span>
-                    <span class="project-stars">★ –</span>
-                </div>
-            </div>
-            <div class="project-card reveal" data-category="academic" id="proj-scholar">
-                <div class="project-header">
-                    <h3 class="project-name">Scholar Search</h3>
-                    <div class="project-links">
-                        <a href="https://github.com/Zubs/scholar-search" target="_blank" rel="noopener">GitHub ↗</a>
-                    </div>
-                </div>
-                <p class="project-category-badge">Academic · Search</p>
-                <p class="project-desc" data-use-gh="true">A research paper discovery tool built as a university
-                    project, enabling students to search and surface relevant academic literature efficiently.</p>
-                <div class="project-footer">
-                    <span class="project-lang">–</span>
-                    <span class="project-stars">★ –</span>
-                </div>
-            </div>
-            <div class="project-card reveal" data-category="academic" id="proj-colab">
-                <div class="project-header">
-                    <h3 class="project-name">ColabDev</h3>
-                    <div class="project-links">
-                        <a href="https://github.com/Zubs/ColabDev" target="_blank" rel="noopener">GitHub ↗</a>
-                    </div>
-                </div>
-                <p class="project-category-badge">Academic · Collaboration</p>
-                <p class="project-desc" data-use-gh="true">A collaborative development project to build an OpenDay
-                    application.</p>
-                <div class="project-footer">
-                    <span class="project-lang">–</span>
-                    <span class="project-stars">★ –</span>
-                </div>
-            </div>
-            <div class="project-card reveal" data-category="academic" id="proj-football">
-                <div class="project-header">
-                    <h3 class="project-name">FootballSite</h3>
-                    <div class="project-links">
-                        <a href="https://github.com/Zubs/footballSite" target="_blank" rel="noopener">GitHub ↗</a>
-                    </div>
-                </div>
-                <p class="project-category-badge">Academic · Web</p>
-                <p class="project-desc" data-use-gh="true">A football information site built as a university project,
-                    showcasing data-driven frontend design with live fixture and results data.</p>
-                <div class="project-footer">
-                    <span class="project-lang">–</span>
-                    <span class="project-stars">★ –</span>
-                </div>
-            </div>
-            <div class="project-card reveal" data-category="experiment" id="proj-gpcalc">
-                <div class="project-header">
-                    <h3 class="project-name">GPCalc</h3>
-                    <div class="project-links">
-                        <a href="https://github.com/Zubs/GPCalc" target="_blank" rel="noopener">GitHub ↗</a>
-                    </div>
-                </div>
-                <p class="project-category-badge">Experiment · Utility</p>
-                <p class="project-desc" data-use-gh="true">A GPA/CGPA calculator utility. Built for fun to help students
-                    quickly compute their grade point averages with support for different grading scales.</p>
-                <div class="project-footer">
-                    <span class="project-lang">–</span>
-                    <span class="project-stars">★ –</span>
-                </div>
-            </div>
-            <div class="project-card reveal" data-category="experiment" id="proj-imgfinder">
-                <div class="project-header">
-                    <h3 class="project-name">Node Image Finder</h3>
-                    <div class="project-links">
-                        <a href="https://github.com/Zubs/node_image_finder" target="_blank" rel="noopener">GitHub ↗</a>
-                    </div>
-                </div>
-                <p class="project-category-badge">Experiment · Node.js</p>
-                <p class="project-desc" data-use-gh="true">A Node.js CLI tool to get images links from Unsplash</p>
-                <div class="project-footer">
-                    <span class="project-lang">JavaScript</span>
-                    <span class="project-stars">★ –</span>
-                </div>
-            </div>
-            <div class="project-card reveal" data-category="experiment" id="proj-brick">
-                <div class="project-header">
-                    <h3 class="project-name">BrickBreaker Challenge</h3>
-                    <div class="project-links">
-                        <a href="https://github.com/Zubs/BrickBreakerChallenge" target="_blank" rel="noopener">GitHub
-                            ↗</a>
-                    </div>
-                </div>
-                <p class="project-category-badge">Experiment · AI-Paired</p>
-                <p class="project-desc" data-use-gh="true">A classic Brick Breaker game built in collaboration with an
-                    AI pair-programmer. An exploration of human-AI co-authorship in game development.</p>
-                <div class="project-footer">
-                    <span class="project-lang">JavaScript</span>
-                    <span class="project-stars">★ –</span>
-                </div>
-            </div>
-            <div class="project-card reveal" data-category="opensource" id="proj-collect">
-                <div class="project-header">
-                    <h3 class="project-name">CollectJS Tutorial</h3>
-                    <div class="project-links">
-                        <a href="https://github.com/Zubs/collectjs_tutorial" target="_blank" rel="noopener">GitHub ↗</a>
-                    </div>
-                </div>
-                <p class="project-category-badge">Open Source · Article Code</p>
-                <p class="project-desc" data-use-gh="true">Companion codebase for a published technical article on
-                    Collect.js — a fluent array and object manipulation library for JavaScript.</p>
-                <div class="project-footer">
-                    <span class="project-lang">JavaScript</span>
-                    <span class="project-stars">★ –</span>
-                </div>
-            </div>
-        </div>
-        <div class="reveal" style="margin-top:2.5rem;text-align:right;">
-            <a href="projects.html" class="btn btn-secondary">See Full Project Breakdown ↗</a>
-        </div>
-    </div>
-</section>
 <section id="research" class="section">
     <div class="container">
         <p class="section-label reveal">Academic</p>
@@ -505,7 +303,9 @@
                 <p style="color:var(--ink-mid);margin-bottom:2rem;font-size:0.95rem;" class="reveal">
                     I'm drawn to research questions at the boundary of intelligent systems and human experience.
                     My goal is to pursue graduate study in an area where rigorous engineering meets meaningful
-                    societal impact.
+                    societal impact. My BSc dissertation and its findings are written up on the
+                    <a href="research.html" style="color:var(--accent);border-bottom:1px solid var(--accent);">research
+                        page →</a>
                 </p>
                 <div class="research-interests reveal">
                     <div class="interest-item">
@@ -718,7 +518,9 @@
                     infrastructure, and understanding them at a deep level feels like understanding computing itself.
                 </p>
                 <p>
-                    I was one of the top <strong>IBM Z Student Ambassador</strong> in the world, and served as
+                    I reached the <strong>Superstar tier</strong>, the highest in the <strong>IBM Z Student
+                    Ambassador</strong>
+                    programme, and served as
                     <strong>Secretary / Vice-President</strong> of the
                     <strong>Mainframe Student Society at the University of Wolverhampton</strong> — working to grow
                     awareness of enterprise computing among the next generation of engineers.
@@ -727,11 +529,12 @@
                     human intervention.
                 </p>
                 <p>
-                    I currently serve as a mentee on the <strong><a
-                        href="https://mentorship.lfx.linuxfoundation.org/project/24db3ae3-5b77-45b2-9306-096b2944f038"
-                        target="_blank">Open Mainframe Project Education<a/></strong> where I work to try to act as
-                    a relatable voice for the student and early-career community, documenting my own learning journey
-                    and translating foundational technical workflows into engaging, introductory-level blog series and
+                    In summer 2026 I was a mentee on the Open Mainframe Project's
+                    <strong><a
+                            href="https://mentorship.lfx.linuxfoundation.org/project/24db3ae3-5b77-45b2-9306-096b2944f038"
+                            target="_blank" rel="noopener">Mainframe Open Education</a></strong> programme (LFX
+                    Mentorship), acting as a relatable voice for students and early-career engineers by documenting my
+                    own learning and turning foundational technical workflows into introductory blog series and
                     interactive modules.
                 </p>
                 <div style="display:flex;gap:1rem;margin-top:1.8rem;flex-wrap:wrap;">
@@ -741,12 +544,14 @@
                     <a href="https://zubairidrisaweda.medium.com/introduction-to-the-mainframe-workload-manager-wlm-107499ecc9ce"
                        target="_blank" rel="noopener" class="btn btn-ghost"
                        style="font-size:0.68rem;padding:0.7rem 1.5rem;">Read: Intro to WLM ↗</a>
+                    <a href="mainframe.html" class="btn btn-ghost"
+                       style="font-size:0.68rem;padding:0.7rem 1.5rem;">The Mainframe Path →</a>
                 </div>
             </div>
             <div class="about-meta reveal">
                 <div class="meta-block">
                     <p class="meta-label">Role</p>
-                    <p class="meta-value">IBM Z Student Ambassador</p>
+                    <p class="meta-value">IBM Z Student Ambassador (Superstar tier)</p>
                 </div>
                 <div class="meta-block">
                     <p class="meta-label">Society Position</p>
@@ -821,11 +626,10 @@
                 <div class="hobby-icon">🎨</div>
                 <h3 class="hobby-name">The Arts</h3>
                 <p class="hobby-desc">
-                    Art in every form. I listen to everything — if it hits, it hits, genre be damned.
-                    I take quiet pride in the fact that I've been to an art gallery or museum in almost
-                    every city I've ever visited. Paintings, sculptures, nature — the mountains, the
-                    animals, the endless greenery. And people. Humans, especially women, are very
-                    beautiful works of art.
+                    Art in every form. I listen to everything: if it hits, it hits, whatever the genre.
+                    I take quiet pride in having visited an art gallery or museum in almost every city
+                    I've been to. Paintings, sculptures, and nature too: the mountains, the animals,
+                    the endless greenery.
                 </p>
             </div>
             <div class="hobby-card reveal">
@@ -866,16 +670,15 @@
         <div class="contact-grid">
             <div>
                 <p class="contact-text reveal">
-                    I'm actively looking for my next chapter — whether that's an engineering role
-                    where I can build impactful systems, or a graduate programme (MS or PhD) where I can
-                    pursue research in AI, HRI, or distributed systems.<br><br>
+                    I'm actively looking for my next chapter: an engineering role where I can build
+                    impactful systems, a graduate mainframe role on IBM Z, or a graduate programme
+                    (MS or PhD) where I can pursue research in AI, HRI, or distributed systems.<br><br>
                     If you're building something ambitious, running a research lab, or simply want to talk shop
                     — I'd love to hear from you.
                 </p>
                 <div class="contact-email reveal">
                     <span>Reach me directly at</span>
-                    <a href="mailto:zubairidrisaweda@gmail.com"><span
-                            class="__cf_email__" data-cfemail="b5cfc0d7d4dcc7dcd1c7dcc6d4c2d0d1d4f5d2d8d4dcd99bd6dad8">zubairidrisaweda@gmail.com</span></a>
+                    <a href="mailto:zubairidrisaweda@gmail.com">zubairidrisaweda@gmail.com</a>
                 </div>
             </div>
             <div class="contact-options">
@@ -892,11 +695,23 @@
                     </a>
                 </div>
                 <div class="contact-option reveal">
+                    <p class="contact-option-label">Mainframe Roles</p>
+                    <p class="contact-option-title">Graduate Mainframe Engineer</p>
+                    <p class="contact-option-desc">
+                        IBM Z, z/OS, JCL and enterprise batch. Former IBM Z Student Ambassador (Superstar tier)
+                        and builder of JCLcheck. Open to UK roles.
+                    </p>
+                    <a href="mainframe.html" class="btn btn-outline-light"
+                       style="font-size:0.68rem;padding:0.7rem 1.5rem;">
+                        See the Mainframe Path →
+                    </a>
+                </div>
+                <div class="contact-option reveal">
                     <p class="contact-option-label">Graduate Research (MS / PhD)</p>
                     <p class="contact-option-title">Seeking Research Opportunities</p>
                     <p class="contact-option-desc">
                         Interested in Robotics, HRI, AI Systems, Cognitive Science, or Distributed Systems.
-                        4+ years professional engineering + 443K+ published technical writing.
+                        3+ years of professional engineering and 443K+ readers of my technical writing.
                     </p>
                     <a href="Zubair-Idris-Aweda-Academic-Resume.pdf" target="_blank" class="btn btn-outline-light"
                        style="font-size:0.68rem;padding:0.7rem 1.5rem;">
@@ -928,9 +743,14 @@
         <div class="footer-inner">
             <p class="footer-copy">© 2026 Zubair Idris Aweda. Built with HTML, CSS &amp; JS.</p>
             <div class="footer-links">
-                <a href="https://github.com/Zubs/Zubs.github.io" target="_blank" rel="noopener">Source ↗</a> <a
-                    href="mailto:zubairidrisaweda@gmail.com">Email</a>
-                <a href="#hero">Back to Top ↑</a>
+                <a href="index.html" aria-current="page">Home</a>
+                <a href="projects.html">Projects</a>
+                <a href="engineering.html">Engineering</a>
+                <a href="mainframe.html">Mainframe</a>
+                <a href="research.html">Research</a>
+                <a href="testimonials.html">Testimonials</a>
+                <a href="https://github.com/Zubs/Zubs.github.io" target="_blank" rel="noopener">Source ↗</a>
+                <a href="mailto:zubairidrisaweda@gmail.com">Email</a>
             </div>
         </div>
     </div>

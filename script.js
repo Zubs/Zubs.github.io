@@ -7,18 +7,23 @@
     const nav = document.getElementById('nav');
     const burger = document.getElementById('burger');
     const links = document.getElementById('navLinks');
+    if (!nav) return;
 
     window.addEventListener('scroll', () => {
         nav.classList.toggle('scrolled', window.scrollY > 30);
     }, {passive: true});
 
     burger && burger.addEventListener('click', () => {
-        links.classList.toggle('open');
+        const open = links.classList.toggle('open');
+        burger.setAttribute('aria-expanded', open ? 'true' : 'false');
     });
 
     // Close nav on link click (mobile)
     links && links.querySelectorAll('a').forEach(a => {
-        a.addEventListener('click', () => links.classList.remove('open'));
+        a.addEventListener('click', () => {
+            links.classList.remove('open');
+            burger && burger.setAttribute('aria-expanded', 'false');
+        });
     });
 })();
 
@@ -40,146 +45,129 @@
     });
 })();
 
-/* ── Project filter ───────────────────────────────────────── */
-(function () {
-    const btns = document.querySelectorAll('.filter-btn');
-    const cards = document.querySelectorAll('.project-card');
-
-    btns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            btns.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-
-            const cat = btn.dataset.filter;
-            cards.forEach(c => {
-                const match = cat === 'all' || c.dataset.category === cat;
-                c.classList.toggle('hidden', !match);
-            });
-        });
-    });
-})();
-
-/* ── Dynamic blog feed from freeCodeCamp via RSS ─────────── */
+/* ── Latest writing: freeCodeCamp RSS with a static fallback ── */
 (function () {
     const container = document.getElementById('articles-grid');
     if (!container) return;
 
-    // Use AllOrigins to bypass CORS on the freeCodeCamp RSS feed
-    const RSS_URL = encodeURIComponent(
-        'https://www.freecodecamp.org/news/author/zubairidrisaweda/rss/'
-    );
-    const PROXY = `https://api.allorigins.win/get?url=${RSS_URL}`;
+    const FEED = 'https://www.freecodecamp.org/news/author/Zubs/rss/';
 
-    // Fallback articles (static) in case feed fails
+    // The feed does not send CORS headers, so it is read through a public proxy.
+    // Proxies go down from time to time, so several are tried in order.
+    const PROXIES = [
+        url => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+        url => `https://corsproxy.io/?url=${encodeURIComponent(url)}`,
+        url => `https://api.codetabs.com/v1/proxy/?quest=${encodeURIComponent(url)}`,
+    ];
+
+    const TIMEOUT_MS = 6000;
+
+    // Shown straight away, then replaced if the live feed loads.
     const FALLBACK = [
+        {
+            title: 'How Relational Database Constraints Work and Why They\'re Important',
+            url: 'https://www.freecodecamp.org/news/how-relational-database-constraints-work-and-why-theyre-important/',
+            date: 'Jan 2026',
+            source: 'freeCodeCamp'
+        },
+        {
+            title: 'Learn Relational Database Basics: Key Concepts for Beginners',
+            url: 'https://www.freecodecamp.org/news/learn-relational-database-basics-key-concepts-for-beginners/',
+            date: 'Jan 2025',
+            source: 'freeCodeCamp'
+        },
+        {
+            title: 'Collect.js Tutorial: How to Work with JavaScript Arrays and Objects',
+            url: 'https://www.freecodecamp.org/news/work-with-javascript-arrays-objects-with-collect-js/',
+            date: 'Jan 2024',
+            source: 'freeCodeCamp'
+        },
         {
             title: 'Kafka vs RabbitMQ: What Are the Differences?',
             url: 'https://earthly.dev/blog/kafka-vs-rabbitmq/',
-            date: 'Dec 2022',
+            date: 'Oct 2023',
             source: 'Earthly'
         },
         {
-            title: 'Build a Flight Booking App with PHP and Bootstrap — Part 1',
-            url: 'https://draft.dev/',
-            date: 'May 2022',
-            source: 'Draft.dev'
+            title: 'How to Use Queues in Web Applications: Node.js and Redis Tutorial',
+            url: 'https://www.freecodecamp.org/news/how-to-use-queues-in-web-applications/',
+            date: 'Jul 2023',
+            source: 'freeCodeCamp'
         },
         {
-            title: 'Getting Started With Alpine.js',
-            url: 'https://www.section.io/engineering-education/getting-started-with-alpinejs/',
-            date: 'Nov 2021',
-            source: 'Section.io'
+            title: 'How to Use Redis in Your PHP Apps',
+            url: 'https://www.freecodecamp.org/news/how-to-use-redis-with-php/',
+            date: 'May 2023',
+            source: 'freeCodeCamp'
         },
     ];
+
+    function escapeHTML(str) {
+        return String(str).replace(/[&<>"']/g, ch => ({
+            '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+        }[ch]));
+    }
+
+    function safeUrl(url) {
+        return /^https:\/\//i.test(url) ? url : '#';
+    }
 
     function renderArticles(items) {
         container.innerHTML = '';
         items.slice(0, 6).forEach(item => {
             const card = document.createElement('div');
-            card.className = 'article-card reveal';
+            card.className = 'article-card reveal visible';
             card.innerHTML = `
-        <a href="${item.url}" target="_blank" rel="noopener">
-          <span class="article-source">${item.source}</span>
-          <span class="article-title">${item.title}</span>
-          <span class="article-date">${item.date}</span>
+        <a href="${escapeHTML(safeUrl(item.url))}" target="_blank" rel="noopener">
+          <span class="article-source">${escapeHTML(item.source)}</span>
+          <span class="article-title">${escapeHTML(item.title)}</span>
+          <span class="article-date">${escapeHTML(item.date)}</span>
         </a>`;
             container.appendChild(card);
         });
-
-        // Re-observe new elements
-        const observer = new IntersectionObserver(
-            (entries) => entries.forEach(e => {
-                if (e.isIntersecting) {
-                    e.target.classList.add('visible');
-                    observer.unobserve(e.target);
-                }
-            }),
-            {threshold: 0.08}
-        );
-        container.querySelectorAll('.reveal').forEach(el => observer.observe(el));
     }
 
     function parseRSS(xmlStr) {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(xmlStr, 'text/xml');
-        const items = Array.from(doc.querySelectorAll('item'));
-        return items.map(item => ({
-            title: item.querySelector('title')?.textContent || '',
-            url: item.querySelector('link')?.textContent || '#',
-            date: new Date(item.querySelector('pubDate')?.textContent || '').toLocaleDateString('en-GB', {
-                month: 'short',
-                year: 'numeric'
-            }),
-            source: 'freeCodeCamp'
-        }));
+        const doc = new DOMParser().parseFromString(xmlStr, 'text/xml');
+        if (doc.querySelector('parsererror')) return [];
+
+        return Array.from(doc.querySelectorAll('item')).map(item => {
+            const pub = new Date(item.querySelector('pubDate')?.textContent || '');
+            return {
+                title: item.querySelector('title')?.textContent?.trim() || '',
+                url: item.querySelector('link')?.textContent?.trim() || '#',
+                date: isNaN(pub) ? '' : pub.toLocaleDateString('en-GB', {month: 'short', year: 'numeric'}),
+                source: 'freeCodeCamp'
+            };
+        }).filter(a => a.title && a.url !== '#');
     }
 
-    fetch(PROXY)
-        .then(r => r.json())
-        .then(data => {
-            const parsed = parseRSS(data.contents);
-            if (parsed.length > 0) {
-                renderArticles(parsed);
-            } else {
-                renderArticles(FALLBACK);
-            }
-        })
-        .catch(() => renderArticles(FALLBACK));
-})();
-
-/* ── GitHub API: enrich project cards ─────────────────────── */
-(function () {
-    const repos = [
-        {el: 'proj-toroman', slug: 'Zubs/toRoman'},
-        {el: 'proj-football', slug: 'Zubs/footballSite'},
-        {el: 'proj-scholar', slug: 'Zubs/scholar-search'},
-        {el: 'proj-owasp', slug: 'Zubs/owasp-sec-bank'},
-        {el: 'proj-gpcalc', slug: 'Zubs/GPCalc'},
-        {el: 'proj-colab', slug: 'Zubs/ColabDev'},
-        {el: 'proj-imgfinder', slug: 'Zubs/node_image_finder'},
-        {el: 'proj-brick', slug: 'Zubs/BrickBreakerChallenge'},
-        {el: 'proj-collect', slug: 'Zubs/collectjs_tutorial'},
-    ];
-
-    repos.forEach(({el, slug}) => {
-        const card = document.getElementById(el);
-        if (!card) return;
-        fetch(`https://api.github.com/repos/${slug}`)
-            .then(r => r.json())
-            .then(data => {
-                const starsEl = card.querySelector('.project-stars');
-                const langEl = card.querySelector('.project-lang');
-                if (starsEl && data.stargazers_count !== undefined)
-                    starsEl.textContent = `★ ${data.stargazers_count}`;
-                if (langEl && data.language)
-                    langEl.textContent = data.language;
-                // If card description is placeholder, use GitHub's
-                const descEl = card.querySelector('.project-desc');
-                if (descEl && descEl.dataset.useGh === 'true' && data.description)
-                    descEl.textContent = data.description;
+    function fetchWithTimeout(url) {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
+        return fetch(url, {signal: controller.signal})
+            .then(r => {
+                if (!r.ok) throw new Error(`HTTP ${r.status}`);
+                return r.text();
             })
-            .catch(() => {
-            });
+            .finally(() => clearTimeout(timer));
+    }
+
+    async function loadLiveFeed() {
+        for (const proxy of PROXIES) {
+            try {
+                const items = parseRSS(await fetchWithTimeout(proxy(FEED)));
+                if (items.length) return items;
+            } catch (e) {
+                // Try the next proxy
+            }
+        }
+        return null;
+    }
+
+    renderArticles(FALLBACK);
+    loadLiveFeed().then(items => {
+        if (items) renderArticles(items);
     });
 })();
 

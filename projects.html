@@ -77,7 +77,7 @@
 
         .proj-entry {
             display: grid;
-            grid-template-columns: 260px 1fr;
+            grid-template-columns: 260px minmax(0, 1fr);
             gap: 0;
             border-bottom: 1px solid var(--rule);
             padding: 4rem 0;
@@ -197,8 +197,21 @@
 
         /* ── Main content ── */
         .proj-main {
+            min-width: 0;
             padding-left: 3rem;
             border-left: 1px solid var(--rule);
+        }
+
+        .proj-sidebar {
+            min-width: 0;
+        }
+
+        .proj-main code {
+            overflow-wrap: anywhere;
+        }
+
+        .feature-list li {
+            min-width: 0;
         }
 
         .proj-headline {
@@ -283,18 +296,19 @@
         .feature-list li {
             font-size: 0.88rem;
             color: var(--ink-mid);
-            display: flex;
-            align-items: baseline;
-            gap: 0.6rem;
+            position: relative;
+            padding-left: 1.3rem;
             line-height: 1.5;
         }
 
         .feature-list li::before {
             content: '→';
+            position: absolute;
+            left: 0;
+            top: 0.1em;
             color: var(--amber);
             font-family: var(--font-mono);
             font-size: 0.7rem;
-            flex-shrink: 0;
         }
 
         .tech-chips {
@@ -341,77 +355,11 @@
             color: var(--ink-light);
         }
 
-        /* ── Visual placeholder ── */
-        .proj-visual {
-            margin-bottom: 2.5rem;
-            border: 1px solid var(--rule);
-            border-radius: 2px;
-            overflow: hidden;
-            background: var(--bg-warm);
-            position: relative;
-        }
-
-        .proj-visual-inner {
-            padding: 2.5rem 2rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 180px;
-        }
-
-        .proj-visual-text {
-            font-family: var(--font-display);
-            font-size: clamp(1.8rem, 4vw, 2.8rem);
-            font-weight: 300;
-            font-style: italic;
-            color: var(--rule);
-            text-align: center;
-            letter-spacing: -0.02em;
-            pointer-events: none;
-            user-select: none;
-        }
-
-        .proj-visual-badge {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            font-family: var(--font-mono);
-            font-size: 0.6rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            padding: 0.25rem 0.6rem;
-            background: var(--bg);
-            border: 1px solid var(--rule);
-            color: var(--ink-light);
-        }
-
-        /* ── Summary panel ── */
-        .proj-summary-panel {
-            background: var(--accent);
-            color: var(--white);
-            padding: 1.8rem 2rem;
-            margin-bottom: 2.5rem;
-        }
-
-        .proj-summary-panel .panel-label {
-            font-family: var(--font-mono);
-            font-size: 0.6rem;
-            text-transform: uppercase;
-            letter-spacing: 0.16em;
-            color: rgba(255, 255, 255, 0.5);
-            margin-bottom: 0.6rem;
-        }
-
-        .proj-summary-panel p {
-            font-size: 0.9rem;
-            line-height: 1.65;
-            color: rgba(255, 255, 255, 0.85);
-        }
 
         /* ── Responsive ── */
         @media (max-width: 860px) {
             .proj-entry {
-                grid-template-columns: 1fr;
+                grid-template-columns: minmax(0, 1fr);
             }
 
             .proj-sidebar {
@@ -472,13 +420,16 @@
             <ul class="nav-links" id="navLinks">
                 <li><a href="index.html#about">About</a></li>
                 <li><a href="index.html#experience">Experience</a></li>
-                <li><a href="#" style="color:var(--amber)">Projects</a></li>
-                <li><a href="testimonials.html">Testimonials</a></li>
+                <li><a href="projects.html" aria-current="page">Projects</a></li>
+                <li><a href="engineering.html">Engineering</a></li>
+                <li><a href="mainframe.html">Mainframe</a></li>
+                <li><a href="research.html">Research</a></li>
                 <li><a href="index.html#writing">Writing</a></li>
+                <li><a href="testimonials.html">Testimonials</a></li>
                 <li><a href="index.html#contact">Contact</a></li>
             </ul>
             <a href="Zubair-Idris-Aweda-ATS-Resume.pdf" target="_blank" class="nav-cta" id="nav-cv-btn">CV ↗</a>
-            <button class="nav-burger" id="burger" aria-label="Toggle menu">
+            <button class="nav-burger" id="burger" aria-label="Toggle menu" aria-controls="navLinks">
                 <span></span><span></span><span></span>
             </button>
         </div>
@@ -497,10 +448,9 @@
             Things I've<br><em>Built</em>
         </h1>
         <p class="proj-page-intro">
-            A recruiter-facing breakdown of my work — products, open source libraries, and
-            academic projects. Each entry covers the problem, the engineering decisions, and
-            the outcomes. I care about code that ships, systems that hold, and software
-            that actually helps people.
+            A detailed breakdown of my work: products, open source libraries, academic projects and
+            fundamentals. Each entry covers the problem, the engineering decisions, and the outcomes. I care
+            about code that ships, systems that hold, and software that actually helps people.
         </p>
     </div>
 </div>
@@ -514,871 +464,13 @@
         <button class="filter-btn" data-filter="opensource">Open Source</button>
         <button class="filter-btn" data-filter="academic">Academic</button>
         <button class="filter-btn" data-filter="experiment">Experiments</button>
+        <button class="filter-btn" data-filter="fundamentals">Fundamentals</button>
     </div>
 </div>
 
 <!-- ENTRIES -->
 <div class="container">
     <div class="proj-entries">
-
-        <!-- ── IslamicHub ── -->
-        <article class="proj-entry reveal" data-category="product">
-            <div class="proj-sidebar">
-                <p class="proj-category">Product · Open Source</p>
-                <h2 class="proj-title-main">IslamicHub</h2>
-                <span class="proj-status live">Live</span>
-                <div class="proj-links-sidebar">
-                    <a href="https://islamichub.xyz/" target="_blank" rel="noopener">islamichub.xyz ↗</a>
-                    <a href="https://github.com/Zubs/islamichub" target="_blank" rel="noopener">GitHub ↗</a>
-                </div>
-            </div>
-
-            <div class="proj-main">
-                <p class="proj-headline">IslamicHub is a comprehensive, open-source Islamic education and utility
-                    platform designed to help users learn and live the Five Pillars of Islam. It combines in-depth
-                    scholarly guides grounded in the Qur'an and Hadith with high-utility modern tools like a Zakat
-                    calculator, prayer time engine, and inheritance (Fara'id) calculator.</p>
-
-                <div class="proj-desc-body">
-                    <p>
-                        IslamicHub is a free Islamic education and tools platform built for Muslims seeking
-                        accurate, well-sourced religious guidance online. The problem: most Islamic sites are
-                        either overly simplified, source-poor, or built without real attention to the differences
-                        between schools of thought. IslamicHub treats religious accuracy as a hard requirement,
-                        not an afterthought.
-                    </p>
-                    <p>
-                        Every feature — from the prayer times calculation to the inheritance calculator — is
-                        grounded in Qur'an, Hadith, and cross-referenced with all four major schools of Islamic
-                        jurisprudence (Hanafi, Maliki, Shafi'i, Hanbali). The platform is co-founded with Yusuf Saif
-                        and is actively used and maintained.
-                    </p>
-                </div>
-
-                <div class="proj-meta-row">
-                    <div class="proj-meta-cell">
-                        <p class="proj-meta-key">Role</p>
-                        <p class="proj-meta-val">Co-founder &amp; Lead Engineer</p>
-                    </div>
-                    <div class="proj-meta-cell">
-                        <p class="proj-meta-key">Timeline</p>
-                        <p class="proj-meta-val">2026 – Present</p>
-                    </div>
-                    <div class="proj-meta-cell">
-                        <p class="proj-meta-key">Stack</p>
-                        <p class="proj-meta-val">Vue 3 · Vite · Pinia</p>
-                    </div>
-                </div>
-
-                <div class="proj-block">
-                    <p class="proj-block-label">Core Features</p>
-                    <ul class="feature-list">
-                        <li>Accurate prayer times with Qibla direction finder</li>
-                        <li>Zakat calculator with live gold &amp; silver prices</li>
-                        <li>Islamic inheritance calculator</li>
-                        <li>Live API-driven Hijri calendar</li>
-                        <li>Five Pillars guides grounded in primary sources</li>
-                        <li>Cross-school jurisprudence references throughout</li>
-                        <li>Extensive Hadith library</li>
-                    </ul>
-                </div>
-
-                <div class="proj-block">
-                    <p class="proj-block-label">Engineering Decisions</p>
-                    <ul class="feature-list">
-                        <li>Migrated from the original design in HTML, CSS, and JavaScript to Vue 3 Composition API</li>
-                        <li>Pinia for predictable, modular state management</li>
-                        <li>Live external API integration for financial data (Zakat)</li>
-                        <li>Structured content architecture for multi-madhab content</li>
-                    </ul>
-                </div>
-
-                <div class="proj-block">
-                    <p class="proj-block-label">Technologies</p>
-                    <div class="tech-chips">
-                        <span class="tech-chip primary">Vue 3</span>
-                        <span class="tech-chip primary">JavaScript</span>
-                        <span class="tech-chip primary">Pinia</span>
-                        <span class="tech-chip">Vite</span>
-                        <span class="tech-chip">Vue Router</span>
-                        <span class="tech-chip">REST APIs</span>
-                        <span class="tech-chip">Responsive HTML & CSS</span>
-                    </div>
-                </div>
-            </div>
-        </article>
-
-        <!-- ── Kueri ── -->
-        <article class="proj-entry reveal" data-category="product">
-            <div class="proj-sidebar">
-                <p class="proj-category">Product · Developer Tool</p>
-                <h2 class="proj-title-main">Kueri</h2>
-                <span class="proj-status building">Building</span>
-                <div class="proj-links-sidebar">
-                    <a href="https://kueriapp.netlify.app/" target="_blank" rel="noopener">Live preview ↗</a>
-                </div>
-            </div>
-
-            <div class="proj-main">
-                <p class="proj-headline">"TablePlus meets Cursor — an AI-native desktop database client for
-                    developers."</p>
-
-                <div class="proj-visual">
-                    <div class="proj-visual-inner">
-                        <span class="proj-visual-text">Kueri</span>
-                    </div>
-                    <span class="proj-visual-badge">Desktop · AI · In Development</span>
-                </div>
-
-                <div class="proj-desc-body">
-                    <p>
-                        Most database clients are UI wrappers around SQL. Kueri is an IDE-style tool — you can write
-                        queries the traditional way, or describe what you want in plain English and let the AI
-                        generate and explain the SQL. It's positioned at the intersection of developer tooling and
-                        AI assistance, for teams that already know SQL but want to move faster.
-                    </p>
-                    <p>
-                        Built during a focused 10-day pivot from concept to MVP. Currently in active development,
-                        with a pre-seed pitch deck, AI cost-reduction roadmap, and launch strategy in progress.
-                        Supports PostgreSQL, MySQL, MongoDB, and SQLite.
-                    </p>
-                </div>
-
-                <div class="proj-meta-row">
-                    <div class="proj-meta-cell">
-                        <p class="proj-meta-key">Role</p>
-                        <p class="proj-meta-val">Solo founder &amp; Engineer</p>
-                    </div>
-                    <div class="proj-meta-cell">
-                        <p class="proj-meta-key">Timeline</p>
-                        <p class="proj-meta-val">2025 – Present</p>
-                    </div>
-                    <div class="proj-meta-cell">
-                        <p class="proj-meta-key">Stack</p>
-                        <p class="proj-meta-val">Electron · Vue 3 · Tailwind · Gemini</p>
-                    </div>
-                </div>
-
-                <div class="proj-block">
-                    <p class="proj-block-label">Core Features (MVP)</p>
-                    <ul class="feature-list">
-                        <li>Natural language → SQL query generation</li>
-                        <li>AI query explanation for onboarding &amp; learning</li>
-                        <li>Multi-database support (PG, MySQL, MongoDB, SQLite)</li>
-                        <li>IDE-style interface with schema explorer</li>
-                        <li>Connection management with encrypted credentials</li>
-                        <li>Query history and saved snippets</li>
-                    </ul>
-                </div>
-
-                <div class="proj-block">
-                    <p class="proj-block-label">Key Engineering Challenges</p>
-                    <ul class="feature-list">
-                        <li>AI token cost optimisation across query volumes</li>
-                        <li>Cross-database query normalisation layer</li>
-                        <li>Electron IPC architecture for secure DB connections</li>
-                        <li>Context-aware prompt engineering for schema-aware AI</li>
-                    </ul>
-                </div>
-
-                <div class="proj-block">
-                    <p class="proj-block-label">Technologies</p>
-                    <div class="tech-chips">
-                        <span class="tech-chip primary">Electron</span>
-                        <span class="tech-chip primary">Vue 3</span>
-                        <span class="tech-chip primary">Google Gemini</span>
-                        <span class="tech-chip">Tailwind CSS</span>
-                        <span class="tech-chip">PostgreSQL</span>
-                        <span class="tech-chip">MySQL</span>
-                        <span class="tech-chip">MongoDB</span>
-                        <span class="tech-chip">SQLite</span>
-                        <span class="tech-chip">Node.js</span>
-                    </div>
-                </div>
-
-                <div class="proj-summary-panel">
-                    <p class="panel-label">Why this matters to a recruiter</p>
-                    <p>Building a startup solo demonstrates product thinking, architecture ownership, AI integration
-                        experience, and the ability to ship — not just code. Kueri is a live proof of all four.</p>
-                </div>
-            </div>
-        </article>
-
-        <!-- ── toRoman ── -->
-        <article class="proj-entry reveal" data-category="opensource">
-            <div class="proj-sidebar">
-                <p class="proj-category">Open Source · npm Package</p>
-                <h2 class="proj-title-main">toRoman</h2>
-                <span class="proj-status live">Published</span>
-                <div class="proj-links-sidebar">
-                    <a href="https://github.com/Zubs/toRoman" target="_blank" rel="noopener">GitHub ↗</a>
-                    <a href="https://www.npmjs.com/package/toroman" target="_blank" rel="noopener">npm ↗</a>
-                    <a href="packages/toroman/index.html" target="_blank">Interactive Playground ↗</a>
-                </div>
-            </div>
-
-            <div class="proj-main">
-                <p class="proj-headline">"A zero-dependency library for Roman numeral operations — shipped with a full
-                    interactive docs playground."</p>
-
-                <div class="proj-desc-body">
-                    <p>
-                        toRoman is a lightweight TypeScript library for converting between Arabic integers and
-                        Roman numerals, validating Roman numeral strings, and performing arithmetic entirely in
-                        Roman notation. What started as a focused utility grew into a full-featured package with
-                        a rich API and a custom-built interactive documentation site.
-                    </p>
-                    <p>
-                        The library handles edge cases the obvious implementation misses — invalid character
-                        sequences, repetition limits per Roman character, subtractive notation rules — all
-                        enforced with clear, typed error messages. The accompanying docs playground lets users
-                        try every API method in the browser without setup.
-                    </p>
-                </div>
-
-                <div class="proj-meta-row">
-                    <div class="proj-meta-cell">
-                        <p class="proj-meta-key">Role</p>
-                        <p class="proj-meta-val">Author &amp; Maintainer</p>
-                    </div>
-                    <div class="proj-meta-cell">
-                        <p class="proj-meta-key">Distribution</p>
-                        <p class="proj-meta-val">npm · CDN (unpkg)</p>
-                    </div>
-                    <div class="proj-meta-cell">
-                        <p class="proj-meta-key">Stack</p>
-                        <p class="proj-meta-val">TypeScript · Zero deps</p>
-                    </div>
-                </div>
-
-                <div class="proj-block">
-                    <p class="proj-block-label">API Surface</p>
-                    <ul class="feature-list">
-                        <li><code style="font-size:0.78rem;color:var(--accent)">toRoman(n)</code> — integer → Roman</li>
-                        <li><code style="font-size:0.78rem;color:var(--accent)">fromRoman(s)</code> — Roman → integer
-                        </li>
-                        <li><code style="font-size:0.78rem;color:var(--accent)">isRoman(s)</code> — full validation</li>
-                        <li><code style="font-size:0.78rem;color:var(--accent)">addRoman / subtractRoman</code></li>
-                        <li><code style="font-size:0.78rem;color:var(--accent)">multiplyRoman / divideRoman</code></li>
-                        <li><code style="font-size:0.78rem;color:var(--accent)">rangeRoman / tableRoman</code></li>
-                    </ul>
-                </div>
-
-                <div class="proj-block">
-                    <p class="proj-block-label">Technologies</p>
-                    <div class="tech-chips">
-                        <span class="tech-chip primary">TypeScript</span>
-                        <span class="tech-chip primary">npm</span>
-                        <span class="tech-chip">Vanilla JS</span>
-                        <span class="tech-chip">Zero dependencies</span>
-                        <span class="tech-chip">Custom Docs Site</span>
-                    </div>
-                </div>
-            </div>
-        </article>
-
-        <!-- ── OWASP SecBank ── -->
-        <article class="proj-entry reveal" data-category="academic">
-            <div class="proj-sidebar">
-                <p class="proj-category">Academic · Security · Dissertation</p>
-                <h2 class="proj-title-main">OWASP SecBank</h2>
-                <span class="proj-status live">Live</span>
-                <div class="proj-links-sidebar">
-                    <a href="https://github.com/Zubs/owasp-sec-bank" target="_blank" rel="noopener">GitHub ↗</a>
-                    <a href="https://documenter.getpostman.com/view/33365941/2sBXVZpuxT" target="_blank" rel="noopener">API
-                        Docs ↗</a>
-                </div>
-            </div>
-
-            <div class="proj-main">
-                <p class="proj-headline">"A BSc dissertation research artefact — two parallel banking apps, one
-                    deliberately broken, one hardened, built to empirically compare OWASP vulnerability behaviour and
-                    mitigation effectiveness."</p>
-
-                <div class="proj-visual">
-                    <div class="proj-visual-inner">
-                        <span class="proj-visual-text">SecBank A/B</span>
-                    </div>
-                    <span class="proj-visual-badge">Dissertation · Vue.js · Express · PostgreSQL</span>
-                </div>
-
-                <div class="proj-desc-body">
-                    <p>
-                        OWASP SecBank is a full-stack banking application built as a research artefact for a BSc
-                        Computer Science dissertation. The project addresses a real gap in security research: most
-                        discussions of OWASP vulnerabilities are theoretical. This closes that gap with a live,
-                        working system.
-                    </p>
-                    <p>
-                        The methodology is A/B: two fully functional parallel builds of the same banking platform.
-                        <strong>Version A (Insecure)</strong> deliberately incorporates weak authentication, inline
-                        SQL queries, insecure design patterns, and missing access controls. <strong>Version B
-                        (Secure)</strong> implements RBAC, parameterised queries, secure session management, and
-                        industry best practices throughout. Running them side-by-side enables direct empirical
-                        comparison of vulnerability behaviour and the measurable impact of each mitigation.
-                        The secure version also served as the basis of a security talk at DevFest London 2023.
-                    </p>
-                </div>
-
-                <div class="proj-meta-row">
-                    <div class="proj-meta-cell">
-                        <p class="proj-meta-key">Role</p>
-                        <p class="proj-meta-val">Author, Researcher &amp; Speaker</p>
-                    </div>
-                    <div class="proj-meta-cell">
-                        <p class="proj-meta-key">Context</p>
-                        <p class="proj-meta-val">BSc Dissertation + DevFest London 2023</p>
-                    </div>
-                    <div class="proj-meta-cell">
-                        <p class="proj-meta-key">Stack</p>
-                        <p class="proj-meta-val">Vue.js · Express.js · PostgreSQL</p>
-                    </div>
-                </div>
-
-                <div class="proj-block">
-                    <p class="proj-block-label">A/B Methodology — What's Compared</p>
-                    <ul class="feature-list">
-                        <li><strong>Insecure:</strong> Inline SQL → SQL Injection risk</li>
-                        <li><strong>Secure:</strong> Parameterised queries → injection prevented</li>
-                        <li><strong>Insecure:</strong> Weak auth, no RBAC → broken access control</li>
-                        <li><strong>Secure:</strong> RBAC + secure session management</li>
-                        <li><strong>Insecure:</strong> No input validation → XSS &amp; injection vectors</li>
-                        <li><strong>Secure:</strong> Server-side validation &amp; output encoding</li>
-                        <li><strong>Insecure:</strong> Plaintext credentials, insecure storage</li>
-                        <li><strong>Secure:</strong> Hashed passwords, secure token handling</li>
-                    </ul>
-                </div>
-
-                <div class="proj-block">
-                    <p class="proj-block-label">Full Feature Set (Both Versions)</p>
-                    <ul class="feature-list">
-                        <li>User registration, login, logout with token auth</li>
-                        <li>Money transfer with recipient account lookup</li>
-                        <li>Transaction history with full audit trail</li>
-                        <li>Profile management including avatar upload/view</li>
-                        <li>Admin dashboard: all users, transactions, system logs</li>
-                        <li>DB schemas: Users, Accounts, Transactions, Logs, Tokens</li>
-                    </ul>
-                </div>
-
-                <div class="proj-block">
-                    <p class="proj-block-label">Engineering &amp; Research Notes</p>
-                    <ul class="feature-list">
-                        <li>SonarQube integrated for static code quality analysis</li>
-                        <li>GitHub Actions CI/CD pipeline via <code style="font-size:0.78rem;color:var(--accent)">.github/workflows</code>
-                        </li>
-                        <li>Postman collection published for full API documentation</li>
-                        <li>Swagger UI served at <code style="font-size:0.78rem;color:var(--accent)">/api-docs</code>
-                            for interactive exploration
-                        </li>
-                        <li>Deployed to both Netlify (frontend) and Render (backend)</li>
-                    </ul>
-                </div>
-
-                <div class="proj-block">
-                    <p class="proj-block-label">Technologies</p>
-                    <div class="tech-chips">
-                        <span class="tech-chip primary">Vue.js</span>
-                        <span class="tech-chip primary">Express.js</span>
-                        <span class="tech-chip primary">PostgreSQL</span>
-                        <span class="tech-chip">JavaScript</span>
-                        <span class="tech-chip">SonarQube</span>
-                        <span class="tech-chip">GitHub Actions</span>
-                        <span class="tech-chip">Swagger / OpenAPI</span>
-                        <span class="tech-chip">Postman</span>
-                        <span class="tech-chip">Netlify</span>
-                        <span class="tech-chip">Render</span>
-                        <span class="tech-chip">OWASP Top 10</span>
-                    </div>
-                </div>
-
-                <div class="proj-summary-panel">
-                    <p class="panel-label">Why this matters to a recruiter</p>
-                    <p>This isn't just "I built a vulnerable app for a talk." It's a dissertation-grade research
-                        artefact with a rigorous A/B methodology, CI/CD, static analysis, published API docs, and two
-                        live deployments. It demonstrates security knowledge at the implementation level — not just
-                        awareness — and the ability to conduct and communicate original research.</p>
-                </div>
-            </div>
-        </article>
-
-        <!-- ── Scholar Search ── -->
-        <article class="proj-entry reveal" data-category="academic">
-            <div class="proj-sidebar">
-                <p class="proj-category">Academic · Big Data</p>
-                <h2 class="proj-title-main">ScholarSearch</h2>
-                <span class="proj-status archived">Academic</span>
-                <div class="proj-links-sidebar">
-                    <a href="https://github.com/Zubs/scholar-search" target="_blank" rel="noopener">GitHub ↗</a>
-                </div>
-            </div>
-
-            <div class="proj-main">
-                <p class="proj-headline">"A full-stack academic search engine over an arXiv dataset — built for a Big
-                    Data module."</p>
-
-                <div class="proj-desc-body">
-                    <p>
-                        ScholarSearch is a research paper discovery tool built as a university project for a Big
-                        Data module (6CS030). The system ingests a large arXiv dataset into Elasticsearch,
-                        exposing a fast full-text search API via FastAPI, consumed by a Vue 3 frontend.
-                    </p>
-                    <p>
-                        The project required not just engineering but academic rigour — including a Literature
-                        Review covering information retrieval systems, an IEEE-formatted report, and multiple
-                        audit passes to catch bugs including XSS via v-html, pagination edge cases, sort value
-                        mismatches, and null pointer crashes.
-                    </p>
-                </div>
-
-                <div class="proj-meta-row">
-                    <div class="proj-meta-cell">
-                        <p class="proj-meta-key">Role</p>
-                        <p class="proj-meta-val">Lead Engineer &amp; Author</p>
-                    </div>
-                    <div class="proj-meta-cell">
-                        <p class="proj-meta-key">Module</p>
-                        <p class="proj-meta-val">6CS030 — Big Data</p>
-                    </div>
-                    <div class="proj-meta-cell">
-                        <p class="proj-meta-key">Dataset</p>
-                        <p class="proj-meta-val">arXiv research papers</p>
-                    </div>
-                </div>
-
-                <div class="proj-block">
-                    <p class="proj-block-label">Technical Highlights</p>
-                    <ul class="feature-list">
-                        <li>Elasticsearch for full-text search at scale</li>
-                        <li>FastAPI backend with pagination &amp; filtering</li>
-                        <li>Vue 3 Composition API frontend</li>
-                        <li>XSS remediation (v-html audit)</li>
-                        <li>arXiv dataset ingestion pipeline</li>
-                        <li>IEEE-formatted academic report</li>
-                    </ul>
-                </div>
-
-                <div class="proj-block">
-                    <p class="proj-block-label">Technologies</p>
-                    <div class="tech-chips">
-                        <span class="tech-chip primary">Vue 3</span>
-                        <span class="tech-chip primary">FastAPI</span>
-                        <span class="tech-chip primary">Elasticsearch</span>
-                        <span class="tech-chip">Python</span>
-                        <span class="tech-chip">arXiv Dataset</span>
-                        <span class="tech-chip">Docker</span>
-                    </div>
-                </div>
-            </div>
-        </article>
-
-        <!-- ── BrickBreaker ── -->
-        <article class="proj-entry reveal" data-category="experiment">
-            <div class="proj-sidebar">
-                <p class="proj-category">Experiment · AI-Paired</p>
-                <h2 class="proj-title-main">BrickBreaker Challenge</h2>
-                <span class="proj-status archived">Experiment</span>
-                <div class="proj-links-sidebar">
-                    <a href="https://github.com/Zubs/BrickBreakerChallenge" target="_blank" rel="noopener">GitHub ↗</a>
-                </div>
-            </div>
-
-            <div class="proj-main">
-                <p class="proj-headline">"An experiment in human-AI co-authorship — building a game with an AI pair
-                    programmer."</p>
-
-                <div class="proj-desc-body">
-                    <p>
-                        A fully playable Brick Breaker game built in collaboration with an AI pair-programmer.
-                        The project was an intentional exploration of human-AI co-authorship in game development:
-                        where does the human add value, where does the AI excel, and what does the handoff look like?
-                    </p>
-                    <p>
-                        Beyond the game itself, this is a study in prompt engineering, AI output review, and the
-                        pragmatics of building software with generative tools — a skill set increasingly relevant
-                        across the industry.
-                    </p>
-                </div>
-
-                <div class="proj-meta-row">
-                    <div class="proj-meta-cell">
-                        <p class="proj-meta-key">Role</p>
-                        <p class="proj-meta-val">Lead + AI co-author</p>
-                    </div>
-                    <div class="proj-meta-cell">
-                        <p class="proj-meta-key">Type</p>
-                        <p class="proj-meta-val">Browser game</p>
-                    </div>
-                    <div class="proj-meta-cell">
-                        <p class="proj-meta-key">Stack</p>
-                        <p class="proj-meta-val">Vanilla JavaScript · Canvas API</p>
-                    </div>
-                </div>
-
-                <div class="proj-block">
-                    <p class="proj-block-label">Technologies</p>
-                    <div class="tech-chips">
-                        <span class="tech-chip primary">JavaScript</span>
-                        <span class="tech-chip">HTML5 Canvas</span>
-                        <span class="tech-chip">AI-assisted dev</span>
-                    </div>
-                </div>
-            </div>
-        </article>
-
-        <!-- ── GPCalc ── -->
-        <article class="proj-entry reveal" data-category="experiment">
-            <div class="proj-sidebar">
-                <p class="proj-category">Experiment · Utility</p>
-                <h2 class="proj-title-main">GPCalc</h2>
-                <span class="proj-status archived">Utility</span>
-                <div class="proj-links-sidebar">
-                    <a href="https://github.com/Zubs/GPCalc" target="_blank" rel="noopener">GitHub ↗</a>
-                </div>
-            </div>
-
-            <div class="proj-main">
-                <p class="proj-headline">"A GPA/CGPA calculator that supports multiple grading scales — built because
-                    the existing ones were terrible."</p>
-
-                <div class="proj-desc-body">
-                    <p>
-                        GPCalc is a GPA and CGPA calculator utility built for students who need to quickly
-                        compute grade point averages without wrestling with inflexible tools. It supports
-                        different grading scales across institutions and handles the running CGPA calculation
-                        across multiple semesters.
-                    </p>
-                </div>
-
-                <div class="proj-meta-row">
-                    <div class="proj-meta-cell">
-                        <p class="proj-meta-key">Role</p>
-                        <p class="proj-meta-val">Author</p>
-                    </div>
-                    <div class="proj-meta-cell">
-                        <p class="proj-meta-key">Type</p>
-                        <p class="proj-meta-val">Student utility</p>
-                    </div>
-                    <div class="proj-meta-cell">
-                        <p class="proj-meta-key">Users</p>
-                        <p class="proj-meta-val">Students</p>
-                    </div>
-                </div>
-
-                <div class="proj-block">
-                    <p class="proj-block-label">Technologies</p>
-                    <div class="tech-chips">
-                        <span class="tech-chip primary">JavaScript</span>
-                        <span class="tech-chip">HTML/CSS</span>
-                    </div>
-                </div>
-            </div>
-        </article>
-
-        <!-- ── ZTodo ── -->
-        <article class="proj-entry reveal" data-category="experiment">
-            <div class="proj-sidebar">
-                <p class="proj-category">Experiment · Productivity</p>
-                <h2 class="proj-title-main">ZTodo</h2>
-                <span class="proj-status live">Live</span>
-                <div class="proj-links-sidebar">
-                    <a href="https://ztodo.netlify.app" target="_blank" rel="noopener">ztodo.netlify.app ↗</a>
-                    <a href="https://github.com/Zubs/ZTodo" target="_blank" rel="noopener">GitHub ↗</a>
-                </div>
-            </div>
-
-            <div class="proj-main">
-                <p class="proj-headline">"A clean, distraction-free todo app — built to explore Vue 2, Vuetify, and the
-                    full Vue CLI ecosystem."</p>
-
-                <div class="proj-visual">
-                    <div class="proj-visual-inner">
-                        <span class="proj-visual-text">ZTodo</span>
-                    </div>
-                    <span class="proj-visual-badge">Vue 2 · PWA · Live</span>
-                </div>
-
-                <div class="proj-desc-body">
-                    <p>
-                        ZTodo is a todo application built with Vue 2 and Vuetify, deployed as a Progressive Web App.
-                        The project was a deliberate exercise in learning the Vue CLI ecosystem end-to-end —
-                        from component architecture and Vuex state management, to routing, service workers,
-                        and PWA configuration for offline support.
-                    </p>
-                    <p>
-                        Each todo supports a title and an optional body for additional context, and the interface
-                        handles inline editing by clicking an existing item — a small UX detail that keeps the
-                        workflow keyboard-friendly and fast. Clean, focused, and ships with zero build warnings.
-                    </p>
-                </div>
-
-                <div class="proj-meta-row">
-                    <div class="proj-meta-cell">
-                        <p class="proj-meta-key">Role</p>
-                        <p class="proj-meta-val">Author</p>
-                    </div>
-                    <div class="proj-meta-cell">
-                        <p class="proj-meta-key">Deployment</p>
-                        <p class="proj-meta-val">Netlify · PWA</p>
-                    </div>
-                    <div class="proj-meta-cell">
-                        <p class="proj-meta-key">Stack</p>
-                        <p class="proj-meta-val">Vue 2 · Vuetify · Vuex · Vue Router</p>
-                    </div>
-                </div>
-
-                <div class="proj-block">
-                    <p class="proj-block-label">Features</p>
-                    <ul class="feature-list">
-                        <li>Create todos with optional detail body</li>
-                        <li>Inline edit by clicking any existing item</li>
-                        <li>Delete individual todos</li>
-                        <li>Completion checkbox state per item</li>
-                        <li>Offline support via service worker (PWA)</li>
-                        <li>Enter key submission for keyboard-first flow</li>
-                    </ul>
-                </div>
-
-                <div class="proj-block">
-                    <p class="proj-block-label">Engineering Notes</p>
-                    <ul class="feature-list">
-                        <li>Vuex store wired for global state management</li>
-                        <li>Vue Router with history mode and 404 fallback</li>
-                        <li>Service worker registered via <code style="font-size:0.78rem;color:var(--accent)">register-service-worker</code>
-                        </li>
-                        <li>Full PWA manifest with multi-size icon set</li>
-                        <li>Vuetify Material Design component library</li>
-                        <li>ESLint configured with Vue essential rules</li>
-                    </ul>
-                </div>
-
-                <div class="proj-block">
-                    <p class="proj-block-label">Technologies</p>
-                    <div class="tech-chips">
-                        <span class="tech-chip primary">Vue 2</span>
-                        <span class="tech-chip primary">Vuetify</span>
-                        <span class="tech-chip primary">Vuex</span>
-                        <span class="tech-chip">Vue Router</span>
-                        <span class="tech-chip">PWA</span>
-                        <span class="tech-chip">Service Workers</span>
-                        <span class="tech-chip">Netlify</span>
-                        <span class="tech-chip">JavaScript</span>
-                        <span class="tech-chip">Babel</span>
-                    </div>
-                </div>
-            </div>
-        </article>
-
-        <!-- ── Be Kind Initiative ── -->
-        <article class="proj-entry reveal" data-category="experiment">
-            <div class="proj-sidebar">
-                <p class="proj-category">Experiment · Charity · Full-Stack</p>
-                <h2 class="proj-title-main">Be Kind Initiative</h2>
-                <span class="proj-status live">Live</span>
-                <div class="proj-links-sidebar">
-                    <a href="https://ohw-2020-3.onrender.com" target="_blank" rel="noopener">Live site ↗</a>
-                    <a href="https://github.com/Zubs/ohw-2020-3" target="_blank" rel="noopener">GitHub ↗</a>
-                </div>
-            </div>
-
-            <div class="proj-main">
-                <p class="proj-headline">"A full-stack web presence for a Lagos-based charity — with a contact form that
-                    saves to MongoDB and sends email notifications in real time."</p>
-
-                <div class="proj-visual">
-                    <div class="proj-visual-inner">
-                        <span class="proj-visual-text">Be Kind Initiative</span>
-                    </div>
-                    <span class="proj-visual-badge">Node.js · EJS · MongoDB · Live</span>
-                </div>
-
-                <div class="proj-desc-body">
-                    <p>
-                        Be Kind Initiative is a Lagos-based NGO working to reduce poverty, train youth in
-                        leadership and volunteering, and support under-resourced communities across Nigeria.
-                        The project needed a public-facing website to expand reach and support grant applications.
-                    </p>
-                    <p>
-                        Built with Node.js, Express, and EJS templating, the site includes a multi-page layout
-                        (Home, About, Contact), a Bootstrap-powered responsive carousel, and a contact form that
-                        persists submissions to MongoDB and triggers an email notification to the organisation
-                        via Nodemailer — giving the team a real-time inbox alert for every inquiry.
-                    </p>
-                </div>
-
-                <div class="proj-meta-row">
-                    <div class="proj-meta-cell">
-                        <p class="proj-meta-key">Role</p>
-                        <p class="proj-meta-val">Main Developer</p>
-                    </div>
-                    <div class="proj-meta-cell">
-                        <p class="proj-meta-key">Client</p>
-                        <p class="proj-meta-val">Be Kind Initiative, Lagos</p>
-                    </div>
-                    <div class="proj-meta-cell">
-                        <p class="proj-meta-key">Stack</p>
-                        <p class="proj-meta-val">Node.js · Express · EJS · MongoDB</p>
-                    </div>
-                </div>
-
-                <div class="proj-block">
-                    <p class="proj-block-label">Features</p>
-                    <ul class="feature-list">
-                        <li>Multi-page site: Home, About, Contact, 404</li>
-                        <li>Bootstrap 4 responsive carousel on homepage</li>
-                        <li>Contact form with name, email, and message</li>
-                        <li>MongoDB persistence via Mongoose for all submissions</li>
-                        <li>Real-time email alerts to the org via Nodemailer</li>
-                        <li>Custom 404 page with styled error handling</li>
-                    </ul>
-                </div>
-
-                <div class="proj-block">
-                    <p class="proj-block-label">Engineering Notes</p>
-                    <ul class="feature-list">
-                        <li>Express routing with separate GET/POST handlers</li>
-                        <li>EJS partials (header/footer) for DRY templating</li>
-                        <li>Per-page CSS loaded dynamically via EJS locals</li>
-                        <li>Mongoose schema with timestamps and optional name field</li>
-                        <li>Morgan HTTP request logging in development</li>
-                        <li>Environment config via dotenv for DB URI and port</li>
-                    </ul>
-                </div>
-
-                <div class="proj-block">
-                    <p class="proj-block-label">Technologies</p>
-                    <div class="tech-chips">
-                        <span class="tech-chip primary">Node.js</span>
-                        <span class="tech-chip primary">Express</span>
-                        <span class="tech-chip primary">MongoDB</span>
-                        <span class="tech-chip primary">Mongoose</span>
-                        <span class="tech-chip">EJS</span>
-                        <span class="tech-chip">Nodemailer</span>
-                        <span class="tech-chip">Bootstrap 4</span>
-                        <span class="tech-chip">Morgan</span>
-                        <span class="tech-chip">dotenv</span>
-                        <span class="tech-chip">Render</span>
-                    </div>
-                </div>
-            </div>
-        </article>
-
-        <!-- ── FootballSite ── -->
-        <article class="proj-entry reveal" data-category="academic">
-            <div class="proj-sidebar">
-                <p class="proj-category">Academic · Full-Stack · RIA</p>
-                <h2 class="proj-title-main">FootballSite</h2>
-                <span class="proj-status live">Live</span>
-                <div class="proj-links-sidebar">
-                    <a href="https://github.com/Zubs/footballSite" target="_blank" rel="noopener">GitHub ↗</a>
-                </div>
-            </div>
-
-            <div class="proj-main">
-                <p class="proj-headline">"A full-stack football match tracker with live API sync, AJAX navigation,
-                    geolocation filtering, and social comments — graded 100/100."</p>
-
-                <div class="proj-visual">
-                    <div class="proj-visual-inner">
-                        <span class="proj-visual-text">FootballSite ⚽</span>
-                    </div>
-                    <span class="proj-visual-badge">Laravel 12 · MySQL · AJAX · 100/100</span>
-                </div>
-
-                <div class="proj-desc-body">
-                    <p>
-                        Built for the <strong>6CC001 Advanced Web Technologies</strong> module at the University of
-                        Wolverhampton, FootballSite is a dynamic football fixture and fan engagement platform.
-                        It integrates a live third-party football data API (API-Football v3), supports AJAX-driven
-                        browsing without full page reloads, and uses the browser Geolocation API to surface matches
-                        relevant to the user's location. Graded 100/100.
-                    </p>
-                    <p>
-                        The architecture is deliberately lean — a custom service class centralises all
-                        outbound API calls, fixtures are cached in MySQL to avoid redundant requests, and the
-                        same controller method serves both full-page loads and AJAX partial updates by detecting
-                        <code style="font-size:0.78rem;color:var(--accent)">$request->ajax()</code> server-side.
-                        Lineups and match stats are fetched lazily on first visit and stored as JSON columns,
-                        keeping the database write load minimal.
-                    </p>
-                </div>
-
-                <div class="proj-meta-row">
-                    <div class="proj-meta-cell">
-                        <p class="proj-meta-key">Module</p>
-                        <p class="proj-meta-val">6CC001 Advanced Web Technologies</p>
-                    </div>
-                    <div class="proj-meta-cell">
-                        <p class="proj-meta-key">Grade</p>
-                        <p class="proj-meta-val" style="color:var(--accent);font-weight:600;">100 / 100</p>
-                    </div>
-                    <div class="proj-meta-cell">
-                        <p class="proj-meta-key">Stack</p>
-                        <p class="proj-meta-val">Laravel 12 · MySQL · Alpine.js · API-Football</p>
-                    </div>
-                </div>
-
-                <div class="proj-block">
-                    <p class="proj-block-label">Core Features</p>
-                    <ul class="feature-list">
-                        <li>Daily fixture dashboard split into completed &amp; upcoming</li>
-                        <li>Live API sync — refreshes automatically for today/yesterday if stale &gt;10 min</li>
-                        <li>Match detail: starting XIs, substitutes, managers, comparative stat bars</li>
-                        <li>AJAX search with 300ms debounce — no full-page reload on team name filter</li>
-                        <li>AJAX date navigation — prev/next day updates match list in-place via Fetch API</li>
-                        <li>Geolocation "Matches near me" using Browser Geolocation + BigDataCloud reverse geocode</li>
-                        <li>Auth system — register, login, email verification, password reset, account deletion</li>
-                        <li>Social comments per match — authenticated users only, displayed newest-first</li>
-                        <li>Responsive design with collapsible mobile nav, fluid breakpoints</li>
-                        <li>Custom 404 page with football-themed copy</li>
-                    </ul>
-                </div>
-
-                <div class="proj-block">
-                    <p class="proj-block-label">Key Engineering Decisions</p>
-                    <ul class="feature-list">
-                        <li><code style="font-size:0.78rem;color:var(--accent)">FootballApiService</code> — dedicated
-                            service class for all API-Football calls; maps status codes to local ENUM
-                        </li>
-                        <li>Smart sync: only re-fetches when date is today/yesterday &amp; last sync &gt;10 min old</li>
-                        <li>Lineups &amp; stats lazy-loaded on first match detail visit, cached as JSON columns</li>
-                        <li><code style="font-size:0.78rem;color:var(--accent)">updateOrCreate</code> throughout to
-                            prevent duplicate records on re-sync
-                        </li>
-                        <li>Same controller action serves full-page load and AJAX partial (detects via <code
-                                style="font-size:0.78rem;color:var(--accent)">$request->ajax()</code>)
-                        </li>
-                        <li>Full PHPUnit test suite — Feature and Unit coverage across Auth, Profile, and core flows
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="proj-block">
-                    <p class="proj-block-label">Technologies</p>
-                    <div class="tech-chips">
-                        <span class="tech-chip primary">PHP 8.2</span>
-                        <span class="tech-chip primary">Laravel 12</span>
-                        <span class="tech-chip primary">MySQL</span>
-                        <span class="tech-chip primary">API-Football v3</span>
-                        <span class="tech-chip">Blade Templates</span>
-                        <span class="tech-chip">Alpine.js</span>
-                        <span class="tech-chip">Tailwind CSS</span>
-                        <span class="tech-chip">Fetch API (AJAX)</span>
-                        <span class="tech-chip">Geolocation API</span>
-                        <span class="tech-chip">Laravel Breeze</span>
-                        <span class="tech-chip">PHPUnit</span>
-                        <span class="tech-chip">Vite</span>
-                    </div>
-                </div>
-
-                <div class="proj-summary-panel">
-                    <p class="panel-label">Why this matters to a recruiter</p>
-                    <p>100/100 on a module that explicitly required third-party API integration, AJAX-driven RIA
-                        behaviour, browser device API usage, and server-side PHP with a database. Every requirement was
-                        met and exceeded — and the codebase is clean enough that the marker had nothing to subtract.</p>
-                </div>
-            </div>
-        </article>
 
         <!-- ── JCLcheck ── -->
         <article class="proj-entry reveal" data-category="product">
@@ -1396,12 +488,6 @@
                 <p class="proj-headline">"A SaaS JCL validation workbench for mainframe developers — built from scratch
                     as a custom lexer → parser → AST → rule-engine pipeline. No mainframe connection required."</p>
 
-                <div class="proj-visual">
-                    <div class="proj-visual-inner">
-                        <span class="proj-visual-text">JCLcheck</span>
-                    </div>
-                    <span class="proj-visual-badge">Node.js · Vue 3 · Lexer/Parser · Live</span>
-                </div>
 
                 <div class="proj-desc-body">
                     <p>
@@ -1423,11 +509,15 @@
                 <div class="proj-meta-row">
                     <div class="proj-meta-cell">
                         <p class="proj-meta-key">Role</p>
-                        <p class="proj-meta-val">Sole Engineer/Founder</p>
+                        <p class="proj-meta-val">Sole Engineer &amp; Founder</p>
                     </div>
                     <div class="proj-meta-cell">
                         <p class="proj-meta-key">Stack</p>
                         <p class="proj-meta-val">Node.js · Express · Vue 3 · Vite</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Domain</p>
+                        <p class="proj-meta-val">IBM z/OS JCL</p>
                     </div>
                 </div>
 
@@ -1519,13 +609,1103 @@
                     </div>
                 </div>
 
-                <div class="proj-summary-panel">
-                    <p class="panel-label">Why this matters to a recruiter</p>
-                    <p>Writing a hand-crafted lexer, parser, and AST from scratch — without ANTLR or a grammar generator
-                        — for a domain-specific language as arcane as IBM JCL is not a beginner task. It demonstrates
-                        compiler theory in practice, deep mainframe domain knowledge, a modular rule engine
-                        architecture, and the product thinking to wrap it all in a workbench UI that's genuinely useful
-                        for real training programmes.</p>
+            </div>
+        </article>
+
+        <!-- ── OWASP SecBank ── -->
+        <article class="proj-entry reveal" data-category="academic">
+            <div class="proj-sidebar">
+                <p class="proj-category">Academic · Security · Dissertation</p>
+                <h2 class="proj-title-main">OWASP SecBank</h2>
+                <span class="proj-status live">Live</span>
+                <div class="proj-links-sidebar">
+                    <a href="https://github.com/Zubs/owasp-sec-bank" target="_blank" rel="noopener">GitHub ↗</a>
+                    <a href="https://owasp-secure.netlify.app" target="_blank" rel="noopener">Secure demo ↗</a>
+                    <a href="https://owasp-insecure.netlify.app" target="_blank" rel="noopener">Insecure demo ↗</a>
+                    <a href="https://documenter.getpostman.com/view/33365941/2sBXVZpuxT" target="_blank"
+                       rel="noopener">API Docs ↗</a>
+                    <a href="research.html">Research write-up →</a>
+                </div>
+            </div>
+
+            <div class="proj-main">
+                <p class="proj-headline">"The research artefact behind my BSc dissertation: one banking app built
+                    twice, once deliberately vulnerable and once hardened, then tested by people and by scanners."</p>
+
+                <div class="proj-desc-body">
+                    <p>
+                        OWASP SecBank grew out of the OWASP Top 10 talks I gave at DevFest Ogbomoso 2022 and DevFest
+                        London 2023. Later, my dissertation turned that talk into a controlled experiment around one
+                        question: how are OWASP Top 10 threats best managed in modern database-driven web
+                        applications?
+                    </p>
+                    <p>
+                        The method is A/B. <strong>Version A (Insecure)</strong> deliberately implements all ten OWASP
+                        categories, from string-concatenated SQL and plaintext passwords to a vulnerable
+                        <code style="font-size:0.78rem;color:var(--accent)">node-serialize</code> cookie and an avatar
+                        upload that will fetch any URL.
+                        <strong>Version B (Secure)</strong> is the same application rebuilt with a specific,
+                        verifiable fix for each one. Both were deployed separately and tested under the same
+                        conditions by four manual penetration testers, SonarQube (SAST), OWASP ZAP (DAST) and Snyk
+                        (SCA), alongside a 24-respondent developer survey.
+                    </p>
+                </div>
+
+                <div class="proj-meta-row">
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Role</p>
+                        <p class="proj-meta-val">Author &amp; Researcher</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Context</p>
+                        <p class="proj-meta-val">BSc Dissertation (6CS007) · P81</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Stack</p>
+                        <p class="proj-meta-val">Vue 3 · Express 5 · PostgreSQL</p>
+                    </div>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">A/B Methodology: What's Compared</p>
+                    <ul class="feature-list">
+                        <li><strong>Insecure:</strong> String-concatenated SQL in every controller</li>
+                        <li><strong>Secure:</strong> Parameterised queries throughout</li>
+                        <li><strong>Insecure:</strong> Plaintext passwords, hardcoded JWT secret, 30-day tokens</li>
+                        <li><strong>Secure:</strong> bcrypt (cost 12), secrets required at boot, 1-hour tokens stored
+                            server-side so logout revokes them
+                        </li>
+                        <li><strong>Insecure:</strong> Trusts user and account IDs sent by the client</li>
+                        <li><strong>Secure:</strong> Ownership checks and admin-only routes, 403 on mismatch</li>
+                        <li><strong>Insecure:</strong> Negative transfer amounts accepted</li>
+                        <li><strong>Secure:</strong> Joi validation on every input; transfers run in a database
+                            transaction with <code style="font-size:0.78rem;color:var(--accent)">SELECT … FOR
+                                UPDATE</code></li>
+                        <li><strong>Insecure:</strong> <code style="font-size:0.78rem;color:var(--accent)">node-serialize</code>
+                            cookie deserialised on every
+                            request
+                        </li>
+                        <li><strong>Secure:</strong> Dependency removed; signed JSON cookie instead</li>
+                        <li><strong>Insecure:</strong> Avatar upload fetches any URL (SSRF)</li>
+                        <li><strong>Secure:</strong> HTTPS only, private and loopback ranges blocked, image types
+                            allowlisted
+                        </li>
+                        <li><strong>Insecure:</strong> Raw database errors returned, no logging</li>
+                        <li><strong>Secure:</strong> Generic error responses; Winston logs to rotating files and a
+                            <code style="font-size:0.78rem;color:var(--accent)">system_logs</code> table
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Full Feature Set (Both Versions)</p>
+                    <ul class="feature-list">
+                        <li>Registration, login and logout with token auth</li>
+                        <li>Money transfer with recipient lookup by account number</li>
+                        <li>Transaction history per account</li>
+                        <li>Profile management, including avatar upload</li>
+                        <li>Admin dashboard: all users, transactions and system logs</li>
+                        <li>Users, accounts, transactions, system_logs and tokens tables via node-pg-migrate</li>
+                    </ul>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Engineering &amp; Research Notes</p>
+                    <ul class="feature-list">
+                        <li>GitHub Actions run SonarQube (SonarCloud), Snyk and OWASP ZAP against both versions and
+                            publish comparison reports
+                        </li>
+                        <li>ZAP API scan driven by the OpenAPI spec, authenticated with a fetched JWT</li>
+                        <li>Manual test reports, scanner reports and survey responses kept in the repo's
+                            <code style="font-size:0.78rem;color:var(--accent)">artefacts/</code> folder
+                        </li>
+                        <li>Postman collection published; Swagger UI served at <code
+                                style="font-size:0.78rem;color:var(--accent)">/api-docs</code></li>
+                        <li>Frontends on Netlify, backends on Render</li>
+                        <li>Findings and the full comparison are on the <a href="research.html"
+                                                                           style="color:var(--accent);border-bottom:1px solid var(--accent);">research
+                            page</a></li>
+                    </ul>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Technologies</p>
+                    <div class="tech-chips">
+                        <span class="tech-chip primary">Vue 3</span>
+                        <span class="tech-chip primary">Express 5</span>
+                        <span class="tech-chip primary">PostgreSQL</span>
+                        <span class="tech-chip">Node.js</span>
+                        <span class="tech-chip">Pinia</span>
+                        <span class="tech-chip">Bootstrap 5</span>
+                        <span class="tech-chip">Joi</span>
+                        <span class="tech-chip">bcrypt</span>
+                        <span class="tech-chip">Winston</span>
+                        <span class="tech-chip">node-pg-migrate</span>
+                        <span class="tech-chip">SonarQube</span>
+                        <span class="tech-chip">Snyk</span>
+                        <span class="tech-chip">OWASP ZAP</span>
+                        <span class="tech-chip">GitHub Actions</span>
+                        <span class="tech-chip">Swagger / OpenAPI</span>
+                        <span class="tech-chip">Netlify</span>
+                        <span class="tech-chip">Render</span>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- ── FootballSite ── -->
+        <article class="proj-entry reveal" data-category="academic">
+            <div class="proj-sidebar">
+                <p class="proj-category">Academic · Full-Stack · RIA</p>
+                <h2 class="proj-title-main">FootballSite</h2>
+                <span class="proj-status archived">Academic</span>
+                <div class="proj-links-sidebar">
+                    <a href="https://github.com/Zubs/footballSite" target="_blank" rel="noopener">GitHub ↗</a>
+                </div>
+            </div>
+
+            <div class="proj-main">
+                <p class="proj-headline">"A full-stack football match tracker with live API sync, AJAX navigation,
+                    geolocation filtering, and social comments — graded 100/100."</p>
+
+
+                <div class="proj-desc-body">
+                    <p>
+                        Built for the <strong>6CC001 Advanced Web Technologies</strong> module at the University of
+                        Wolverhampton, FootballSite is a dynamic football fixture and fan engagement platform.
+                        It integrates a live third-party football data API (API-Football v3), supports AJAX-driven
+                        browsing without full page reloads, and uses the browser Geolocation API to surface matches
+                        relevant to the user's location. Graded 100/100.
+                    </p>
+                    <p>
+                        The architecture is deliberately lean — a custom service class centralises all
+                        outbound API calls, fixtures are cached in MySQL to avoid redundant requests, and the
+                        same controller method serves both full-page loads and AJAX partial updates by detecting
+                        <code style="font-size:0.78rem;color:var(--accent)">$request->ajax()</code> server-side.
+                        Lineups and match stats are fetched lazily on first visit and stored as JSON columns,
+                        keeping the database write load minimal.
+                    </p>
+                </div>
+
+                <div class="proj-meta-row">
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Module</p>
+                        <p class="proj-meta-val">6CC001 Advanced Web Technologies</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Grade</p>
+                        <p class="proj-meta-val" style="color:var(--accent);font-weight:600;">100 / 100</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Stack</p>
+                        <p class="proj-meta-val">Laravel 12 · MySQL · Alpine.js · API-Football</p>
+                    </div>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Core Features</p>
+                    <ul class="feature-list">
+                        <li>Daily fixture dashboard split into completed &amp; upcoming</li>
+                        <li>Live API sync — refreshes automatically for today/yesterday if stale &gt;10 min</li>
+                        <li>Match detail: starting XIs, substitutes, managers, comparative stat bars</li>
+                        <li>AJAX search with 300ms debounce — no full-page reload on team name filter</li>
+                        <li>AJAX date navigation — prev/next day updates match list in-place via Fetch API</li>
+                        <li>Geolocation "Matches near me" using Browser Geolocation + BigDataCloud reverse geocode</li>
+                        <li>Auth system — register, login, email verification, password reset, account deletion</li>
+                        <li>Social comments per match — authenticated users only, displayed newest-first</li>
+                        <li>Responsive design with collapsible mobile nav, fluid breakpoints</li>
+                        <li>Custom 404 page with football-themed copy</li>
+                    </ul>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Key Engineering Decisions</p>
+                    <ul class="feature-list">
+                        <li><code style="font-size:0.78rem;color:var(--accent)">FootballApiService</code> — dedicated
+                            service class for all API-Football calls; maps status codes to local ENUM
+                        </li>
+                        <li>Smart sync: only re-fetches when date is today/yesterday &amp; last sync &gt;10 min old</li>
+                        <li>Lineups &amp; stats lazy-loaded on first match detail visit, cached as JSON columns</li>
+                        <li><code style="font-size:0.78rem;color:var(--accent)">updateOrCreate</code> throughout to
+                            prevent duplicate records on re-sync
+                        </li>
+                        <li>Same controller action serves full-page load and AJAX partial (detects via <code
+                                style="font-size:0.78rem;color:var(--accent)">$request->ajax()</code>)
+                        </li>
+                        <li>Full PHPUnit test suite — Feature and Unit coverage across Auth, Profile, and core flows
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Technologies</p>
+                    <div class="tech-chips">
+                        <span class="tech-chip primary">PHP 8.2</span>
+                        <span class="tech-chip primary">Laravel 12</span>
+                        <span class="tech-chip primary">MySQL</span>
+                        <span class="tech-chip primary">API-Football v3</span>
+                        <span class="tech-chip">Blade Templates</span>
+                        <span class="tech-chip">Alpine.js</span>
+                        <span class="tech-chip">Tailwind CSS</span>
+                        <span class="tech-chip">Fetch API (AJAX)</span>
+                        <span class="tech-chip">Geolocation API</span>
+                        <span class="tech-chip">Laravel Breeze</span>
+                        <span class="tech-chip">PHPUnit</span>
+                        <span class="tech-chip">Vite</span>
+                    </div>
+                </div>
+
+            </div>
+        </article>
+
+        <!-- ── ColabDev ── -->
+        <article class="proj-entry reveal" data-category="academic">
+            <div class="proj-sidebar">
+                <p class="proj-category">Academic · Team Project</p>
+                <h2 class="proj-title-main">ColabDev</h2>
+                <span class="proj-status archived">Academic</span>
+                <div class="proj-links-sidebar">
+                    <a href="https://github.com/Zubs/ColabDev" target="_blank" rel="noopener">GitHub ↗</a>
+                </div>
+            </div>
+
+            <div class="proj-main">
+                <p class="proj-headline">"An open day companion app for the University of Wolverhampton, built from
+                    scratch by a team of eight. It scored 96, the highest mark of the year."</p>
+
+                <div class="proj-desc-body">
+                    <p>
+                        Built for the <strong>5CS024 Collaborative Development</strong> module, ColabDev is a web
+                        app for running university open days. Prospective students browse events and FAQs and
+                        register to attend, while staff manage everything from an admin dashboard. The team of
+                        eight was split across development, security, business and project management. I led the
+                        four-person development team, covering frontend, backend, database and DevOps, and worked
+                        hand in hand with the security and business teams and the project manager.
+                    </p>
+                    <p>
+                        The Flask API is layered into routes, controllers, services and SQLAlchemy models over
+                        PostgreSQL, with schema changes tracked in Alembic migrations. Each registration captures
+                        personal, contact, course interest and event details, then sends HTML emails over Brevo
+                        SMTP: a confirmation to the applicant, a notification to admissions, and a separate email
+                        to a parent or carer when their details are given.
+                    </p>
+                </div>
+
+                <div class="proj-meta-row">
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Role</p>
+                        <p class="proj-meta-val">Lead, 4-person dev team</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Module</p>
+                        <p class="proj-meta-val">5CS024 Collaborative Development</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Grade</p>
+                        <p class="proj-meta-val" style="color:var(--accent);font-weight:600;">96 · Highest of the
+                            year</p>
+                    </div>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Core Features</p>
+                    <ul class="feature-list">
+                        <li>Open day registration with nested field validation</li>
+                        <li>Events listing, grouped by date</li>
+                        <li>Public FAQ page</li>
+                        <li>Applicant, admissions and carer emails on every registration</li>
+                        <li>Admin dashboard to create, edit and delete events and FAQs</li>
+                        <li>Admin views of registrations and staff, plus adding new staff accounts</li>
+                    </ul>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Engineering Decisions</p>
+                    <ul class="feature-list">
+                        <li>Flask blueprints → controllers → services → models, one module per domain</li>
+                        <li>JWT auth with tokens stored server-side, so logout revokes the session</li>
+                        <li>Passwords hashed with PBKDF2-SHA256 via Werkzeug</li>
+                        <li>Five Alembic migrations tracking every schema change</li>
+                        <li>OpenAPI spec served through Swagger UI, plus a Postman collection</li>
+                        <li>Vue Router guards on every admin route, backed by a Pinia auth store</li>
+                        <li>API on Render, deploying automatically from <code
+                                style="font-size:0.78rem;color:var(--accent)">main</code>; SPA on Netlify
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Technologies</p>
+                    <div class="tech-chips">
+                        <span class="tech-chip primary">Python</span>
+                        <span class="tech-chip primary">Flask</span>
+                        <span class="tech-chip primary">PostgreSQL</span>
+                        <span class="tech-chip primary">Vue 3</span>
+                        <span class="tech-chip">SQLAlchemy</span>
+                        <span class="tech-chip">Alembic</span>
+                        <span class="tech-chip">PyJWT</span>
+                        <span class="tech-chip">Pinia</span>
+                        <span class="tech-chip">Vue Router</span>
+                        <span class="tech-chip">Vite</span>
+                        <span class="tech-chip">Axios</span>
+                        <span class="tech-chip">Brevo SMTP</span>
+                        <span class="tech-chip">Swagger / OpenAPI</span>
+                        <span class="tech-chip">Render</span>
+                        <span class="tech-chip">Netlify</span>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- ── IslamicHub ── -->
+        <article class="proj-entry reveal" data-category="product">
+            <div class="proj-sidebar">
+                <p class="proj-category">Product · Open Source</p>
+                <h2 class="proj-title-main">IslamicHub</h2>
+                <span class="proj-status live">Live</span>
+                <div class="proj-links-sidebar">
+                    <a href="https://islamichub.xyz/" target="_blank" rel="noopener">islamichub.xyz ↗</a>
+                    <a href="https://github.com/Zubs/islamichub" target="_blank" rel="noopener">GitHub ↗</a>
+                </div>
+            </div>
+
+            <div class="proj-main">
+                <p class="proj-headline">"A free, open-source Islamic education and tools platform: scholarly guides to
+                    the
+                    Five Pillars alongside a Zakat calculator, prayer times engine and inheritance calculator."</p>
+
+                <div class="proj-desc-body">
+                    <p>
+                        IslamicHub is a free Islamic education and tools platform built for Muslims seeking
+                        accurate, well-sourced religious guidance online. The problem: most Islamic sites are
+                        either overly simplified, source-poor, or built without real attention to the differences
+                        between schools of thought. IslamicHub treats religious accuracy as a hard requirement,
+                        not an afterthought.
+                    </p>
+                    <p>
+                        Every feature — from the prayer times calculation to the inheritance calculator — is
+                        grounded in Qur'an, Hadith, and cross-referenced with all four major schools of Islamic
+                        jurisprudence (Hanafi, Maliki, Shafi'i, Hanbali). The platform is co-founded with Yusuf Saif
+                        and is actively used and maintained.
+                    </p>
+                </div>
+
+                <div class="proj-meta-row">
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Role</p>
+                        <p class="proj-meta-val">Co-founder &amp; Lead Engineer</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Timeline</p>
+                        <p class="proj-meta-val">2026 – Present</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Stack</p>
+                        <p class="proj-meta-val">Vue 3 · Vite · Pinia</p>
+                    </div>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Core Features</p>
+                    <ul class="feature-list">
+                        <li>Accurate prayer times with Qibla direction finder</li>
+                        <li>Zakat calculator with live gold &amp; silver prices</li>
+                        <li>Islamic inheritance calculator</li>
+                        <li>Live API-driven Hijri calendar</li>
+                        <li>Five Pillars guides grounded in primary sources</li>
+                        <li>Cross-school jurisprudence references throughout</li>
+                        <li>Extensive Hadith library</li>
+                    </ul>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Engineering Decisions</p>
+                    <ul class="feature-list">
+                        <li>Migrated from the original design in HTML, CSS, and JavaScript to Vue 3 Composition API</li>
+                        <li>Pinia for predictable, modular state management</li>
+                        <li>Live external API integration for financial data (Zakat)</li>
+                        <li>Structured content architecture for multi-madhab content</li>
+                    </ul>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Technologies</p>
+                    <div class="tech-chips">
+                        <span class="tech-chip primary">Vue 3</span>
+                        <span class="tech-chip primary">JavaScript</span>
+                        <span class="tech-chip primary">Pinia</span>
+                        <span class="tech-chip">Vite</span>
+                        <span class="tech-chip">Vue Router</span>
+                        <span class="tech-chip">REST APIs</span>
+                        <span class="tech-chip">Responsive HTML & CSS</span>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- ── Kueri ── -->
+        <article class="proj-entry reveal" data-category="product">
+            <div class="proj-sidebar">
+                <p class="proj-category">Product · Developer Tool</p>
+                <h2 class="proj-title-main">Kueri</h2>
+                <span class="proj-status building">Building</span>
+                <div class="proj-links-sidebar">
+                    <a href="https://kueriapp.netlify.app/" target="_blank" rel="noopener">Live preview ↗</a>
+                </div>
+            </div>
+
+            <div class="proj-main">
+                <p class="proj-headline">"TablePlus meets Cursor — an AI-native desktop database client for
+                    developers."</p>
+
+
+                <div class="proj-desc-body">
+                    <p>
+                        Most database clients are UI wrappers around SQL. Kueri is an IDE-style tool — you can write
+                        queries the traditional way, or describe what you want in plain English and let the AI
+                        generate and explain the SQL. It's positioned at the intersection of developer tooling and
+                        AI assistance, for teams that already know SQL but want to move faster.
+                    </p>
+                    <p>
+                        Built during a focused 10-day pivot from concept to MVP. Currently in active development,
+                        with a pre-seed pitch deck, AI cost-reduction roadmap, and launch strategy in progress.
+                        Supports PostgreSQL, MySQL, MongoDB, and SQLite.
+                    </p>
+                </div>
+
+                <div class="proj-meta-row">
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Role</p>
+                        <p class="proj-meta-val">Solo founder &amp; Engineer</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Timeline</p>
+                        <p class="proj-meta-val">2025 – Present</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Stack</p>
+                        <p class="proj-meta-val">Electron · Vue 3 · Tailwind · Gemini</p>
+                    </div>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Core Features (MVP)</p>
+                    <ul class="feature-list">
+                        <li>Natural language → SQL query generation</li>
+                        <li>AI query explanation for onboarding &amp; learning</li>
+                        <li>Multi-database support (PG, MySQL, MongoDB, SQLite)</li>
+                        <li>IDE-style interface with schema explorer</li>
+                        <li>Connection management with encrypted credentials</li>
+                        <li>Query history and saved snippets</li>
+                    </ul>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Key Engineering Challenges</p>
+                    <ul class="feature-list">
+                        <li>AI token cost optimisation across query volumes</li>
+                        <li>Cross-database query normalisation layer</li>
+                        <li>Electron IPC architecture for secure DB connections</li>
+                        <li>Context-aware prompt engineering for schema-aware AI</li>
+                    </ul>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Technologies</p>
+                    <div class="tech-chips">
+                        <span class="tech-chip primary">Electron</span>
+                        <span class="tech-chip primary">Vue 3</span>
+                        <span class="tech-chip primary">Google Gemini</span>
+                        <span class="tech-chip">Tailwind CSS</span>
+                        <span class="tech-chip">PostgreSQL</span>
+                        <span class="tech-chip">MySQL</span>
+                        <span class="tech-chip">MongoDB</span>
+                        <span class="tech-chip">SQLite</span>
+                        <span class="tech-chip">Node.js</span>
+                    </div>
+                </div>
+
+            </div>
+        </article>
+
+        <!-- ── Scholar Search ── -->
+        <article class="proj-entry reveal" data-category="academic">
+            <div class="proj-sidebar">
+                <p class="proj-category">Academic · Big Data</p>
+                <h2 class="proj-title-main">ScholarSearch</h2>
+                <span class="proj-status archived">Academic</span>
+                <div class="proj-links-sidebar">
+                    <a href="https://github.com/Zubs/scholar-search" target="_blank" rel="noopener">GitHub ↗</a>
+                </div>
+            </div>
+
+            <div class="proj-main">
+                <p class="proj-headline">"A full-stack academic search engine over an arXiv dataset — built for a Big
+                    Data module."</p>
+
+                <div class="proj-desc-body">
+                    <p>
+                        ScholarSearch is a research paper discovery tool built as a university project for a Big
+                        Data module (6CS030). The system ingests a large arXiv dataset into Elasticsearch,
+                        exposing a fast full-text search API via FastAPI, consumed by a Vue 3 frontend.
+                    </p>
+                    <p>
+                        The project required not just engineering but academic rigour — including a Literature
+                        Review covering information retrieval systems, an IEEE-formatted report, and multiple
+                        audit passes to catch bugs including XSS via v-html, pagination edge cases, sort value
+                        mismatches, and null pointer crashes.
+                    </p>
+                </div>
+
+                <div class="proj-meta-row">
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Role</p>
+                        <p class="proj-meta-val">Lead Engineer &amp; Author</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Module</p>
+                        <p class="proj-meta-val">6CS030 — Big Data</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Dataset</p>
+                        <p class="proj-meta-val">arXiv research papers</p>
+                    </div>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Technical Highlights</p>
+                    <ul class="feature-list">
+                        <li>Elasticsearch for full-text search at scale</li>
+                        <li>FastAPI backend with pagination &amp; filtering</li>
+                        <li>Vue 3 Composition API frontend</li>
+                        <li>XSS remediation (v-html audit)</li>
+                        <li>arXiv dataset ingestion pipeline</li>
+                        <li>IEEE-formatted academic report</li>
+                    </ul>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Technologies</p>
+                    <div class="tech-chips">
+                        <span class="tech-chip primary">Vue 3</span>
+                        <span class="tech-chip primary">FastAPI</span>
+                        <span class="tech-chip primary">Elasticsearch</span>
+                        <span class="tech-chip">Python</span>
+                        <span class="tech-chip">arXiv Dataset</span>
+                        <span class="tech-chip">Docker</span>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- ── toRoman ── -->
+        <article class="proj-entry reveal" data-category="opensource">
+            <div class="proj-sidebar">
+                <p class="proj-category">Open Source · npm Package</p>
+                <h2 class="proj-title-main">toRoman</h2>
+                <span class="proj-status live">Published</span>
+                <div class="proj-links-sidebar">
+                    <a href="https://github.com/Zubs/toRoman" target="_blank" rel="noopener">GitHub ↗</a>
+                    <a href="https://www.npmjs.com/package/toroman" target="_blank" rel="noopener">npm ↗</a>
+                    <a href="packages/toroman/index.html" target="_blank">Interactive Playground ↗</a>
+                </div>
+            </div>
+
+            <div class="proj-main">
+                <p class="proj-headline">"A zero-dependency library for Roman numeral operations — shipped with a full
+                    interactive docs playground."</p>
+
+                <div class="proj-desc-body">
+                    <p>
+                        toRoman is a lightweight TypeScript library for converting between Arabic integers and
+                        Roman numerals, validating Roman numeral strings, and performing arithmetic entirely in
+                        Roman notation. What started as a focused utility grew into a full-featured package with
+                        a rich API and a custom-built interactive documentation site.
+                    </p>
+                    <p>
+                        The library handles edge cases the obvious implementation misses — invalid character
+                        sequences, repetition limits per Roman character, subtractive notation rules — all
+                        enforced with clear, typed error messages. The accompanying docs playground lets users
+                        try every API method in the browser without setup.
+                    </p>
+                </div>
+
+                <div class="proj-meta-row">
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Role</p>
+                        <p class="proj-meta-val">Author &amp; Maintainer</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Distribution</p>
+                        <p class="proj-meta-val">npm · CDN (unpkg)</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Stack</p>
+                        <p class="proj-meta-val">TypeScript · Zero deps</p>
+                    </div>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">API Surface</p>
+                    <ul class="feature-list">
+                        <li><code style="font-size:0.78rem;color:var(--accent)">toRoman(n)</code> — integer → Roman</li>
+                        <li><code style="font-size:0.78rem;color:var(--accent)">fromRoman(s)</code> — Roman → integer
+                        </li>
+                        <li><code style="font-size:0.78rem;color:var(--accent)">isRoman(s)</code> — full validation</li>
+                        <li><code style="font-size:0.78rem;color:var(--accent)">addRoman / subtractRoman</code></li>
+                        <li><code style="font-size:0.78rem;color:var(--accent)">multiplyRoman / divideRoman</code></li>
+                        <li><code style="font-size:0.78rem;color:var(--accent)">rangeRoman / tableRoman</code></li>
+                    </ul>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Technologies</p>
+                    <div class="tech-chips">
+                        <span class="tech-chip primary">TypeScript</span>
+                        <span class="tech-chip primary">npm</span>
+                        <span class="tech-chip">Vanilla JS</span>
+                        <span class="tech-chip">Zero dependencies</span>
+                        <span class="tech-chip">Custom Docs Site</span>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- ── DSA Practice ── -->
+        <article class="proj-entry reveal" data-category="fundamentals">
+            <div class="proj-sidebar">
+                <p class="proj-category">Fundamentals · Data Structures &amp; Algorithms</p>
+                <h2 class="proj-title-main">DSA Practice</h2>
+                <span class="proj-status archived">Practice</span>
+                <div class="proj-links-sidebar">
+                    <a href="https://github.com/Zubs/DSA-Practice" target="_blank" rel="noopener">GitHub ↗</a>
+                    <a href="https://github.com/Zubs/snippets" target="_blank" rel="noopener">Problem solutions ↗</a>
+                </div>
+            </div>
+
+            <div class="proj-main">
+                <p class="proj-headline">"Classic data structures and algorithms written from scratch in PHP and
+                    TypeScript, with tests and Big-O notes for each."</p>
+
+                <div class="proj-desc-body">
+                    <p>
+                        DSA Practice is where I build the fundamentals by hand instead of reaching for built-ins,
+                        working through <em>PHP 7 Data Structures and Algorithms</em> alongside articles and videos.
+                        The PHP side is a Composer package using PHP 8 typed properties and union types, tested with
+                        PHPUnit. The TypeScript side covers searching and sorting, tested with Jest. The README
+                        records the time and space complexity of each structure.
+                    </p>
+                    <p>
+                        Alongside it, my <a href="https://github.com/Zubs/snippets" target="_blank" rel="noopener"
+                                            style="color:var(--accent);border-bottom:1px solid var(--accent);">snippets</a>
+                        repo holds
+                        59 solutions to HackerRank, LeetCode and freeCodeCamp problems in TypeScript and PHP, from Two
+                        Sum and Group Anagrams to Product of Array Except Self and Median of Two Sorted Arrays.
+                    </p>
+                </div>
+
+                <div class="proj-meta-row">
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Role</p>
+                        <p class="proj-meta-val">Author</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Languages</p>
+                        <p class="proj-meta-val">PHP 8 · TypeScript</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Testing</p>
+                        <p class="proj-meta-val">PHPUnit · Jest</p>
+                    </div>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Data Structures (PHP)</p>
+                    <ul class="feature-list">
+                        <li>Linear, circular and doubly linked lists on a shared abstract base that implements
+                            <code style="font-size:0.78rem;color:var(--accent)">Iterator</code>, so lists work in <code
+                                    style="font-size:0.78rem;color:var(--accent)">foreach</code></li>
+                        <li>Stacks backed by an array (with overflow and underflow exceptions) and by a linked list</li>
+                        <li>Binary search tree with insert, search, and delete via in-order successor</li>
+                        <li>Binary max heap with trickle-up insert and trickle-down delete</li>
+                        <li>Hash table, reused as the child map inside the trie</li>
+                        <li>Balanced-bracket checker as a stack application</li>
+                    </ul>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Algorithms (TypeScript)</p>
+                    <ul class="feature-list">
+                        <li>Linear search, ordered linear search and binary search</li>
+                        <li>Bubble, selection and insertion sort</li>
+                        <li>Quick sort and quickselect with in-place partitioning</li>
+                        <li>Table-driven Jest tests for every algorithm</li>
+                    </ul>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Technologies</p>
+                    <div class="tech-chips">
+                        <span class="tech-chip primary">PHP 8</span>
+                        <span class="tech-chip primary">TypeScript</span>
+                        <span class="tech-chip">PHPUnit</span>
+                        <span class="tech-chip">Jest</span>
+                        <span class="tech-chip">Composer</span>
+                        <span class="tech-chip">Big-O Analysis</span>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- ── Be Kind Initiative ── -->
+        <article class="proj-entry reveal" data-category="experiment">
+            <div class="proj-sidebar">
+                <p class="proj-category">Experiment · Charity · Full-Stack</p>
+                <h2 class="proj-title-main">Be Kind Initiative</h2>
+                <span class="proj-status live">Live</span>
+                <div class="proj-links-sidebar">
+                    <a href="https://ohw-2020-3.onrender.com" target="_blank" rel="noopener">Live site ↗</a>
+                    <a href="https://github.com/Zubs/ohw-2020-3" target="_blank" rel="noopener">GitHub ↗</a>
+                </div>
+            </div>
+
+            <div class="proj-main">
+                <p class="proj-headline">"A full-stack web presence for a Lagos-based charity — with a contact form that
+                    saves to MongoDB and sends email notifications in real time."</p>
+
+
+                <div class="proj-desc-body">
+                    <p>
+                        Be Kind Initiative is a Lagos-based NGO working to reduce poverty, train youth in
+                        leadership and volunteering, and support under-resourced communities across Nigeria.
+                        The project needed a public-facing website to expand reach and support grant applications.
+                    </p>
+                    <p>
+                        Built with Node.js, Express, and EJS templating, the site includes a multi-page layout
+                        (Home, About, Contact), a Bootstrap-powered responsive carousel, and a contact form that
+                        persists submissions to MongoDB and triggers an email notification to the organisation
+                        via Nodemailer — giving the team a real-time inbox alert for every inquiry.
+                    </p>
+                </div>
+
+                <div class="proj-meta-row">
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Role</p>
+                        <p class="proj-meta-val">Main Developer</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Client</p>
+                        <p class="proj-meta-val">Be Kind Initiative, Lagos</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Stack</p>
+                        <p class="proj-meta-val">Node.js · Express · EJS · MongoDB</p>
+                    </div>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Features</p>
+                    <ul class="feature-list">
+                        <li>Multi-page site: Home, About, Contact, 404</li>
+                        <li>Bootstrap 4 responsive carousel on homepage</li>
+                        <li>Contact form with name, email, and message</li>
+                        <li>MongoDB persistence via Mongoose for all submissions</li>
+                        <li>Real-time email alerts to the org via Nodemailer</li>
+                        <li>Custom 404 page with styled error handling</li>
+                    </ul>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Engineering Notes</p>
+                    <ul class="feature-list">
+                        <li>Express routing with separate GET/POST handlers</li>
+                        <li>EJS partials (header/footer) for DRY templating</li>
+                        <li>Per-page CSS loaded dynamically via EJS locals</li>
+                        <li>Mongoose schema with timestamps and optional name field</li>
+                        <li>Morgan HTTP request logging in development</li>
+                        <li>Environment config via dotenv for DB URI and port</li>
+                    </ul>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Technologies</p>
+                    <div class="tech-chips">
+                        <span class="tech-chip primary">Node.js</span>
+                        <span class="tech-chip primary">Express</span>
+                        <span class="tech-chip primary">MongoDB</span>
+                        <span class="tech-chip primary">Mongoose</span>
+                        <span class="tech-chip">EJS</span>
+                        <span class="tech-chip">Nodemailer</span>
+                        <span class="tech-chip">Bootstrap 4</span>
+                        <span class="tech-chip">Morgan</span>
+                        <span class="tech-chip">dotenv</span>
+                        <span class="tech-chip">Render</span>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- ── ZTodo ── -->
+        <article class="proj-entry reveal" data-category="experiment">
+            <div class="proj-sidebar">
+                <p class="proj-category">Experiment · Productivity</p>
+                <h2 class="proj-title-main">ZTodo</h2>
+                <span class="proj-status live">Live</span>
+                <div class="proj-links-sidebar">
+                    <a href="https://ztodo.netlify.app" target="_blank" rel="noopener">ztodo.netlify.app ↗</a>
+                    <a href="https://github.com/Zubs/ZTodo" target="_blank" rel="noopener">GitHub ↗</a>
+                </div>
+            </div>
+
+            <div class="proj-main">
+                <p class="proj-headline">"A clean, distraction-free todo app — built to explore Vue 2, Vuetify, and the
+                    full Vue CLI ecosystem."</p>
+
+
+                <div class="proj-desc-body">
+                    <p>
+                        ZTodo is a todo application built with Vue 2 and Vuetify, deployed as a Progressive Web App.
+                        The project was a deliberate exercise in learning the Vue CLI ecosystem end-to-end —
+                        from component architecture and Vuex state management, to routing, service workers,
+                        and PWA configuration for offline support.
+                    </p>
+                    <p>
+                        Each todo supports a title and an optional body for additional context, and the interface
+                        handles inline editing by clicking an existing item — a small UX detail that keeps the
+                        workflow keyboard-friendly and fast. Clean, focused, and ships with zero build warnings.
+                    </p>
+                </div>
+
+                <div class="proj-meta-row">
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Role</p>
+                        <p class="proj-meta-val">Author</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Deployment</p>
+                        <p class="proj-meta-val">Netlify · PWA</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Stack</p>
+                        <p class="proj-meta-val">Vue 2 · Vuetify · Vuex · Vue Router</p>
+                    </div>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Features</p>
+                    <ul class="feature-list">
+                        <li>Create todos with optional detail body</li>
+                        <li>Inline edit by clicking any existing item</li>
+                        <li>Delete individual todos</li>
+                        <li>Completion checkbox state per item</li>
+                        <li>Offline support via service worker (PWA)</li>
+                        <li>Enter key submission for keyboard-first flow</li>
+                    </ul>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Engineering Notes</p>
+                    <ul class="feature-list">
+                        <li>Vuex store wired for global state management</li>
+                        <li>Vue Router with history mode and 404 fallback</li>
+                        <li>Service worker registered via <code style="font-size:0.78rem;color:var(--accent)">register-service-worker</code>
+                        </li>
+                        <li>Full PWA manifest with multi-size icon set</li>
+                        <li>Vuetify Material Design component library</li>
+                        <li>ESLint configured with Vue essential rules</li>
+                    </ul>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Technologies</p>
+                    <div class="tech-chips">
+                        <span class="tech-chip primary">Vue 2</span>
+                        <span class="tech-chip primary">Vuetify</span>
+                        <span class="tech-chip primary">Vuex</span>
+                        <span class="tech-chip">Vue Router</span>
+                        <span class="tech-chip">PWA</span>
+                        <span class="tech-chip">Service Workers</span>
+                        <span class="tech-chip">Netlify</span>
+                        <span class="tech-chip">JavaScript</span>
+                        <span class="tech-chip">Babel</span>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- ── Node Image Finder ── -->
+        <article class="proj-entry reveal" data-category="experiment">
+            <div class="proj-sidebar">
+                <p class="proj-category">Experiment · CLI</p>
+                <h2 class="proj-title-main">Node Image Finder</h2>
+                <span class="proj-status archived">Experiment</span>
+                <div class="proj-links-sidebar">
+                    <a href="https://github.com/Zubs/node_image_finder" target="_blank" rel="noopener">GitHub ↗</a>
+                </div>
+            </div>
+
+            <div class="proj-main">
+                <p class="proj-headline">"My first command-line tool: search Unsplash from the terminal and get
+                    clickable image and download links back."</p>
+
+                <div class="proj-desc-body">
+                    <p>
+                        A small Node.js CLI that takes a search term and an optional orientation, queries the
+                        Unsplash API, and prints the top ten results as clickable terminal hyperlinks, each with a
+                        direct download link. Flags are parsed and validated with yargs, so a missing search term or
+                        an unsupported orientation fails with a clear usage message instead of a stack trace.
+                    </p>
+                </div>
+
+                <div class="proj-meta-row">
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Role</p>
+                        <p class="proj-meta-val">Author</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Type</p>
+                        <p class="proj-meta-val">Node.js CLI</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Stack</p>
+                        <p class="proj-meta-val">Node.js · yargs · Unsplash API</p>
+                    </div>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Features</p>
+                    <ul class="feature-list">
+                        <li><code style="font-size:0.78rem;color:var(--accent)">-s</code> / <code
+                                style="font-size:0.78rem;color:var(--accent)">--search</code>: required search term
+                        </li>
+                        <li><code style="font-size:0.78rem;color:var(--accent)">-o</code> / <code
+                                style="font-size:0.78rem;color:var(--accent)">--orientation</code>: landscape, portrait
+                            or squarish
+                        </li>
+                        <li>Ten results per search, titles linked to full-size images</li>
+                        <li>Download link for every image</li>
+                        <li>Installs as a global <code style="font-size:0.78rem;color:var(--accent)">zubs</code> command
+                            via the <code style="font-size:0.78rem;color:var(--accent)">bin</code> field
+                        </li>
+                        <li>API key kept out of the code with dotenv</li>
+                    </ul>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Technologies</p>
+                    <div class="tech-chips">
+                        <span class="tech-chip primary">Node.js</span>
+                        <span class="tech-chip primary">JavaScript</span>
+                        <span class="tech-chip">yargs</span>
+                        <span class="tech-chip">Unsplash API</span>
+                        <span class="tech-chip">chalk</span>
+                        <span class="tech-chip">boxen</span>
+                        <span class="tech-chip">terminal-link</span>
+                        <span class="tech-chip">dotenv</span>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- ── GPCalc ── -->
+        <article class="proj-entry reveal" data-category="experiment">
+            <div class="proj-sidebar">
+                <p class="proj-category">Experiment · Utility</p>
+                <h2 class="proj-title-main">GPCalc</h2>
+                <span class="proj-status archived">Utility</span>
+                <div class="proj-links-sidebar">
+                    <a href="https://github.com/Zubs/GPCalc" target="_blank" rel="noopener">GitHub ↗</a>
+                </div>
+            </div>
+
+            <div class="proj-main">
+                <p class="proj-headline">"A GPA/CGPA calculator that supports multiple grading scales — built because
+                    the existing ones were too rigid."</p>
+
+                <div class="proj-desc-body">
+                    <p>
+                        GPCalc is a GPA and CGPA calculator utility built for students who need to quickly
+                        compute grade point averages without wrestling with inflexible tools. It supports
+                        different grading scales across institutions and handles the running CGPA calculation
+                        across multiple semesters.
+                    </p>
+                </div>
+
+                <div class="proj-meta-row">
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Role</p>
+                        <p class="proj-meta-val">Author</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Type</p>
+                        <p class="proj-meta-val">Student utility</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Users</p>
+                        <p class="proj-meta-val">Students</p>
+                    </div>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Technologies</p>
+                    <div class="tech-chips">
+                        <span class="tech-chip primary">JavaScript</span>
+                        <span class="tech-chip">HTML/CSS</span>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- ── BrickBreaker ── -->
+        <article class="proj-entry reveal" data-category="experiment">
+            <div class="proj-sidebar">
+                <p class="proj-category">Experiment · AI-Paired</p>
+                <h2 class="proj-title-main">BrickBreaker Challenge</h2>
+                <span class="proj-status archived">Experiment</span>
+                <div class="proj-links-sidebar">
+                    <a href="https://github.com/Zubs/BrickBreakerChallenge" target="_blank" rel="noopener">GitHub ↗</a>
+                </div>
+            </div>
+
+            <div class="proj-main">
+                <p class="proj-headline">"An experiment in human-AI co-authorship — building a game with an AI pair
+                    programmer."</p>
+
+                <div class="proj-desc-body">
+                    <p>
+                        A fully playable Brick Breaker game built in collaboration with an AI pair-programmer.
+                        The project was an intentional exploration of human-AI co-authorship in game development:
+                        where does the human add value, where does the AI excel, and what does the handoff look like?
+                    </p>
+                    <p>
+                        Beyond the game itself, this is a study in prompt engineering, AI output review, and the
+                        pragmatics of building software with generative tools — a skill set increasingly relevant
+                        across the industry.
+                    </p>
+                </div>
+
+                <div class="proj-meta-row">
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Role</p>
+                        <p class="proj-meta-val">Lead + AI co-author</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Type</p>
+                        <p class="proj-meta-val">Browser game</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Stack</p>
+                        <p class="proj-meta-val">Vanilla JavaScript · Canvas API</p>
+                    </div>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Technologies</p>
+                    <div class="tech-chips">
+                        <span class="tech-chip primary">JavaScript</span>
+                        <span class="tech-chip">HTML5 Canvas</span>
+                        <span class="tech-chip">AI-assisted dev</span>
+                    </div>
                 </div>
             </div>
         </article>
@@ -1556,10 +1736,15 @@
 <footer>
     <div class="container">
         <div class="footer-inner">
-            <p class="footer-copy">© 2026 Zubair Idris Aweda.</p>
+            <p class="footer-copy">© 2026 Zubair Idris Aweda. Built with HTML, CSS &amp; JS.</p>
             <div class="footer-links">
                 <a href="index.html">Home</a>
+                <a href="projects.html" aria-current="page">Projects</a>
+                <a href="engineering.html">Engineering</a>
+                <a href="mainframe.html">Mainframe</a>
+                <a href="research.html">Research</a>
                 <a href="testimonials.html">Testimonials</a>
+                <a href="https://github.com/Zubs/Zubs.github.io" target="_blank" rel="noopener">Source ↗</a>
                 <a href="mailto:zubairidrisaweda@gmail.com">Email</a>
             </div>
         </div>
