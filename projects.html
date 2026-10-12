@@ -472,6 +472,138 @@
 <div class="container">
     <div class="proj-entries">
 
+        <!-- ── Miteno ── -->
+        <article class="proj-entry reveal" data-category="product">
+            <div class="proj-sidebar">
+                <p class="proj-category">Client Work · E-commerce · AI-Driven Development</p>
+                <h2 class="proj-title-main">Miteno</h2>
+                <span class="proj-status building">Beta</span>
+            </div>
+
+            <div class="proj-main">
+                <p class="proj-headline">"A WhatsApp-ordering storefront for an independent UK clothing brand, built
+                    spec-first with an AI agent: fifteen features under my supervision, then nine more in a single
+                    unattended run."</p>
+
+                <div class="proj-desc-body">
+                    <p>
+                        Miteno is a beta e-commerce site for an independent UK clothing brand. The owner signs in to a
+                        private admin area to publish designs with photos, sizes, colours, stock and prices, and to
+                        manage collections and site content. Shoppers browse, search and fill a bag without an
+                        account, then press "Order on WhatsApp" to open a pre-filled message listing their items and
+                        the total. There are no online payments in the beta.
+                    </p>
+                    <p>
+                        The project is also my case study in <strong>AI-driven, spec-driven development</strong>. I
+                        wrote the product spec and a build-ordered feature list, then drove Claude Code through
+                        OpenSpec one feature at a time: propose a change (proposal, requirement deltas, design and
+                        tasks), review it, apply it, then archive it so the requirements merge into a living
+                        specification. Nothing counted as finished until Pint, PHPStan and the full test suite passed.
+                    </p>
+                    <p>
+                        <strong>Supervised:</strong> for the first fifteen features I reviewed every plan before any
+                        code was written, made the product and dependency decisions, and merged each feature through
+                        its own pull request. <strong>Unsupervised:</strong> once the cycle was proven, I handed the
+                        remaining nine features to the agent in one run. It built each on its own branch stacked on
+                        the last, checked its own plans, verified pages in a headless browser, and recorded every
+                        decision that needed me in a final "owner's list" feature for me to review afterwards.
+                    </p>
+                </div>
+
+                <div class="proj-meta-row">
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Role</p>
+                        <p class="proj-meta-val">Engineer · Spec author &amp; reviewer</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Method</p>
+                        <p class="proj-meta-val">Spec-driven · Claude Code + OpenSpec</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Stack</p>
+                        <p class="proj-meta-val">Laravel 13 · PostgreSQL · Alpine.js · Bootstrap 5</p>
+                    </div>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Spec-Driven Workflow</p>
+                    <ul class="feature-list">
+                        <li><strong>Propose:</strong> each feature starts as a written change with a proposal,
+                            requirement deltas with scenarios, a design and a task list
+                        </li>
+                        <li><strong>Apply:</strong> the agent works through the tasks, writing the tests alongside
+                            the code
+                        </li>
+                        <li><strong>Archive:</strong> the deltas merge into the main specification, which is
+                            validated strictly on every archive
+                        </li>
+                        <li><strong>Gate:</strong> formatting, static analysis and the full test suite must all pass
+                            before a feature is ticked
+                        </li>
+                        <li><strong>Guardrails:</strong> a short project rules file sets the stack, bans new
+                            dependencies without my approval and keeps the code simple
+                        </li>
+                        <li><strong>Deferred decisions:</strong> anything the agent could not verify or decide alone
+                            goes to an owner's checklist instead of being guessed
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">By the Numbers</p>
+                    <ul class="feature-list">
+                        <li>24 features built in order, from admin sign-in to launch readiness</li>
+                        <li>15 supervised features, 9 unsupervised in one run</li>
+                        <li>32 capability specifications, kept in the repository beside the code</li>
+                        <li>1,103 automated tests, with Pint and PHPStan clean</li>
+                    </ul>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">What Was Built</p>
+                    <ul class="feature-list">
+                        <li>Admin area with two-factor sign-in, products, variants, photos, pricing, sales, stock
+                            and collections
+                        </li>
+                        <li>Editable site content: banner, announcement bar, size guide and information pages with
+                            sanitised rich text
+                        </li>
+                        <li>Shop and collection pages with size, colour and price filters, sorting and paging</li>
+                        <li>Product page with gallery, zoom, variant picker and live stock</li>
+                        <li>Search using PostgreSQL full-text search</li>
+                        <li>Account-free bag kept in the browser and re-checked against live prices and stock</li>
+                        <li>"Order on WhatsApp" and custom request messages built on the server</li>
+                        <li>Meta and social tags, product structured data, sitemap and robots file</li>
+                        <li>Security headers, an accessibility scan with axe-core and a launch-check command</li>
+                    </ul>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Technologies</p>
+                    <div class="tech-chips">
+                        <span class="tech-chip primary">AI-Driven Development</span>
+                        <span class="tech-chip primary">Spec-Driven Development</span>
+                        <span class="tech-chip primary">Claude Code</span>
+                        <span class="tech-chip primary">OpenSpec</span>
+                        <span class="tech-chip">PHP 8.3</span>
+                        <span class="tech-chip">Laravel 13</span>
+                        <span class="tech-chip">PostgreSQL</span>
+                        <span class="tech-chip">Laravel Fortify</span>
+                        <span class="tech-chip">Blade</span>
+                        <span class="tech-chip">Alpine.js</span>
+                        <span class="tech-chip">Bootstrap 5</span>
+                        <span class="tech-chip">Vite</span>
+                        <span class="tech-chip">Spatie Media Library</span>
+                        <span class="tech-chip">Pest</span>
+                        <span class="tech-chip">Pint</span>
+                        <span class="tech-chip">Larastan</span>
+                        <span class="tech-chip">Docker</span>
+                        <span class="tech-chip">Render</span>
+                    </div>
+                </div>
+            </div>
+        </article>
+
         <!-- ── JCLcheck ── -->
         <article class="proj-entry reveal" data-category="product">
             <div class="proj-sidebar">
