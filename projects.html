@@ -1489,6 +1489,104 @@
             </div>
         </article>
 
+        <!-- ── Shipping Label Management System ── -->
+        <article class="proj-entry reveal" data-category="experiment">
+            <div class="proj-sidebar">
+                <p class="proj-category">Experiment · Logistics · Full-Stack</p>
+                <h2 class="proj-title-main">Shipping Label Management System</h2>
+                <span class="proj-status live">Complete</span>
+                <div class="proj-links-sidebar">
+                    <a href="https://github.com/Zubs/shipping-app" target="_blank" rel="noopener">GitHub ↗</a>
+                </div>
+            </div>
+
+            <div class="proj-main">
+                <p class="proj-headline">"A secure, role-based shipping label manager with a web dashboard and a
+                    token-authenticated REST API, both backed by the same authorisation policies."</p>
+
+                <div class="proj-desc-body">
+                    <p>
+                        A time-boxed Laravel build for managing shipping labels. Standard users sign in, create
+                        shipments with a customer name, delivery address and courier, and manage their own shipment
+                        history. Admins get a separate dashboard with full courier management, a system-wide view of
+                        every shipment and a list of registered users.
+                    </p>
+                    <p>
+                        The same features are exposed through a RESTful API secured with Laravel Sanctum tokens.
+                        Authorisation lives in <strong>policies</strong> rather than controllers, so the web routes
+                        and the API enforce identical rules: standard users only ever see their own shipments, and
+                        couriers that still have shipments cannot be deleted.
+                    </p>
+                </div>
+
+                <div class="proj-meta-row">
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Role</p>
+                        <p class="proj-meta-val">Sole Engineer</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Auth</p>
+                        <p class="proj-meta-val">Breeze (web) · Sanctum (API)</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Stack</p>
+                        <p class="proj-meta-val">Laravel 13 · MySQL · Tailwind CSS · Alpine.js</p>
+                    </div>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Architecture</p>
+                    <ul class="feature-list">
+                        <li><strong>Thin controllers:</strong> controllers only coordinate input, domain logic and
+                            responses
+                        </li>
+                        <li><strong>Form requests:</strong> validation and request-level authorisation sit in
+                            dedicated request classes
+                        </li>
+                        <li><strong>Policies:</strong> courier and shipment policies give one source of truth for
+                            permissions across web and API
+                        </li>
+                        <li><strong>API resources:</strong> a transformation layer keeps database columns out of the
+                            public JSON contract
+                        </li>
+                        <li><strong>Backed enum:</strong> user roles are a PHP enum, removing magic strings</li>
+                        <li><strong>Schema constraints:</strong> unique courier codes, restrict-on-delete for couriers
+                            and indexed foreign keys
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Testing</p>
+                    <ul class="feature-list">
+                        <li>Pest suite covering authentication, role-based routing and middleware boundaries</li>
+                        <li>Courier and shipment CRUD, validation rules and delete-constraint protection</li>
+                        <li>API contract tests for status codes (200, 201, 401, 403, 422) and cross-user data
+                            isolation
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Technologies</p>
+                    <div class="tech-chips">
+                        <span class="tech-chip primary">Laravel 13</span>
+                        <span class="tech-chip primary">REST API</span>
+                        <span class="tech-chip primary">RBAC</span>
+                        <span class="tech-chip">PHP 8.3</span>
+                        <span class="tech-chip">MySQL</span>
+                        <span class="tech-chip">Laravel Sanctum</span>
+                        <span class="tech-chip">Laravel Breeze</span>
+                        <span class="tech-chip">Blade</span>
+                        <span class="tech-chip">Tailwind CSS</span>
+                        <span class="tech-chip">Alpine.js</span>
+                        <span class="tech-chip">Vite</span>
+                        <span class="tech-chip">Pest</span>
+                    </div>
+                </div>
+            </div>
+        </article>
+
         <!-- ── Be Kind Initiative ── -->
         <article class="proj-entry reveal" data-category="experiment">
             <div class="proj-sidebar">
