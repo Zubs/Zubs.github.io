@@ -178,6 +178,7 @@
 
     const phrases = [
         'Full-Stack Engineer',
+        'AI-Driven Developer',
         'Open Source Contributor',
         'Technical Writer',
     ];
