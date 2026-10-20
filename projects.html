@@ -613,28 +613,44 @@
                 <div class="proj-links-sidebar">
                     <a href="https://jclcheck.xyz" target="_blank" rel="noopener">jclcheck.xyz ↗</a>
                     <a href="https://github.com/Zubs/jclcheck" target="_blank" rel="noopener">GitHub ↗</a>
+                    <a href="https://www.npmjs.com/package/jclcheck" target="_blank" rel="noopener">npm ↗</a>
                 </div>
             </div>
 
             <div class="proj-main">
-                <p class="proj-headline">"A SaaS JCL validation workbench for mainframe developers — built from scratch
-                    as a custom lexer → parser → AST → rule-engine pipeline. No mainframe connection required."</p>
+                <p class="proj-headline">"A free JCL checker for people learning the mainframe — a custom lexer →
+                    parser → AST → rule-engine pipeline, a 3270-style workbench, and a CLI for CI. No mainframe
+                    connection required."</p>
 
 
                 <div class="proj-desc-body">
                     <p>
-                        JCLcheck is a standalone SaaS JCL (Job Control Language) validator built to help
-                        mainframe developers learn JCL and catch errors before submitting jobs to a real system.
-                        The core insight: you shouldn't need a mainframe connection to validate JCL syntax. The
-                        entire validation pipeline — lexing, parsing, AST construction, rule evaluation —
-                        runs server-side in Node.js, with every diagnostic carrying a plain-English explanation
-                        and a suggested fix.
+                        JCLcheck is a free online checker for z/OS JCL (Job Control Language), built for students
+                        and new mainframe developers who don't have a z/OS system to practise on. Paste JCL into
+                        the workbench and every problem appears straight away with its line and column, an error
+                        code, a plain-English explanation and a suggested fix. The checking is done by my own
+                        lexer, parser and rule engine, based on the IBM JCL Reference.
                     </p>
                     <p>
-                        The workbench UI takes visual cues from classic IBM 3270 terminal
-                        aesthetics — including a PF-key action bar (F1 Help / F5 Validate / F9 Sample / F12 Clear)
-                        — so that the interface itself doubles as a learning tool for the terminal conventions
-                        new mainframe developers need to internalise.
+                        Since the first release it has grown into a full toolset: hover explanations for every
+                        keyword and value, a dataset-flow grid that follows each dataset through a job's steps,
+                        one-key formatting into the standard columns, site profiles and inline suppressions for
+                        a shop's own rules, shareable links, drafts, a z/OS level and JES picker, and a
+                        <code style="font-size:0.78rem;color:var(--accent)">jclcheck</code> command published on
+                        npm whose SARIF output shows problems on the right lines of a GitHub pull request.
+                    </p>
+                    <p>
+                        Much of that second phase was <strong>AI-driven and spec-driven</strong>. Each feature was
+                        written up first — what it does, how it works and its tests — then planned as an
+                        <strong>OpenSpec</strong> change (proposal, spec deltas, tasks) and built with
+                        <strong>Claude Code</strong> as an AI pair programmer, against a regression suite of
+                        exact-diagnostic fixtures. I set the direction, answered the open questions on JCL
+                        behaviour, and reviewed and approved every change.
+                    </p>
+                    <p>
+                        The workbench takes its look from classic IBM 3270 terminals, including a PF-key action
+                        bar (F1 Help · F4 Format · F5 Validate · F6 Share · F9 Sample · F12 Clear), so the
+                        interface itself teaches the conventions new mainframe developers need.
                     </p>
                 </div>
 
@@ -648,36 +664,39 @@
                         <p class="proj-meta-val">Node.js · Express · Vue 3 · Vite</p>
                     </div>
                     <div class="proj-meta-cell">
-                        <p class="proj-meta-key">Domain</p>
-                        <p class="proj-meta-val">IBM z/OS JCL</p>
+                        <p class="proj-meta-key">Process</p>
+                        <p class="proj-meta-val">Spec-driven · AI-assisted</p>
                     </div>
                 </div>
 
                 <div class="proj-block">
-                    <p class="proj-block-label">Validation Pipeline — What Gets Checked</p>
+                    <p class="proj-block-label">What Gets Checked</p>
                     <ul class="feature-list">
-                        <li><strong>Lexer:</strong> <code style="font-size:0.78rem;color:var(--accent)">//</code> record
-                            format, comment/continuation lines, unterminated quotes, 80-column overflow, in-stream data
-                            delimiters
+                        <li><strong>Reading lines:</strong> 80-column records (71 for the statement, 72 for
+                            continuation, 73–80 ignored), comments, continuations including quoted strings
+                            resuming in column 16, in-stream data with <code style="font-size:0.78rem;color:var(--accent)">DLM=</code>, and exact positions on
+                            continued statements
                         </li>
-                        <li><strong>Parser/Structure:</strong> statement recognition (JOB, EXEC, DD, PROC, PEND, SET,
-                            IF/THEN/ELSE/ENDIF, INCLUDE), unmatched parentheses, IF/ENDIF &amp; PROC/PEND balance
+                        <li><strong>Structure:</strong> several jobs per stream, JOB/EXEC/DD order, JCLLIB and
+                            NOTIFY placement, IF/THEN/ELSE conditions and their step references, PROC/PEND balance,
+                            and JES2 job groups with dependency-loop detection
                         </li>
-                        <li><strong>Ordering:</strong> JOB must come first; EXEC before its DDs; only one JOB per job
-                            stream
+                        <li><strong>Keywords and values:</strong> JOB/EXEC/DD and other statements against IBM JCL
+                            Reference tables, with Levenshtein "did you mean…" suggestions, positional limits,
+                            value rules, and DISP/SPACE/DCB/REGION/TIME/dataset-name syntax
                         </li>
-                        <li><strong>DD rules:</strong> duplicate ddnames within a step; exactly one data source required
-                            (DSN / DUMMY / SYSOUT / instream)
+                        <li><strong>z/OS levels and JES:</strong> keywords and statements checked against z/OS 2.3
+                            to 3.2, with JES2 and JES3 control statements
                         </li>
-                        <li><strong>Keywords:</strong> every keyword on JOB/EXEC/DD checked against IBM JCL Reference
-                            tables — with Levenshtein-distance "did you mean…" typo suggestions
+                        <li><strong>Procedures and INCLUDE:</strong> in-stream and catalogued PROCs and INCLUDE
+                            members, symbolic <code style="font-size:0.78rem;color:var(--accent)">&amp;SYM</code> parameters resolved per call, DD overrides and
+                            procedure steps
                         </li>
-                        <li><strong>Parameter syntax:</strong> DISP dispositions, SPACE quantities, DCB sub-parameters
-                            (RECFM/DSORG/LRECL/BLKSIZE), REGION, TIME, DSN qualifier rules
+                        <li><strong>Dataset flow:</strong> temporary datasets read before they exist, passes nobody
+                            reads, datasets catalogued twice, reads after a delete, and referbacks to nothing
                         </li>
-                        <li><strong>Procedures:</strong> in-stream PROC/PEND bodies parsed and validated; EXEC PROC=
-                            calls resolved; symbolic <code style="font-size:0.78rem;color:var(--accent)">&amp;SYM</code>
-                            parameters checked against declared defaults; DD overrides matched against procedure DDs
+                        <li><strong>JCL inside JCL:</strong> jobs sent to the internal reader are checked as jobs of
+                            their own
                         </li>
                     </ul>
                 </div>
@@ -686,41 +705,40 @@
                     <p class="proj-block-label">Diagnostic System</p>
                     <ul class="feature-list">
                         <li>Every diagnostic carries <code style="font-size:0.78rem;color:var(--accent)">{ code,
-                            severity, line, column, message, suggestion }</code></li>
-                        <li>Grouped error codes: <code style="font-size:0.78rem;color:var(--accent)">JCLLxxx</code>
-                            lexer · <code style="font-size:0.78rem;color:var(--accent)">JCLPxxx</code> parser · <code
-                                    style="font-size:0.78rem;color:var(--accent)">JCLOxxx</code> ordering · <code
-                                    style="font-size:0.78rem;color:var(--accent)">JCLDxxx</code> DD · <code
-                                    style="font-size:0.78rem;color:var(--accent)">JCLKxxx</code> keyword · <code
-                                    style="font-size:0.78rem;color:var(--accent)">JCLSxxx</code> syntax · <code
-                                    style="font-size:0.78rem;color:var(--accent)">JCLRxxx</code> proc resolution
+                            severity, line, column, length, message, suggestion }</code>, with a deliberate default
+                            severity per code so a job z/OS would reject is never shown as clean</li>
+                        <li>100 codes in groups such as <code style="font-size:0.78rem;color:var(--accent)">JCLLxxx</code> lines ·
+                            <code style="font-size:0.78rem;color:var(--accent)">JCLPxxx</code> structure · <code style="font-size:0.78rem;color:var(--accent)">JCLKxxx</code> keywords ·
+                            <code style="font-size:0.78rem;color:var(--accent)">JCLSxxx</code> values · <code style="font-size:0.78rem;color:var(--accent)">JCLRxxx</code> procedures ·
+                            <code style="font-size:0.78rem;color:var(--accent)">JCLCxxx</code> IF conditions · <code style="font-size:0.78rem;color:var(--accent)">JCLFxxx</code> dataset flow
                         </li>
-                        <li>Line-numbered editor with diagnostic gutter markers</li>
-                        <li>Errors panel with code, message, and plain-English fix for every issue</li>
-                        <li>Bundled sample JCL snippets (clean / broken / proc+symbolics)</li>
+                        <li>Editor with syntax highlighting, underlines under the exact text, a cursor column
+                            readout, and hover explanations linked to IBM's documentation</li>
+                        <li>Inline <code style="font-size:0.78rem;color:var(--accent)">//* JCLCHECK OFF-NEXT code</code> suppressions and JSON site profiles
+                            for naming standards, allowed values and severities</li>
                     </ul>
                 </div>
 
                 <div class="proj-block">
                     <p class="proj-block-label">Architecture</p>
                     <ul class="feature-list">
-                        <li><code style="font-size:0.78rem;color:var(--accent)">lexer.js</code> — physical lines to
-                            logical statements (continuations, comments)
+                        <li><code style="font-size:0.78rem;color:var(--accent)">validator/</code> — the engine as its own zero-dependency package, published
+                            to npm as <code style="font-size:0.78rem;color:var(--accent)">jclcheck</code>: lexer, parameter tokenizer, parser, rule modules,
+                            formatter and CLI
                         </li>
-                        <li><code style="font-size:0.78rem;color:var(--accent)">paramTokenizer.js</code> — operand
-                            string to positional/keyword params (paren/quote aware)
+                        <li><code style="font-size:0.78rem;color:var(--accent)">backend/</code> — Express API (<code style="font-size:0.78rem;color:var(--accent)">/api/validate</code>,
+                            <code style="font-size:0.78rem;color:var(--accent)">/api/format</code>, <code style="font-size:0.78rem;color:var(--accent)">/api/keywords</code>) on Render, using the npm
+                            package
                         </li>
-                        <li><code style="font-size:0.78rem;color:var(--accent)">parser.js</code> — statements to AST
-                            (Job/Step/DD/Proc/If), ordering + structural checks
+                        <li><code style="font-size:0.78rem;color:var(--accent)">frontend/</code> — Vue 3 SPA on Netlify: landing page, about page and the dark
+                            3270-themed workbench
                         </li>
-                        <li><code style="font-size:0.78rem;color:var(--accent)">rules/</code> — modular rule engine:
-                            ddRules, paramRules, procRules
+                        <li>Around 750 tests: exact-diagnostic fixtures and unit tests on Node's built-in test
+                            runner, plus Vitest component tests; ESLint on every package
                         </li>
-                        <li><code style="font-size:0.78rem;color:var(--accent)">keywords.js</code> — keyword/value
-                            tables distilled from the IBM JCL Reference
+                        <li>Privacy by design: JCL is never stored, drafts stay in the browser, shared links carry
+                            the job after the <code style="font-size:0.78rem;color:var(--accent)">#</code>, and usage is counted anonymously with GoatCounter
                         </li>
-                        <li>Fixture-based smoke test suite with no external test framework dependency</li>
-                        <li>Vue 3 SPA: Landing, About, and dark 3270-themed Workbench pages</li>
                     </ul>
                 </div>
 
@@ -731,11 +749,15 @@
                         <span class="tech-chip primary">Vue 3</span>
                         <span class="tech-chip primary">Express</span>
                         <span class="tech-chip primary">Vite</span>
+                        <span class="tech-chip primary">npm</span>
                         <span class="tech-chip">Vue Router</span>
                         <span class="tech-chip">Custom Lexer</span>
                         <span class="tech-chip">AST / Parser</span>
                         <span class="tech-chip">Levenshtein Distance</span>
-                        <span class="tech-chip">JavaScript</span>
+                        <span class="tech-chip">SARIF</span>
+                        <span class="tech-chip">Vitest</span>
+                        <span class="tech-chip">OpenSpec</span>
+                        <span class="tech-chip">Claude Code</span>
                         <span class="tech-chip">IBM JCL Reference</span>
                         <span class="tech-chip">3270 UI Design</span>
                     </div>
@@ -1398,6 +1420,85 @@
                         <span class="tech-chip">Vanilla JS</span>
                         <span class="tech-chip">Zero dependencies</span>
                         <span class="tech-chip">Custom Docs Site</span>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- ── jclcheck (npm) ── -->
+        <article class="proj-entry reveal" data-category="opensource">
+            <div class="proj-sidebar">
+                <p class="proj-category">Open Source · npm Package · CLI</p>
+                <h2 class="proj-title-main">jclcheck</h2>
+                <span class="proj-status live">Published</span>
+                <div class="proj-links-sidebar">
+                    <a href="https://www.npmjs.com/package/jclcheck" target="_blank" rel="noopener">npm ↗</a>
+                    <a href="https://github.com/Zubs/jclcheck/tree/main/validator" target="_blank"
+                       rel="noopener">GitHub ↗</a>
+                    <a href="https://jclcheck.xyz" target="_blank" rel="noopener">Web workbench ↗</a>
+                </div>
+            </div>
+
+            <div class="proj-main">
+                <p class="proj-headline">"Check z/OS JCL from a terminal or a CI pipeline — the JCLcheck engine as a
+                    zero-dependency npm package."</p>
+
+                <div class="proj-desc-body">
+                    <p>
+                        jclcheck is the validation engine behind JCLcheck, published on its own so mainframe teams
+                        that keep JCL in Git can check it before it ever reaches z/OS. It reads JCL the way z/OS
+                        does and reports each problem with its line and column, a code, a plain-English
+                        explanation and a fix, with no mainframe connection and no dependencies.
+                    </p>
+                    <p>
+                        <code style="font-size:0.78rem;color:var(--accent)">npx jclcheck "jcl/**/*.jcl" --format sarif</code> writes SARIF 2.1.0 that
+                        GitHub code scanning shows on the right lines of a pull request, and exit codes fail the
+                        build on errors. The same package formats JCL into the standard columns, and can be used
+                        as a library. Like the rest of JCLcheck, it was built spec-first with AI assistance.
+                    </p>
+                </div>
+
+                <div class="proj-meta-row">
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Role</p>
+                        <p class="proj-meta-val">Author &amp; Maintainer</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Distribution</p>
+                        <p class="proj-meta-val">npm · npx</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Stack</p>
+                        <p class="proj-meta-val">Node.js · Zero deps</p>
+                    </div>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Command and API</p>
+                    <ul class="feature-list">
+                        <li><code style="font-size:0.78rem;color:var(--accent)">jclcheck &lt;files&gt;</code> — text, JSON or SARIF output; exit 0, 1 or 2
+                            for CI</li>
+                        <li><code style="font-size:0.78rem;color:var(--accent)">--zos</code> / <code style="font-size:0.78rem;color:var(--accent)">--jes</code> — check against z/OS 2.3–3.2,
+                            JES2 or JES3</li>
+                        <li><code style="font-size:0.78rem;color:var(--accent)">--library</code> — catalogued PROCs and INCLUDE members from a folder</li>
+                        <li><code style="font-size:0.78rem;color:var(--accent)">--profile</code> — a site profile for naming standards and severities</li>
+                        <li><code style="font-size:0.78rem;color:var(--accent)">jclcheck format</code> — lay JCL out in the standard columns</li>
+                        <li><code style="font-size:0.78rem;color:var(--accent)">validate()</code> / <code style="font-size:0.78rem;color:var(--accent)">format()</code> — the same engine in your own
+                            code</li>
+                        <li>Opt-in, anonymous usage counting that respects <code style="font-size:0.78rem;color:var(--accent)">DO_NOT_TRACK</code></li>
+                    </ul>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Technologies</p>
+                    <div class="tech-chips">
+                        <span class="tech-chip primary">Node.js</span>
+                        <span class="tech-chip primary">npm</span>
+                        <span class="tech-chip">CLI</span>
+                        <span class="tech-chip">SARIF 2.1.0</span>
+                        <span class="tech-chip">GitHub Actions</span>
+                        <span class="tech-chip">Zero dependencies</span>
+                        <span class="tech-chip">z/OS JCL</span>
                     </div>
                 </div>
             </div>

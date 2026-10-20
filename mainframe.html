@@ -591,28 +591,38 @@
             <div class="about-bio reveal">
                 <p>
                     JCLcheck is a real, self-contained JCL validation engine — lexer, parser, AST, and
-                    rule-engine — that I built and shipped as a live SaaS-style product. It runs entirely without a
-                    mainframe: paste JCL into the browser
-                    workbench and it's validated against rules distilled from the IBM JCL Reference.
+                    rule-engine — that I built and shipped as a free, live product. It runs entirely without a
+                    mainframe: paste JCL into the browser workbench and it's checked against rules distilled
+                    from the IBM JCL Reference, at the z/OS level and JES you choose.
                 </p>
                 <p>
-                    The engine checks statement ordering, DD-statement rules, keyword legality (with
+                    The engine checks statement ordering, DD rules, keyword legality (with
                     Levenshtein-distance "did you mean…" suggestions), DISP/SPACE/DCB/REGION/TIME/DSN
-                    value syntax, and full in-stream PROC resolution with symbolic parameter (&amp;SYM)
-                    validation and DD-override matching, every diagnostic ships with a plain-English
-                    message and a suggested fix, built for people still learning the syntax.
+                    value syntax, IF conditions, JES2 job groups, in-stream and catalogued PROCs with
+                    symbolic (&amp;SYM) parameters, and how each dataset flows through a job's steps. Every
+                    diagnostic ships with a plain-English message and a suggested fix, built for people still
+                    learning the syntax.
                 </p>
                 <p>
-                    The frontend is a Vue 3 workbench with a 3270-terminal-styled editor, line-numbered
-                    diagnostic gutter, and PF-key action bar (F1 Help / F5 Validate / F9 Sample / F12
-                    Clear) — built for learning JCL and training new mainframe developers without
-                    needing z/OS access.
+                    The Vue 3 workbench has a 3270-terminal-styled editor with hover explanations for every
+                    keyword, a PF-key action bar (F1 Help / F4 Format / F5 Validate / F6 Share / F9 Sample /
+                    F12 Clear), shareable links and site profiles. The engine is also published on npm as
+                    <strong>jclcheck</strong>, a zero-dependency CLI whose SARIF output puts JCL problems on
+                    GitHub pull requests.
+                </p>
+                <p>
+                    Much of the later work was <strong>AI-driven and spec-driven</strong>: each feature
+                    specified first, planned as an OpenSpec change and built with Claude Code against a
+                    regression suite of around 750 tests, with every decision on JCL behaviour and every change
+                    reviewed by me.
                 </p>
                 <div style="display:flex;gap:1rem;margin-top:1.8rem;flex-wrap:wrap;">
                     <a href="https://jclcheck.xyz" target="_blank" rel="noopener" class="btn btn-primary"
                        style="font-size:0.68rem;padding:0.7rem 1.5rem;">Launch JCLcheck ↗</a>
                     <a href="https://github.com/Zubs/jclcheck" target="_blank" rel="noopener" class="btn btn-ghost"
                        style="font-size:0.68rem;padding:0.7rem 1.5rem;">View Source ↗</a>
+                    <a href="https://www.npmjs.com/package/jclcheck" target="_blank" rel="noopener" class="btn btn-ghost"
+                       style="font-size:0.68rem;padding:0.7rem 1.5rem;">npm Package ↗</a>
                 </div>
             </div>
             <div class="about-meta reveal">
@@ -623,8 +633,8 @@
                 <div class="meta-block">
                     <p class="meta-label">Architecture</p>
                     <p class="meta-value">Hand-written lexer → paren/quote-aware param tokenizer →
-                        parser → AST → rule engine, orchestrated by a validation pipeline. Node.js/Express
-                        API, Vue 3 + Vite frontend.
+                        parser → AST → rule engine, in a zero-dependency package published on npm.
+                        Node.js/Express API, Vue 3 + Vite frontend. Built spec-driven, with AI assistance.
                     </p>
                 </div>
                 <div class="meta-block">
@@ -645,6 +655,9 @@
                         <span class="tag">Lexer / Parser / AST</span>
                         <span class="tag">JCL</span>
                         <span class="tag">IBM JCL Reference</span>
+                        <span class="tag">npm CLI</span>
+                        <span class="tag">OpenSpec</span>
+                        <span class="tag">Claude Code</span>
                     </div>
                 </div>
             </div>
