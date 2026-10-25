@@ -1352,6 +1352,277 @@
             </div>
         </article>
 
+        <!-- ── ACO Agent ── -->
+        <article class="proj-entry reveal" data-category="academic">
+            <div class="proj-sidebar">
+                <p class="proj-category">Academic · AI · Complex Systems</p>
+                <h2 class="proj-title-main">ACO Agent</h2>
+                <span class="proj-status archived">Academic</span>
+            </div>
+
+            <div class="proj-main">
+                <p class="proj-headline">"An agent in a Unity world that plans its route with Ant Colony
+                    Optimisation, written from scratch, with a Gemini assistant and an on-device image
+                    classifier alongside it."</p>
+
+                <div class="proj-desc-body">
+                    <p>
+                        Built for the <strong>6CS014 Complex Systems</strong> module at the University of
+                        Wolverhampton. Waypoints placed in a 3D Unity scene are joined into a fully connected
+                        graph, and a colony of simulated ants searches it for the shortest tour. Each ant picks
+                        its next waypoint by weighing pheromone against distance, and after every round the
+                        three best tours lay down fresh pheromone while the rest evaporates. Once the colony
+                        settles, an agent walks the highest-pheromone route through the scene.
+                    </p>
+                    <p>
+                        Every ant's tour is logged to a file, so convergence can be measured, not just watched.
+                        With 25 ants on a 10-waypoint graph, the average tour fell from 334.8 to 297.7 units,
+                        and by round 10 every ant was taking the same optimal tour. The project also covers two
+                        other kinds of AI in Unity: a Gemini assistant that answers questions from a small
+                        built-in knowledge store, and MobileNet image classification running on the GPU.
+                    </p>
+                </div>
+
+                <div class="proj-meta-row">
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Module</p>
+                        <p class="proj-meta-val">6CS014 Complex Systems</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Result</p>
+                        <p class="proj-meta-val" style="color:var(--accent);font-weight:600;">Converged in 10
+                            rounds</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Stack</p>
+                        <p class="proj-meta-val">Unity · C# · Gemini API · ONNX</p>
+                    </div>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Core Features</p>
+                    <ul class="feature-list">
+                        <li>Ant Colony Optimisation over a graph built from the scene's active waypoints</li>
+                        <li>Agent moves and turns smoothly along the chosen route</li>
+                        <li>Route and pheromone levels drawn in the Unity editor; selecting a waypoint shows its
+                            connections
+                        </li>
+                        <li>Per-round log of every ant's start node, tour length and path</li>
+                        <li>Gemini 2.5 Flash assistant that looks up facts before answering</li>
+                        <li>MobileNet classifier returning top-3 ImageNet labels with confidence</li>
+                    </ul>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Key Engineering Decisions</p>
+                    <ul class="feature-list">
+                        <li>Pheromone and distance weights (α, β), evaporation and Q kept as named parameters
+                            for tuning
+                        </li>
+                        <li>Only the three best ants deposit pheromone each round, which speeds up convergence
+                        </li>
+                        <li>Ties between equally likely paths go to the shorter connection</li>
+                        <li>Final route follows the strongest pheromone trail, with a cap on path length</li>
+                        <li>Image normalisation folded into the model graph, so the GPU does the preprocessing
+                        </li>
+                        <li>Tensors and workers disposed on teardown to avoid GPU memory leaks</li>
+                    </ul>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Technologies</p>
+                    <div class="tech-chips">
+                        <span class="tech-chip primary">C#</span>
+                        <span class="tech-chip primary">Unity</span>
+                        <span class="tech-chip primary">Ant Colony Optimisation</span>
+                        <span class="tech-chip primary">Gemini API</span>
+                        <span class="tech-chip">Unity Inference Engine</span>
+                        <span class="tech-chip">MobileNet (ONNX)</span>
+                        <span class="tech-chip">UnityWebRequest</span>
+                        <span class="tech-chip">Newtonsoft.Json</span>
+                        <span class="tech-chip">LINQ</span>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- ── Robot Navigation ── -->
+        <article class="proj-entry reveal" data-category="academic">
+            <div class="proj-sidebar">
+                <p class="proj-category">Academic · Robotics</p>
+                <h2 class="proj-title-main">Robot Navigation</h2>
+                <span class="proj-status archived">Academic</span>
+            </div>
+
+            <div class="proj-main">
+                <p class="proj-headline">"Simulated robots that follow lines, solve mazes and steer around
+                    obstacles, controlled from Python in CoppeliaSim."</p>
+
+                <div class="proj-desc-body">
+                    <p>
+                        A series of robot programming tasks for the <strong>5CS036</strong> module, each one
+                        building on the last. A Python wrapper class around CoppeliaSim's remote API turns motor
+                        and sensor handles into simple calls like <code
+                            style="font-size:0.78rem;color:var(--accent)">move_forward()</code> and <code
+                            style="font-size:0.78rem;color:var(--accent)">left_sensor()</code>. Every robot
+                        behaviour is written against that wrapper, not against the raw API.
+                    </p>
+                    <p>
+                        The tasks moved from purely reactive control to structured decision-making. First a
+                        three-sensor line tracer, then a robot that solves a line maze by following the left
+                        wall, then a DR20 robot that uses infrared and ultrasonic sensors to get through a
+                        winding course. The last version swaps hand-written if/else logic for a behaviour tree:
+                        a selector tries "go forward if clear" first, then "turn towards the more open side".
+                    </p>
+                </div>
+
+                <div class="proj-meta-row">
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Module</p>
+                        <p class="proj-meta-val">5CS036</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Robots</p>
+                        <p class="proj-meta-val">Line tracer · DR20</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Stack</p>
+                        <p class="proj-meta-val">Python · CoppeliaSim · Jupyter</p>
+                    </div>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Core Features</p>
+                    <ul class="feature-list">
+                        <li>Line following with three downward-facing vision sensors</li>
+                        <li>Left-wall maze solving, with dead-end U-turns and end-of-maze detection</li>
+                        <li>Obstacle avoidance on the DR20 using five infrared and ultrasonic sensors</li>
+                        <li>Behaviour-tree navigation built from condition and action nodes</li>
+                        <li>Screen recordings of each robot running its course</li>
+                    </ul>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Key Engineering Decisions</p>
+                    <ul class="feature-list">
+                        <li>Wrapper class keeps the remote API calls apart from the robot's behaviour</li>
+                        <li>Robot behaviour exposed as an overridable method, so strategies can be swapped
+                            through inheritance
+                        </li>
+                        <li>Behaviour-tree nodes share sensor readings through a common data store, so each
+                            tick reads the sensors only once
+                        </li>
+                        <li>Selector of sequences gives a clear priority order: forward, then left, then right
+                        </li>
+                        <li>Time limit on every control loop so a stuck robot can't hang the simulation</li>
+                    </ul>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Technologies</p>
+                    <div class="tech-chips">
+                        <span class="tech-chip primary">Python</span>
+                        <span class="tech-chip primary">CoppeliaSim (V-REP)</span>
+                        <span class="tech-chip primary">Behaviour Trees</span>
+                        <span class="tech-chip">Remote API</span>
+                        <span class="tech-chip">NumPy</span>
+                        <span class="tech-chip">Jupyter</span>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- ── Parallel Computing ── -->
+        <article class="proj-entry reveal" data-category="academic">
+            <div class="proj-sidebar">
+                <p class="proj-category">Academic · High-Performance Computing</p>
+                <h2 class="proj-title-main">Parallel Computing in C &amp; CUDA</h2>
+                <span class="proj-status archived">Academic</span>
+            </div>
+
+            <div class="proj-main">
+                <p class="proj-headline">"The same problems solved three ways, with POSIX threads, OpenMP and
+                    CUDA, from counting words to cracking passwords on a GPU."</p>
+
+                <div class="proj-desc-body">
+                    <p>
+                        Coursework from two modules, <strong>5CS021 Numerical Methods and Concurrency</strong>
+                        and <strong>6CS005 High Performance Computing</strong>, all written in C. Each program
+                        takes its thread count as an argument and splits the work evenly, handing any leftover
+                        items to the first threads.
+                    </p>
+                    <p>
+                        On the CPU: a multithreaded word-frequency counter, an estimate of π from the Leibniz
+                        series, polynomial evaluation, box blur over PNG images, and a set of OpenMP matrix
+                        operations (element-wise maths, transpose and multiplication). On the GPU: a Sobel edge
+                        detector with one CUDA thread per pixel, and a brute-force password cracker that gives
+                        each password its own block and spreads the 67,600 candidates across that block's
+                        threads.
+                    </p>
+                </div>
+
+                <div class="proj-meta-row">
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Modules</p>
+                        <p class="proj-meta-val">5CS021 · 6CS005</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Models</p>
+                        <p class="proj-meta-val">pthreads · OpenMP · CUDA</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Language</p>
+                        <p class="proj-meta-val">C / CUDA C</p>
+                    </div>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Core Features</p>
+                    <ul class="feature-list">
+                        <li>Sobel edge detection on RGBA PNGs, run on the GPU</li>
+                        <li>GPU brute-force reversal of an encryption scheme over every letter-letter-digit-digit
+                            password
+                        </li>
+                        <li>OpenMP matrix add, subtract, multiply, divide, transpose and product, with shape
+                            checks
+                        </li>
+                        <li>Word-frequency counter over a large text dataset, using pthreads</li>
+                        <li>π from the Leibniz series and multithreaded polynomial evaluation</li>
+                        <li>Multithreaded box blur on PNG images, plus linear regression from data files</li>
+                    </ul>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Key Engineering Decisions</p>
+                    <ul class="feature-list">
+                        <li>Even work split with remainder handling, so no thread gets more than one extra item
+                        </li>
+                        <li>Each thread sums its own share before taking the mutex once to add it to the total
+                        </li>
+                        <li>OpenMP thread count capped at the number of rows, so no threads sit idle</li>
+                        <li>CUDA password search uses a grid-stride loop, so any block size from 1 to 1024 works
+                        </li>
+                        <li>Sobel edges clamped to the image border, and alpha forced opaque on output</li>
+                        <li>All host and device memory freed explicitly</li>
+                    </ul>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Technologies</p>
+                    <div class="tech-chips">
+                        <span class="tech-chip primary">C</span>
+                        <span class="tech-chip primary">CUDA</span>
+                        <span class="tech-chip primary">OpenMP</span>
+                        <span class="tech-chip primary">POSIX Threads</span>
+                        <span class="tech-chip">LodePNG</span>
+                        <span class="tech-chip">CMake</span>
+                        <span class="tech-chip">Image Processing</span>
+                        <span class="tech-chip">Numerical Methods</span>
+                    </div>
+                </div>
+            </div>
+        </article>
+
         <!-- ── toRoman ── -->
         <article class="proj-entry reveal" data-category="opensource">
             <div class="proj-sidebar">

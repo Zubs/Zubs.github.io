@@ -1,0 +1,66 @@
+# Zubair Idris Aweda
+
+> Full-stack software engineer based in Derby, UK, with 3+ years shipping production systems in FinTech (PHP/Laravel, Node.js, Vue.js, TypeScript) and a First Class BSc (Hons) in Computer Science from the University of Wolverhampton (July 2026, 90.44% average). Technical author with 443K+ readers on freeCodeCamp, former IBM Z Student Ambassador (Superstar tier), and conference speaker. Open to engineering roles, graduate mainframe roles, and MS/PhD research in robotics, human-robot interaction, AI systems and distributed systems.
+
+Contact: zubairidrisaweda@gmail.com · GitHub: https://github.com/Zubs · LinkedIn: https://www.linkedin.com/in/zubairidrisaweda/
+
+Availability: remote (global), hybrid or on-site in the UK, and open to relocation. Preferred focus is backend, or full-stack with a strong backend lean.
+
+## Pages
+
+- [Home](https://zubs.github.io/): About, skills, AI-driven development workflow, work experience, talks, teaching, education and contact
+- [Projects](https://zubs.github.io/projects.html): Detailed write-ups of 20 products, open-source packages, academic projects and experiments
+- [Engineering](https://zubs.github.io/engineering.html): Professional and academic stack, availability, writing, speaking and teaching
+- [Research](https://zubs.github.io/research.html): BSc dissertation comparing manual and automated detection of OWASP Top 10 vulnerabilities, with findings
+- [Mainframe](https://zubs.github.io/mainframe.html): IBM Z ambassadorship, Mainframe Student Society leadership, LFX mentorship, Credly badges and JCLcheck
+- [Testimonials](https://zubs.github.io/testimonials.html): Nine recommendations from managers, leads and teammates across five companies
+
+## CVs and papers
+
+- [Engineering CV (PDF)](https://zubs.github.io/Zubair-Idris-Aweda-ATS-Resume.pdf): Industry and full-stack roles
+- [Academic CV (PDF)](https://zubs.github.io/Zubair-Idris-Aweda-Academic-Resume.pdf): Graduate research applications
+- [Dissertation (PDF)](https://zubs.github.io/Detecting%20and%20Mitigating%20OWASP%20Top%2010%20Threats_%20Design,%20Implementation%20and%20Security%20Evaluation%20of%20a%20Database-Driven%20Web%20App.pdf): Detecting and Mitigating OWASP Top 10 Threats (module grade P81)
+- [Dissertation defence slides (PDF)](https://zubs.github.io/Detecting-and-Mitigating-OWASP-Top-10-Threats.pdf)
+
+## Experience
+
+- Stax Payments, Mid-Senior Full-Stack Engineer (PHP), Jun 2022 – Oct 2023: Laravel microservices for high-volume payments at 99.9% uptime; API documentation that cut onboarding time by about 40%
+- freeCodeCamp, Technical Author and Open Source Contributor, 2021 – present: 15+ articles, 443K+ views, Top Open Source Contributor 2021–2024
+- AYU Digital, Software Engineer (contract), Jan – May 2022: Omnichannel notifications (Mailgun, Firebase, Twilio), Twilio verification, PCI-compliant Stripe payments
+- Humongous.io, Software Engineer (contract), Mar – Jun 2021: TypeScript migration and automated testing
+- CitonHub, Junior Backend Engineer (contract), Nov 2020 – Jan 2021: Laravel and Vue.js modernisation
+
+## Featured projects
+
+- [JCLcheck](https://jclcheck.xyz): Live JCL validation SaaS with a hand-written lexer, parser, AST and rule engine, a 3270-style workbench and an npm CLI with SARIF output ([source](https://github.com/Zubs/jclcheck), [npm](https://www.npmjs.com/package/jclcheck))
+- [OWASP SecBank](https://github.com/Zubs/owasp-sec-bank): Dissertation artefact; one banking app built twice, vulnerable and hardened (Vue 3, Express 5, PostgreSQL)
+- Miteno: WhatsApp-ordering storefront for a UK clothing brand, built spec-first with an AI coding agent
+- [IslamicHub](https://islamichub.xyz/): Open-source Islamic education platform with Zakat, prayer times and inheritance calculators
+- [Kueri](https://kueriapp.netlify.app/): AI-native desktop database client (Electron, Vue 3, Gemini), in progress
+- [FootballSite](https://github.com/Zubs/footballSite): Laravel football match tracker with live API sync, graded 100/100
+- [ColabDev](https://github.com/Zubs/ColabDev): University open day app built by a team of eight; led the development team; highest mark of the year (96)
+- [ScholarSearch](https://github.com/Zubs/scholar-search): Academic search engine over arXiv (FastAPI, Elasticsearch, Vue 3)
+- ACO Agent: Unity agent using hand-written Ant Colony Optimisation route planning, plus a Gemini assistant and MobileNet image classification (6CS014 Complex Systems)
+- Robot Navigation: Line following, maze solving and behaviour-tree obstacle avoidance for simulated robots in CoppeliaSim (Python)
+- Parallel Computing in C & CUDA: pthreads, OpenMP and CUDA coursework including GPU Sobel edge detection and a GPU password cracker (6CS005 High Performance Computing, 100%)
+- [toRoman](https://github.com/Zubs/toRoman): Zero-dependency TypeScript Roman numeral library on npm ([playground](https://zubs.github.io/packages/toroman/))
+
+The [Projects page](https://zubs.github.io/projects.html) has the full list, including smaller experiments.
+
+## Mainframe series
+
+- [Mainframe 101: An Interactive Series](https://zubs.github.io/mainframe-series/): Beginner-friendly interactive modules on IBM Z
+- [Introduction to the Mainframe Workload Manager (WLM)](https://zubs.github.io/mainframe-series/introduction-to-the-mainframe-workload-manager-wlm/)
+- [Batch Processing and the Job Entry Subsystem (JES)](https://zubs.github.io/mainframe-series/batch-processing-and-the-job-entry-subsystem-jes/)
+- [Designing and Developing Applications for z/OS](https://zubs.github.io/mainframe-series/designing-and-developing-applications-for-zos/)
+- [Introduction to Mainframe Programming Languages](https://zubs.github.io/mainframe-series/introduction-to-mainframe-programming-languages/)
+- [Introduction to Mainframe Scripting Languages](https://zubs.github.io/mainframe-series/introduction-to-mainframe-scripting-languages/)
+- [Mainframe Communications](https://zubs.github.io/mainframe-series/mainframe-communications/)
+- [Mainframe Interaction](https://zubs.github.io/mainframe-series/mainframe-interaction/)
+
+## Optional
+
+- [freeCodeCamp articles](https://www.freecodecamp.org/news/author/Zubs): Backend engineering, Laravel, Node.js, security and algorithms
+- [Medium](https://zubairidrisaweda.medium.com): Mainframe and enterprise computing writing
+- [Credly badges](https://www.credly.com/users/zubairidrisaweda): Verified IBM Z credentials
+- [Site source](https://github.com/Zubs/Zubs.github.io)
