@@ -8,7 +8,7 @@ Availability: remote (global), hybrid or on-site in the UK, and open to relocati
 
 ## Pages
 
-- [Home](https://zubs.github.io/): About, skills, AI-driven development workflow, work experience, talks, teaching, education and contact
+- [Home](https://zubs.github.io/): About, skills, AI-driven development workflow, graph database (Neo4j) certifications, work experience, talks, teaching, education and contact
 - [Projects](https://zubs.github.io/projects.html): Detailed write-ups of 20 products, open-source packages, academic projects and experiments
 - [Engineering](https://zubs.github.io/engineering.html): Professional and academic stack, availability, writing, speaking and teaching
 - [Research](https://zubs.github.io/research.html): BSc dissertation comparing manual and automated detection of OWASP Top 10 vulnerabilities, with findings
@@ -57,6 +57,12 @@ The [Projects page](https://zubs.github.io/projects.html) has the full list, inc
 - [Introduction to Mainframe Scripting Languages](https://zubs.github.io/mainframe-series/introduction-to-mainframe-scripting-languages/)
 - [Mainframe Communications](https://zubs.github.io/mainframe-series/mainframe-communications/)
 - [Mainframe Interaction](https://zubs.github.io/mainframe-series/mainframe-interaction/)
+
+## Certifications
+
+- [Neo4j Certified Professional](https://graphacademy.neo4j.com/c/c2e5a167-a80b-47aa-8f06-17d567706378), Neo4j, Oct 2026
+- Neo4j GraphAcademy, Oct 2026: [Neo4j Fundamentals](https://graphacademy.neo4j.com/c/990c97d0-bc94-419a-bce9-7590c99fecb1), [Cypher Fundamentals](https://graphacademy.neo4j.com/c/c0e54fdd-6b68-41c0-9215-2f0852d14881), [Graph Data Modeling Fundamentals](https://graphacademy.neo4j.com/c/c83bfa8c-27ba-41af-b519-6538b3f65656), [Importing Data Fundamentals](https://graphacademy.neo4j.com/c/00bfbd6a-e676-46b5-836e-4e2dd8962ef2), [Neo4j & Generative AI Fundamentals](https://graphacademy.neo4j.com/c/ac3053a6-3d39-47c3-9e2a-0793418a761d), [Using Neo4j with Python](https://graphacademy.neo4j.com/c/04968111-e534-4c78-a798-e07e9877c722)
+- Unlearn, Oct 2026: [Turbo Mode: Optimizing Productivity with AI Tools & Agents](https://unlearn.dev/c/a2f3a4d8-d8ab-43d1-ad44-e7824713ffb2), [The Future Proof Dev: An Intro to AI for Web Developers](https://unlearn.dev/c/a2f1cf73-b71f-4ed9-ba81-a273b7787f7f)
 
 ## Optional
 
