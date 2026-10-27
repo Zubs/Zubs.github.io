@@ -9,7 +9,7 @@ Availability: remote (global), hybrid or on-site in the UK, and open to relocati
 ## Pages
 
 - [Home](https://zubs.github.io/): About, skills, AI-driven development workflow, graph database (Neo4j) certifications, work experience, talks, teaching, education and contact
-- [Projects](https://zubs.github.io/projects.html): Detailed write-ups of 20 products, open-source packages, academic projects and experiments
+- [Projects](https://zubs.github.io/projects.html): Detailed write-ups of 21 products, open-source packages, academic projects and experiments
 - [Engineering](https://zubs.github.io/engineering.html): Professional and academic stack, availability, writing, speaking and teaching
 - [Research](https://zubs.github.io/research.html): BSc dissertation comparing manual and automated detection of OWASP Top 10 vulnerabilities, with findings
 - [Mainframe](https://zubs.github.io/mainframe.html): IBM Z ambassadorship, Mainframe Student Society leadership, LFX mentorship, Credly badges and JCLcheck
@@ -32,6 +32,7 @@ Availability: remote (global), hybrid or on-site in the UK, and open to relocati
 
 ## Featured projects
 
+- [konvertoj](https://www.npmjs.com/package/konvertoj): Private, local file converter CLI (149 modes for images, HEIC, PDF, GIF, video and audio), built spec-first by Claude Code with OpenSpec, with 30 plan-reviewer and regression-tester sub-agents, released as 1.0.0 with npm provenance ([source](https://github.com/Zubs/konvertoj))
 - [JCLcheck](https://jclcheck.xyz): Live JCL validation SaaS with a hand-written lexer, parser, AST and rule engine, a 3270-style workbench and an npm CLI with SARIF output ([source](https://github.com/Zubs/jclcheck), [npm](https://www.npmjs.com/package/jclcheck))
 - [OWASP SecBank](https://github.com/Zubs/owasp-sec-bank): Dissertation artefact; one banking app built twice, vulnerable and hardened (Vue 3, Express 5, PostgreSQL)
 - Miteno: WhatsApp-ordering storefront for a UK clothing brand, built spec-first with an AI coding agent

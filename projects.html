@@ -1623,6 +1623,146 @@
             </div>
         </article>
 
+        <!-- ── konvertoj ── -->
+        <article class="proj-entry reveal" data-category="opensource">
+            <div class="proj-sidebar">
+                <p class="proj-category">Open Source · CLI · Agentic Development</p>
+                <h2 class="proj-title-main">konvertoj</h2>
+                <span class="proj-status live">Live on npm</span>
+                <div class="proj-links-sidebar">
+                    <a href="https://www.npmjs.com/package/konvertoj" target="_blank" rel="noopener">npm ↗</a>
+                    <a href="https://github.com/Zubs/konvertoj" target="_blank" rel="noopener">GitHub ↗</a>
+                </div>
+            </div>
+
+            <div class="proj-main">
+                <p class="proj-headline">"A private, local file converter, like FreeConvert but nothing is uploaded:
+                    149 modes for images, iPhone photos, PDFs, GIFs, video and audio, built spec-first by a team of AI
+                    agents that I directed, and released as 1.0.0 with npm provenance."</p>
+
+                <div class="proj-desc-body">
+                    <p>
+                        konvertoj (Esperanto for "to convert") is a command-line tool that converts and edits files on
+                        your own computer. <code style="font-size:0.78rem;color:var(--accent)">npx konvertoj -m heictojpg holiday.heic</code>
+                        turns an iPhone photo into a JPG with nothing to install but Node.js. It converts between JPG,
+                        PNG, WebP, AVIF, GIF, TIFF, BMP, ICO, HEIC and SVG; resizes, compresses, crops, rotates and
+                        strips location data; turns images into PDFs and PDF pages into images; makes GIFs; and converts
+                        video to MP4 and extracts audio. Video uses FFmpeg: an installed copy, or a checksummed add-on
+                        that konvertoj downloads once, only after asking.
+                    </p>
+                    <p>
+                        I built it to solve a problem I had: converting files without uploading them to a website. It
+                        was developed through <strong>spec-driven, agentic development</strong>. I wrote the product
+                        spec, a build-ordered list of 20 features and the agent's rules, then directed
+                        <strong>Claude Code</strong> through <strong>OpenSpec</strong>: every feature was proposed,
+                        checked by a reviewer agent, built, regression-tested by a second agent and archived into a
+                        living specification.
+                    </p>
+                    <p>
+                        <strong>Unsupervised:</strong> features 5 to 19 were built in a single run, each on its own
+                        branch. <strong>Human in the loop:</strong> I stayed in the loop by testing and validating
+                        the output at every stage, through to the release.
+                    </p>
+                </div>
+
+                <div class="proj-meta-row">
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Role</p>
+                        <p class="proj-meta-val">Sole Product Engineer</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Method</p>
+                        <p class="proj-meta-val">Spec-driven · Agentic · Claude Code + OpenSpec</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Stack</p>
+                        <p class="proj-meta-val">TypeScript · Node.js · sharp · pdf.js · FFmpeg</p>
+                    </div>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Agentic Workflow</p>
+                    <ul class="feature-list">
+                        <li><strong>Propose:</strong> each feature starts as an OpenSpec change with a proposal,
+                            requirement deltas, a design and tasks, validated strictly
+                        </li>
+                        <li><strong>Review:</strong> a reviewer agent checks the plan against the spec and feature
+                            list, and the plan is revised until it is approved
+                        </li>
+                        <li><strong>Apply and gate:</strong> code and tests are written together; formatting, type
+                            checks, linting, tests and the build must all pass
+                        </li>
+                        <li><strong>Regression:</strong> a tester agent re-checks every feature built so far on real
+                            files and reports confirmed bugs, which are fixed before archiving
+                        </li>
+                        <li><strong>Archive:</strong> requirement deltas merge into 25 capability specifications kept
+                            beside the code
+                        </li>
+                        <li><strong>Agents:</strong> 1 orchestrator and 30 sub-agents (plan reviewers and regression
+                            testers)
+                        </li>
+                        <li><strong>Safety:</strong> the entire agentic process ran in a sandboxed environment on the
+                            principle of least privilege; sub-agents could only read and test, never edit, commit or
+                            publish
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Architecture</p>
+                    <ul class="feature-list">
+                        <li><strong>Mode registry:</strong> the single source of truth for every mode; help,
+                            <code style="font-size:0.78rem;color:var(--accent)">--list-modes</code>, input checks, suggestions and the README are generated from it
+                        </li>
+                        <li><strong>Pipeline:</strong> argument parsing → input planning and safe output naming →
+                            format detection from file contents → parallel batch runner → reporter with exit codes
+                        </li>
+                        <li><strong>Converters:</strong> sharp, heic-decode, bmp-ts, decode-ico and a custom ICO
+                            encoder for images; pdf-lib and pdf.js for PDFs; exifr for metadata
+                        </li>
+                        <li><strong>Video add-on:</strong> FFmpeg from the PATH or a pinned, checksummed download, with
+                            proxy support and no shell
+                        </li>
+                        <li><strong>Safe by default:</strong> originals are never modified, outputs are written
+                            atomically, and nothing is overwritten without <code style="font-size:0.78rem;color:var(--accent)">--overwrite</code>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Quality &amp; Release</p>
+                    <ul class="feature-list">
+                        <li>937 Vitest tests, including every README and help example run as a test</li>
+                        <li>CI on Windows, macOS and Linux, plus clean-install smoke tests on 5 platforms × 3 Node.js
+                            versions with install-size and start-up-time budgets
+                        </li>
+                        <li>Released from a GitHub Actions tag with npm provenance, staged publishing approved with
+                            two-factor authentication, then tokenless trusted publishing
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Technologies</p>
+                    <div class="tech-chips">
+                        <span class="tech-chip primary">Agentic Development</span>
+                        <span class="tech-chip primary">Spec-Driven Development</span>
+                        <span class="tech-chip primary">Claude Code</span>
+                        <span class="tech-chip primary">OpenSpec</span>
+                        <span class="tech-chip primary">TypeScript</span>
+                        <span class="tech-chip">Node.js</span>
+                        <span class="tech-chip">sharp</span>
+                        <span class="tech-chip">pdf-lib</span>
+                        <span class="tech-chip">pdf.js</span>
+                        <span class="tech-chip">FFmpeg</span>
+                        <span class="tech-chip">Vitest</span>
+                        <span class="tech-chip">GitHub Actions</span>
+                        <span class="tech-chip">npm Provenance</span>
+                    </div>
+                </div>
+            </div>
+        </article>
+
         <!-- ── toRoman ── -->
         <article class="proj-entry reveal" data-category="opensource">
             <div class="proj-sidebar">
