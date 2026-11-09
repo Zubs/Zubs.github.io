@@ -12,7 +12,7 @@ Availability: remote (global), hybrid or on-site in the UK, and open to relocati
 - [Projects](https://zubs.github.io/projects.html): Detailed write-ups of 21 products, open-source packages, academic projects and experiments
 - [Engineering](https://zubs.github.io/engineering.html): Professional and academic stack, availability, writing, speaking and teaching
 - [Research](https://zubs.github.io/research.html): BSc dissertation comparing manual and automated detection of OWASP Top 10 vulnerabilities, with findings
-- [Mainframe](https://zubs.github.io/mainframe.html): IBM Z ambassadorship, Mainframe Student Society leadership, LFX mentorship, Credly badges and JCLcheck
+- [Mainframe](https://zubs.github.io/mainframe.html): IBM Z ambassadorship, Mainframe Student Society leadership, LFX mentorship, GSUK 2026 talks (mainframe skills gap, z/OS Workload Manager) and open-source panel, Credly badges and JCLcheck
 - [Testimonials](https://zubs.github.io/testimonials.html): Nine recommendations from managers, leads and teammates across five companies
 
 ## CVs and papers
