@@ -472,6 +472,158 @@
 <div class="container">
     <div class="proj-entries">
 
+        <!-- ── Ledgerline ── -->
+        <article class="proj-entry reveal" data-category="product">
+            <div class="proj-sidebar">
+                <p class="proj-category">Product · EdTech · Multi-Agent Development</p>
+                <h2 class="proj-title-main">Ledgerline</h2>
+                <span class="proj-status live">Live</span>
+                <div class="proj-links-sidebar">
+                    <a href="https://cfa-l1-study.netlify.app" target="_blank" rel="noopener">cfa-l1-study.netlify.app ↗</a>
+                </div>
+            </div>
+
+            <div class="proj-main">
+                <p class="proj-headline">"A CFA Level I study app I built for my brother: summaries, timed quizzes and
+                    a study plan drawn from 1,091 resources, written and checked by a team of 94 AI agents so that
+                    every answer is correct and every claim has a source."</p>
+
+                <div class="proj-desc-body">
+                    <p>
+                        My brother is preparing for the CFA Level I exam. He had far more material than he could
+                        filter, learn and practise from: curriculum books, past and mock papers, a Q-bank and hundreds
+                        of lecture videos, all open in a browser tab he studied from. He asked how I could help, so I
+                        built him a study app.
+                    </p>
+                    <p>
+                        Ledgerline gives him a short revision summary for every module of the ten exam topics, timed
+                        quizzes in the real exam format, a mixed mock weighted like the exam, and a day-by-day study
+                        plan sized to the days and hours he has. It is a lightweight Vue app with no backend and no
+                        accounts. It loads only what each page needs, works on a phone, and is checked for
+                        accessibility on every page in light and dark mode.
+                    </p>
+                    <p>
+                        The hard part was not the interface but the <strong>content</strong>. A study app that shows a
+                        wrong answer or a wrong formula does more harm than no app at all, so every summary and every
+                        question had to be correct, written in its own words, and traceable to a page, a timestamp or
+                        a paper question. The build agent first worked through all 1,091 resources and wrote study
+                        notes. Other agents then wrote questions from those notes. Separate agents graded every
+                        question <strong>blind</strong>, without seeing the answer key, and any disagreement went
+                        back for a fix and a fresh grade. Reviewer agents also read the summaries against the
+                        curriculum books and corrected what was wrong.
+                    </p>
+                    <p>
+                        I built it alone, spec-first with Claude Code and OpenSpec: I wrote the product spec and the
+                        feature list, reviewed every plan, made the product and content decisions, and directed the
+                        agents through each feature.
+                    </p>
+                </div>
+
+                <div class="proj-meta-row">
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Role</p>
+                        <p class="proj-meta-val">Solo engineer · Spec author &amp; reviewer</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Method</p>
+                        <p class="proj-meta-val">Spec-driven · 94 agents · Claude Code + OpenSpec</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Stack</p>
+                        <p class="proj-meta-val">Vue 3 · TypeScript · Vite · Tailwind CSS</p>
+                    </div>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">The Agent Team</p>
+                    <ul class="feature-list">
+                        <li><strong>Builder:</strong> the main agent studied the material, planned each feature
+                            through OpenSpec, and wrote the app and its tests
+                        </li>
+                        <li><strong>Question writers:</strong> wrote original questions from the study notes, each
+                            citing a page in its own module
+                        </li>
+                        <li><strong>Blind graders:</strong> answered every question without the key, recomputing
+                            every calculation, so wrong or ambiguous keys showed up as disagreements
+                        </li>
+                        <li><strong>Re-graders:</strong> confirmed each fix with a fresh, independent grade</li>
+                        <li><strong>Curriculum reviewers:</strong> read summaries line by line against the 2027
+                            books and corrected formulas, definitions and worked examples
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Keeping the Content Right</p>
+                    <ul class="feature-list">
+                        <li>Every summary section and every question cites a page, a video timestamp or a paper
+                            question
+                        </li>
+                        <li>Mock and Q-bank questions are rewritten with new wording and new figures, and an
+                            automated check rejects any 12-word run copied from the material
+                        </li>
+                        <li>Where sources disagree, the content follows the curriculum and the disagreement is
+                            recorded
+                        </li>
+                        <li>Content checks run with the unit tests, covering citations, maths that must parse,
+                            answer balance and every module's question target
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">By the Numbers</p>
+                    <ul class="feature-list">
+                        <li>1,091 resources catalogued (166 books and notes, 112 papers and 813 videos), 626 of them
+                            usable, studied and cited
+                        </li>
+                        <li>6,520 practice questions, every one graded blind against its key</li>
+                        <li>94 agents: one builder and 93 writers, graders and reviewers</li>
+                        <li>18 features built in order, with 23 capability specifications kept beside the code</li>
+                        <li>427 unit and component tests and 296 browser tests across four browsers</li>
+                    </ul>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">What Was Built</p>
+                    <ul class="feature-list">
+                        <li>Revision summaries for every module, with typeset formulas, worked examples and cited
+                            sources
+                        </li>
+                        <li>Timed 90-question course quizzes, 20-question module quizzes and a weighted mixed mock,
+                            all fully usable from the keyboard
+                        </li>
+                        <li>Results with the weakest modules first and a review of every answer with its explanation
+                            and sources
+                        </li>
+                        <li>A day-by-day study plan with a checklist, built to the days and hours available</li>
+                        <li>An exam-year switch for the 2026 or 2027 curriculum, and saved quiz scores</li>
+                        <li>Sharing from the phone, link previews, and axe accessibility checks on every page</li>
+                    </ul>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Technologies</p>
+                    <div class="tech-chips">
+                        <span class="tech-chip primary">Multi-Agent Development</span>
+                        <span class="tech-chip primary">Spec-Driven Development</span>
+                        <span class="tech-chip primary">Claude Code</span>
+                        <span class="tech-chip primary">OpenSpec</span>
+                        <span class="tech-chip">Vue 3</span>
+                        <span class="tech-chip">TypeScript</span>
+                        <span class="tech-chip">Vue Router</span>
+                        <span class="tech-chip">Vite</span>
+                        <span class="tech-chip">Tailwind CSS</span>
+                        <span class="tech-chip">KaTeX</span>
+                        <span class="tech-chip">Vitest</span>
+                        <span class="tech-chip">Playwright</span>
+                        <span class="tech-chip">axe-core</span>
+                        <span class="tech-chip">Netlify</span>
+                    </div>
+                </div>
+            </div>
+        </article>
+
         <!-- ── Miteno ── -->
         <article class="proj-entry reveal" data-category="product">
             <div class="proj-sidebar">

@@ -32,6 +32,7 @@ Availability: remote (global), hybrid or on-site in the UK, and open to relocati
 
 ## Featured projects
 
+- [Ledgerline](https://cfa-l1-study.netlify.app): CFA Level I study app built for my brother (Vue 3, TypeScript): summaries, timed quizzes and a study plan drawn from 1,091 resources, with 6,520 questions written and blind-graded by 94 Claude Code agents through spec-driven development with OpenSpec
 - [konvertoj](https://www.npmjs.com/package/konvertoj): Private, local file converter CLI (149 modes for images, HEIC, PDF, GIF, video and audio), built spec-first by Claude Code with OpenSpec, with 30 plan-reviewer and regression-tester sub-agents, released as 1.0.0 with npm provenance ([source](https://github.com/Zubs/konvertoj))
 - [JCLcheck](https://jclcheck.xyz): Live JCL validation SaaS with a hand-written lexer, parser, AST and rule engine, a 3270-style workbench and an npm CLI with SARIF output ([source](https://github.com/Zubs/jclcheck), [npm](https://www.npmjs.com/package/jclcheck))
 - [OWASP SecBank](https://github.com/Zubs/owasp-sec-bank): Dissertation artefact; one banking app built twice, vulnerable and hardened (Vue 3, Express 5, PostgreSQL)
