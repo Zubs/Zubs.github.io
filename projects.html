@@ -2067,6 +2067,118 @@
             </div>
         </article>
 
+        <!-- ── XStarter ── -->
+        <article class="proj-entry reveal" data-category="opensource">
+            <div class="proj-sidebar">
+                <p class="proj-category">Open Source · npm Package · CLI</p>
+                <h2 class="proj-title-main">XStarter</h2>
+                <span class="proj-status live">Published</span>
+                <div class="proj-links-sidebar">
+                    <a href="https://www.npmjs.com/package/@zubs/xstarter" target="_blank" rel="noopener">npm ↗</a>
+                    <a href="https://github.com/Zubs/xstarter" target="_blank" rel="noopener">GitHub ↗</a>
+                </div>
+            </div>
+
+            <div class="proj-main">
+                <p class="proj-headline">"A Node.js MVC project generator: answer a few questions in the terminal and
+                    get a working Express app with routes, views, optional authentication and dependencies already
+                    installed."</p>
+
+                <div class="proj-desc-body">
+                    <p>
+                        XStarter is a command-line scaffolding tool published on npm. Run
+                        <code style="font-size:0.78rem;color:var(--accent)">xstarter</code> in any folder, choose a project name and
+                        template, and it creates a new project directory and lays down the files for you. It is one of
+                        my early published packages: a small, focused utility built to take the repetition out of
+                        starting a Node.js app.
+                    </p>
+                    <p>
+                        The interactive prompts, built with <strong>inquirer</strong>, validate the project name,
+                        offer the bundled templates, and ask whether to initialise Git, use a package manager and
+                        install dependencies. A <strong>Listr</strong> task list then copies the template, rewrites
+                        <code style="font-size:0.78rem;color:var(--accent)">package.json</code> with the project name, optionally
+                        runs <code style="font-size:0.78rem;color:var(--accent)">git init</code>, and installs with npm or yarn via
+                        <code style="font-size:0.78rem;color:var(--accent)">pkg-install</code>.
+                    </p>
+                    <p>
+                        The templates are real MVC-style starters: an Express + EJS app with routes, controllers,
+                        views and a 404 handler, and a plain HTML/CSS/JS variant served by Express. Choosing the
+                        JWT option switches to variants with a Mongoose user model and auth controllers and
+                        views. Users can also point the generator at their own template folder. Running
+                        <code style="font-size:0.78rem;color:var(--accent)">npm run dev</code> starts the generated app on
+                        <code style="font-size:0.78rem;color:var(--accent)">localhost:3000</code>.
+                    </p>
+                </div>
+
+                <div class="proj-meta-row">
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Role</p>
+                        <p class="proj-meta-val">Author &amp; Maintainer</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Distribution</p>
+                        <p class="proj-meta-val">npm · global CLI</p>
+                    </div>
+                    <div class="proj-meta-cell">
+                        <p class="proj-meta-key">Stack</p>
+                        <p class="proj-meta-val">Node.js · Express · EJS · JavaScript</p>
+                    </div>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">How It Works</p>
+                    <ul class="feature-list">
+                        <li>Interactive setup with name validation, template choice, auth choice and Git/package-manager
+                            options
+                        </li>
+                        <li>Template names map to bundled folders, or the user supplies a custom template directory</li>
+                        <li><code style="font-size:0.78rem;color:var(--accent)">ncp</code> copies files without clobbering
+                            existing ones, then the generated <code style="font-size:0.78rem;color:var(--accent)">package.json</code> is renamed
+                        </li>
+                        <li>Progress shown as discrete tasks: copy, Git init, package.json update, install</li>
+                        <li>An <code style="font-size:0.78rem;color:var(--accent)">esm</code> loader bridges the Node bin script to the
+                            ES-module source
+                        </li>
+                        <li>Terminal UI built with boxen, chalk and inquirer, with execa handling Git commands</li>
+                    </ul>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Bundled Templates</p>
+                    <ul class="feature-list">
+                        <li>Express + EJS MVC starter: controllers, routes, EJS views, static assets and Morgan logging
+                        </li>
+                        <li>HTML/CSS/JS starter served by Express, with a custom 404 page</li>
+                        <li>JWT authentication variants with a Mongoose user model, auth controller and login/register
+                            views
+                        </li>
+                        <li>Custom template path for generating projects from any local folder</li>
+                        <li>Each generated app ships with a <code style="font-size:0.78rem;color:var(--accent)">dev</code> script and a
+                            <code style="font-size:0.78rem;color:var(--accent)">start</code> script, listening on port 3000</li>
+                    </ul>
+                </div>
+
+                <div class="proj-block">
+                    <p class="proj-block-label">Technologies</p>
+                    <div class="tech-chips">
+                        <span class="tech-chip primary">Node.js</span>
+                        <span class="tech-chip primary">npm</span>
+                        <span class="tech-chip primary">Express</span>
+                        <span class="tech-chip">EJS</span>
+                        <span class="tech-chip">inquirer</span>
+                        <span class="tech-chip">Listr</span>
+                        <span class="tech-chip">boxen</span>
+                        <span class="tech-chip">chalk</span>
+                        <span class="tech-chip">execa</span>
+                        <span class="tech-chip">ncp</span>
+                        <span class="tech-chip">pkg-install</span>
+                        <span class="tech-chip">Mongoose</span>
+                        <span class="tech-chip">JavaScript</span>
+                    </div>
+                </div>
+            </div>
+        </article>
+
         <!-- ── DSA Practice ── -->
         <article class="proj-entry reveal" data-category="fundamentals">
             <div class="proj-sidebar">
