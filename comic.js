@@ -9,14 +9,8 @@
 
     const issue = window.PORTFOLIO_COMIC;
     const art = window.COMIC_ART;
-    if (!isReady()) {return;}
 
     let pageEl, stageEl, indicator, firstBtn, prevBtn, nextBtn, tocBtn, statusEl;
-    if (!collectRefs()) {return;}
-
-    const prefersReducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    let current = 1;
-    let artUid = 0;
 
     function isReady() {
         return !!(issue && art && issue.total);
@@ -33,6 +27,13 @@
         statusEl = document.getElementById("route-status");
         return !!(pageEl && firstBtn && prevBtn && nextBtn);
     }
+
+    if (!isReady()) {return;}
+    if (!collectRefs()) {return;}
+
+    const prefersReducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let current = 1;
+    let artUid = 0;
 
     /* ---------- small helpers ---------- */
     function orDefault(value, fallback) {
